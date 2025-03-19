@@ -57,6 +57,8 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'capitulo5';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -183,7 +185,6 @@
 <li class="toctree-l1"><a class="reference internal" href="capitulo1.html">1. INTRODUÇÃO ANÁLISE ESPAÇO-TEMPORAL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="capitulo3.html">3. ANÁLISE ESPAÇO-TEMPORAL GLOBAL E LOCAL</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">5. INTRODUÇÃO ÀS SÉRIES TEMPORAIS</a></li>
-
 
 <li class="toctree-l1"><a class="reference internal" href="referencias.html">Bibliografia básica</a></li>
 </ul>
@@ -401,28 +402,15 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">5. INTRODUÇÃO ÀS SÉRIES TEMPORAIS</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estudo-de-caso-analise-de-padroes-e-anomalias-na-precipitacao-em-bage-rs">5.1 Estudo de caso: Análise de Padrões e Anomalias na Precipitação em Bagé (RS)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#caracteristicas-fundamentais-das-series-temporais">5.2 Características Fundamentais das Séries Temporais</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tendencia">5.2.1 Tendência</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analisando-a-tendencia-da-precipitacao-estacao-meteorologica-inmet-83980">5.2.1.1 Analisando a Tendência da Precipitação - estação meteorológica INMET 83980</a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#media-movel-30-dias">5.2.1.1.1 Média Móvel (30 dias)</a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#regressao-linear-para-identificacao-da-tendencia">5.2.1.1.2 Regressão Linear para Identificação da Tendência</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tendencia">5.2.1 Tendência</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#sazonalidade">5.2.2 Sazonalidade</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-da-sazonalidade-da-precipitacao-estacao-meteorologica-inmet-83980">5.2.2.1 Análise da Sazonalidade da Precipitação – Estação Meteorológica INMET 83980</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuicao-mensal-da-precipitacao">5.2.2.1.1 Distribuição Mensal da Precipitação</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decomposicao-da-serie-temporal">5.2.2.1.2 Decomposição da Série Temporal</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-da-funcao-de-autocorrelacao-acf-e-autocorrelacao-parcial-pacf">5.2.2.1.3 Análise da Função de Autocorrelação (ACF) e Autocorrelação Parcial (PACF)</a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ciclos">5.2.3 Ciclos</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-exploratoria-inicial">5.2.3.1 Análise Exploratória Inicial</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">5.2.3.2 Decomposição da Série Temporal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decomposicao-da-serie-temporal">5.2.3.2 Decomposição da Série Temporal</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-de-autocorrelacao-de-longo-prazo-acf-pacf">5.2.3.3 Análise de Autocorrelação de Longo Prazo (ACF/PACF)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-espectral-transformada-de-fourier">5.2.3.4. Análise Espectral (Transformada de Fourier)</a></li>
 </ul>
@@ -437,45 +425,37 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deteccao-de-eventos-extremos-e-anomalias-na-serie-temporal">5.2.5 Detecção de Eventos Extremos e Anomalias na Série Temporal</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacao-estatistica-de-outliers">5.2.5.1 Identificação Estatística de Outliers</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-visual-da-serie-temporal">5.2.5.1.1 Análise Visual da Série Temporal</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacao-de-outliers-com-boxplot">5.2.5.1.2 Identificação de Outliers com Boxplot</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacao-de-outliers-com-desvio-padrao">5.2.5.1.3 Identificação de Outliers com Desvio-Padrão</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacao-de-outliers-medias-moveis">5.2.5.1.4 Identificação de Outliers Médias Móveis</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#comparacao-entre-os-metodos">5.2.1.5.5 Comparação entre os métodos</a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rupturas-estruturais-em-series-temporais">5.2.5.2 Rupturas Estruturais em Séries Temporais</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacao-de-rupturas-estruturas-da-serie-temporal-de-precipitacao">5.2.5.2.1 Identificação de rupturas estruturas da série temporal de precipitação</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacao-estatistica-de-outliers">5.2.5.1 Identificação Estatística de Outliers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rupturas-estruturais-em-series-temporais">5.2.6 Rupturas Estruturais em Séries Temporais</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-de-series-temporais">5.3 Modelos de Séries Temporais</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-classicos">5.3.1 Modelos Clássicos</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-de-suavizacao">5.3.1.1 Modelos de Suavização</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-autorregressivos-e-arima">5.3.1.2 Modelos Autorregressivos e ARIMA</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-autorregressivos-e-arima">5.3.1.2 Modelos Autorregressivos e ARIMA</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-arima-e-sarima">5.3.1.3 Modelos ARIMA e SARIMA</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-avancados">5.3.2 Modelos Avançados</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-baseados-em-aprendizado-de-maquina">5.3.2.1 Modelos Baseados em Aprendizado de Máquina</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-baseados-em-arvore-de-decisao">5.3.2.2. Modelos Baseados em Árvore de Decisão</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#prophet">5.3.2.3 Prophet</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-espaco-temporais">5.3.2.4 Modelos Espaço-Temporais</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-baseados-em-transformers">5.3.2.5 Modelos Baseados em Transformers</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-bayesianos-para-series-temporais">5.3.2.6 Modelos Bayesianos para Séries Temporais</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-para-series-temporais-irregulares-e-multivariadas">5.3.2.7 Modelos para Séries Temporais Irregulares e Multivariadas</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#modelo-autorregressivo-ar">Modelo Autorregressivo (AR)</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-arima-e-sarima">5.3.1.3 Modelos ARIMA e SARIMA</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-avancados">5.3.2 Modelos Avançados</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-baseados-em-aprendizado-de-maquina">5.3.2.1 Modelos Baseados em Aprendizado de Máquina</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-baseados-em-arvore-de-decisao">5.3.2.2. Modelos Baseados em Árvore de Decisão</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#prophet">5.3.2.3 Prophet</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-espaco-temporais">5.3.2.3 Modelos Espaço-Temporais</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#escolha-do-modelo-adequado">5.3.3 Escolha do Modelo Adequado</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#escolha-do-modelo-adequado">5.3.3 Escolha do Modelo Adequado</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#avaliacao-e-comparacao-de-modelos-de-series-temporais">5.4 Avaliação e Comparação de Modelos de Séries Temporais</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-de-avaliacao">5.4.1 Métricas de Avaliação</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-baseadas-em-erro">5.4.1.1 Métricas Baseadas em Erro</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-baseadas-em-acuracia">5.4.1.2 Métricas Baseadas em Acurácia</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-para-series-temporais">5.4.1.3 Métricas para Séries Temporais</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-especificas-para-series-temporais">5.4.1.3 Métricas específicas para Séries Temporais</a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tecnicas-de-comparacao-de-modelos">5.4.2 Técnicas de Comparação de Modelos</a><ul class="nav section-nav flex-column">
@@ -534,9 +514,7 @@ A gestão de desastres naturais depende de análise de séries temporais para pr
 </ul>
 <p>A tendência pode ser linear, quando a variação ocorre de forma constante ao longo do tempo, ou não linear, quando há acelerações ou desacelerações no crescimento ou queda. Em muitos casos, a tendência pode ser influenciada por fatores externos, como mudanças climáticas, políticas econômicas ou avanços tecnológicos.</p>
 <p>Na análise de séries temporais, identificar e modelar a tendência é essencial para remover esse efeito antes de aplicar modelos estatísticos ou de previsão. Para isso, podem ser utilizadas técnicas como diferenciação, ajuste de regressão ou suavização, dependendo do comportamento dos dados.</p>
-<section id="analisando-a-tendencia-da-precipitacao-estacao-meteorologica-inmet-83980">
-<h4>5.2.1.1 Analisando a Tendência da Precipitação - estação meteorológica INMET 83980<a class="headerlink" href="#analisando-a-tendencia-da-precipitacao-estacao-meteorologica-inmet-83980" title="Link to this heading">#</a></h4>
-<p>Para começar a análise dos dados de precipitação, o primeiro passo é visualizar a série temporal para identificar possíveis tendências ao longo dos anos. O gráfico de linha simples permite observar se há um padrão de aumento, redução ou estabilidade na precipitação total ao longo do tempo.</p>
+<p>Para começar a análise dos dados de precipitação da estação meteorológica em nosso estudo de caso, o primeiro passo é visualizar a série temporal para identificar possíveis tendências ao longo dos anos. O gráfico de linha simples permite observar se há um padrão de aumento, redução ou estabilidade na precipitação total ao longo do tempo.</p>
 <p><img alt="Figura 1" src="_images/fig5_1.png" /></p>
 <p>Para compreender melhor o comportamento da precipitação ao longo dos anos, podemos começar com algumas perguntas-chave que nos ajudarão a interpretar a série temporal. A partir do gráfico, podemos observar padrões gerais e levantar hipóteses sobre a variabilidade dos dados.</p>
 <p>Reflita sobre as seguintes questões:</p>
@@ -550,17 +528,14 @@ A gestão de desastres naturais depende de análise de séries temporais para pr
 <p>A quantidade de precipitação apresenta variações significativas ao longo do tempo, com períodos de picos elevados e outros com pouca ou nenhuma precipitação. Esse comportamento é característico de séries temporais de precipitação, que tendem a apresentar alta variabilidade devido à natureza do fenômeno climático.</p>
 <p>Para uma análise mais precisa da tendência, é possível aplicar técnicas estatísticas que ajudam a identificar padrões ao longo do tempo. Por exemplo, a média móvel suaviza a série temporal, facilitando a visualização de variações de longo prazo. A regressão linear permite verificar a existência de uma tendência estatisticamente significativa, enquanto a agregação mensal ou anual contribui para uma melhor interpretação da evolução da precipitação, reduzindo a influência de flutuações diárias e destacando comportamentos sazonais ou estruturais.</p>
 <p>Com essas abordagens estatísticas, podemos compreender melhor a dinâmica da precipitação ao longo do tempo, diferenciando flutuações aleatórias de padrões consistentes.</p>
-<section id="media-movel-30-dias">
-<h5>5.2.1.1.1 Média Móvel (30 dias)<a class="headerlink" href="#media-movel-30-dias" title="Link to this heading">#</a></h5>
+<p><strong>Média Móvel (30 dias)</strong></p>
 <p>Inicialmente, calcularemos a média móvel de 30 dias para suavizar as variações diárias da precipitação. Esse método permite destacar tendências de longo prazo ao reduzir a influência de oscilações de curto prazo e eventos extremos isolados. A precipitação diária apresenta grande variabilidade, o que dificulta a identificação de padrões sem uma suavização adequada dos dados. A média móvel atenua essas flutuações e facilita a visualização de períodos de aumento ou redução da precipitação ao longo do tempo.</p>
 <p><img alt="Figura 1" src="_images/fig5_2.png" /></p>
 <p>A linha azul representa a série temporal original, evidenciando a grande variabilidade diária da precipitação. Já a linha vermelha corresponde à média móvel de 30 dias, que suaviza as flutuações e permite uma melhor identificação de padrões ao longo do tempo. Observa-se a ocorrência de períodos com picos mais intensos, mas, de modo geral, a média móvel mantém-se relativamente estável ao longo dos anos. No entanto, os valores da média móvel parecem baixos, possivelmente devido ao grande número de dias sem chuva, o que dilui a média e reduz sua amplitude. Essa característica pode levar à subestimação da intensidade dos períodos chuvosos, tornando-os menos evidentes na escala linear.</p>
 <p>Para aprimorar a interpretação dos dados, será gerado um gráfico em escala logarítmica. Como os valores de precipitação variam significativamente, essa escala permite uma melhor visualização das oscilações menores sem que eventos extremos dominem a análise.</p>
 <p><img alt="Figura 1" src="_images/fig5_3.png" /></p>
 <p>Ao aplicar a escala logarítmica, os valores da precipitação são transformados, tornando eventos menores mais visíveis e evitando que apenas os grandes picos dominem a interpretação. Com essa mudança, a linha vermelha da média móvel exibe mais variações, destacando melhor os períodos de precipitação ao longo do tempo. Embora os períodos mais secos ainda sejam evidentes, os valores menores de precipitação passam a ser melhor representados. Dessa forma, a escala logarítmica proporciona uma visualização mais equilibrada da série, permitindo identificar com mais clareza tanto os períodos de chuva quanto os de seca.</p>
-</section>
-<section id="regressao-linear-para-identificacao-da-tendencia">
-<h5>5.2.1.1.2 Regressão Linear para Identificação da Tendência<a class="headerlink" href="#regressao-linear-para-identificacao-da-tendencia" title="Link to this heading">#</a></h5>
+<p><strong>Regressão Linear para Identificação da Tendência</strong></p>
 <p>Para avaliar a tendência da precipitação ao longo do tempo, iremos ajustar um modelo de regressão linear, utilizando o tempo (anos) como variável explicativa e a precipitação total como variável dependente. Esse modelo permite verificar se há uma variação estatisticamente significativa na precipitação ao longo dos anos, indicando uma possível tendência de aumento ou redução.</p>
 <p><img alt="Figura 1" src="_images/fig5_4.png" /></p>
 <p>A análise da tendência linear da precipitação ao longo do tempo revela uma linha praticamente reta, sugerindo que não há variação significativa na série temporal. Além disso, a amplitude das flutuações se mantém relativamente constante, sem indícios visuais de mudanças estruturais expressivas.
@@ -664,8 +639,6 @@ Por fim, o intercepto da regressão é -29.88, mas sua interpretação prática 
 </section>
 </section>
 </section>
-</section>
-</section>
 <section class="tex2jax_ignore mathjax_ignore" id="sazonalidade">
 <h1>5.2.2 Sazonalidade<a class="headerlink" href="#sazonalidade" title="Link to this heading">#</a></h1>
 <p>A sazonalidade é um padrão recorrente em uma série temporal que se repete em intervalos regulares. Esse comportamento cíclico é influenciado por fatores naturais, econômicos ou sociais e ocorre dentro de períodos previsíveis, como dias, meses ou anos.</p>
@@ -686,8 +659,6 @@ A sazonalidade em séries temporais pode ser identificada por meio de diferentes
 <li><p>Testes estatísticos (por exemplo, ANOVA): verificam se as variações entre períodos são estatisticamente significativas, indicando a presença de sazonalidade.</p></li>
 <li><p>A correta identificação da sazonalidade permite entender melhor a estrutura dos dados e aprimorar modelos preditivos.</p></li>
 </ul>
-<section id="analise-da-sazonalidade-da-precipitacao-estacao-meteorologica-inmet-83980">
-<h2>5.2.2.1 Análise da Sazonalidade da Precipitação – Estação Meteorológica INMET 83980<a class="headerlink" href="#analise-da-sazonalidade-da-precipitacao-estacao-meteorologica-inmet-83980" title="Link to this heading">#</a></h2>
 <p>Para compreender a sazonalidade da precipitação, inicialmente vamos revisar a série temporal completa, identificando padrões recorrentes ao longo dos anos. Essa visualização permite uma primeira percepção sobre a existência de variações sazonais e sua regularidade.</p>
 <p><img alt="Figura 1" src="_images/fig5_7.png" /></p>
 <p>A partir da análise inicial da série temporal, algumas observações se destacam:</p>
@@ -696,8 +667,7 @@ A sazonalidade em séries temporais pode ser identificada por meio de diferentes
 <li><p>Flutuações Regulares: A precipitação apresenta períodos com maior e menor intensidade em intervalos semelhantes, o que pode indicar um ciclo climático associado a fatores sazonais.</p></li>
 <li><p>A confirmação dessa sazonalidade será feita por meio de métodos estatísticos e gráficos específicos.</p></li>
 </ul>
-<section id="distribuicao-mensal-da-precipitacao">
-<h3>5.2.2.1.1 Distribuição Mensal da Precipitação<a class="headerlink" href="#distribuicao-mensal-da-precipitacao" title="Link to this heading">#</a></h3>
+<p><strong>Distribuição Mensal da Precipitação</strong></p>
 <p>Para compreender o comportamento sazonal da precipitação, analisamos a média mensal ao longo dos anos. Esse tipo de análise permite identificar padrões recorrentes na distribuição das chuvas e avaliar variações sazonais.</p>
 <p>O gráfico a seguir apresenta a média da precipitação mensal ao longo dos anos, destacando possíveis padrões sazonais.</p>
 <p><img alt="Figura 1" src="_images/fig5_8.png" /></p>
@@ -795,9 +765,7 @@ A sazonalidade em séries temporais pode ser identificada por meio de diferentes
 <p>Os meses mais chuvosos incluem outubro, com uma mediana de 125 mm e média de 145 mm, e abril, cuja mediana é de 113 mm e a média de 143 mm. Janeiro e setembro também apresentam médias superiores a 128 mm. Esse padrão sugere que outubro e abril são historicamente os meses mais chuvosos.</p>
 <p>Por outro lado, os meses mais secos são dezembro, novembro, maio e agosto. Dezembro apresenta uma mediana de 87 mm e média de 108 mm, enquanto novembro registra uma mediana de 94 mm e média de 112 mm. Maio e agosto possuem medianas próximas a 93 mm. Esses meses estão associados a um período de menor precipitação sazonal.</p>
 <p>A variação da precipitação também é um fator relevante. Outubro e abril apresentam maior variabilidade, sugerindo que alguns anos registraram chuvas excepcionalmente intensas, enquanto outros foram mais secos. Em contraste, junho e dezembro possuem menor variação, indicando que a precipitação nesses meses tende a ser mais previsível. Outubro e abril podem estar relacionados a eventos extremos de precipitação, enquanto junho e dezembro apresentam um padrão mais estável ao longo dos anos.</p>
-</section>
-<section id="decomposicao-da-serie-temporal">
-<h3>5.2.2.1.2 Decomposição da Série Temporal<a class="headerlink" href="#decomposicao-da-serie-temporal" title="Link to this heading">#</a></h3>
+<p><strong>Decomposição da Série Temporal</strong></p>
 <p>A decomposição da série temporal permite separar a precipitação observada em seus principais componentes: tendência, sazonalidade e resíduos. Essa abordagem facilita a compreensão dos padrões da série ao longo do tempo, destacando diferentes dinâmicas que influenciam a precipitação mensal. O gráfico abaixo apresenta a decomposição da precipitação mensal.</p>
 <p><img alt="Figura 1" src="_images/fig5_10.png" /></p>
 <p>A série observada representa os valores originais da precipitação ao longo do tempo, enquanto a tendência evidencia variações de longo prazo, destacando períodos mais secos ou mais úmidos.
@@ -808,9 +776,7 @@ A sazonalidade indica padrões recorrentes ao longo dos anos, revelando meses si
 <p>Além disso, a amplitude da oscilação sazonal se mantém relativamente constante ao longo do tempo, indicando que a diferença entre os meses mais úmidos e mais secos não sofreu alterações expressivas nas últimas décadas. Caso houvesse um aumento ou redução progressiva nessa amplitude, isso poderia sinalizar mudanças climáticas ou variações estruturais nos padrões de precipitação.</p>
 <p>Outro aspecto importante é a variação periódica da sazonalidade em relação à média. O eixo de referência no gráfico representa o nível médio da sazonalidade, e os valores acima dessa linha indicam meses com precipitação superior à média, enquanto os valores abaixo correspondem a períodos mais secos. Esse comportamento periódico reforça a presença de um ciclo sazonal regular, com padrões que se repetem anualmente.</p>
 <p>A análise confirma que a precipitação mensal segue um comportamento sazonal bem estabelecido, com períodos sistematicamente mais úmidos e outros mais secos ao longo do ano. A estabilidade desse padrão sugere que os ciclos sazonais da chuva não passaram por mudanças significativas ao longo do tempo.</p>
-</section>
-<section id="analise-da-funcao-de-autocorrelacao-acf-e-autocorrelacao-parcial-pacf">
-<h3>5.2.2.1.3 Análise da Função de Autocorrelação (ACF) e Autocorrelação Parcial (PACF)<a class="headerlink" href="#analise-da-funcao-de-autocorrelacao-acf-e-autocorrelacao-parcial-pacf" title="Link to this heading">#</a></h3>
+<p><strong>Análise da Função de Autocorrelação (ACF) e Autocorrelação Parcial (PACF)</strong></p>
 <p>A Função de Autocorrelação (ACF) e a Função de Autocorrelação Parcial (PACF) são ferramentas estatísticas de grande utilidade na análise de séries temporais, sendo amplamente utilizadas para identificar padrões sazonais, dependências temporais e auxiliar na escolha de modelos preditivos.</p>
 <p>A ACF mede o grau de correlação entre os valores da série temporal em diferentes defasagens (lags), ou seja, indica o quanto um valor em um determinado instante está relacionado com valores anteriores, como no período imediatamente anterior (t-1), dois períodos antes (t-2), três períodos antes (t-3), e assim por diante. Se a autocorrelação em um determinado lag for alta, isso significa que os valores da série possuem uma forte relação com os valores desse período anterior.</p>
 <p>Quando a autocorrelação apresenta oscilações regulares, pode ser um indicativo de sazonalidade. Por exemplo, se há um pico de autocorrelação em defasagens de 12 meses, isso sugere a existência de um padrão anual. No gráfico da ACF, o eixo x representa os lags (defasagens temporais), enquanto o eixo y indica a intensidade da correlação entre os valores da série e suas versões defasadas. Barras que ultrapassam as bandas de confiança sugerem correlações estatisticamente significativas.</p>
@@ -826,8 +792,6 @@ A sazonalidade indica padrões recorrentes ao longo dos anos, revelando meses si
 <p>A análise do gráfico revela a ausência de um padrão auto-regressivo claro, uma vez que nenhum lag apresenta valores significativamente altos fora dos limites de significância. Isso indica que não há uma relação forte entre a precipitação de um mês e os meses anteriores, descartando a possibilidade de um modelo autoregressivo simples (AR) para previsão. Além disso, a maioria dos coeficientes de autocorrelação parcial é muito pequena, sugerindo que a influência da precipitação de um mês sobre os meses seguintes é mínima. Esse comportamento reforça a baixa dependência temporal da série.
 Outro aspecto importante é a ausência de picos significativos nos múltiplos de 12 (lag 12, 24, 36), o que seria esperado caso houvesse um padrão sazonal bem definido. A falta desses sinais reforça a hipótese de que a sazonalidade observada na decomposição da série pode ser fraca ou variável ao longo do tempo.</p>
 <p>Dessa forma, o PACF confirma as conclusões da ACF, indicando que a precipitação mensal não apresenta uma estrutura auto-regressiva significativa. Além disso, a sazonalidade da precipitação pode não ser fixa ao longo dos anos, podendo estar sujeita a variações interanuais influenciadas por fatores climáticos externos.</p>
-</section>
-</section>
 <section id="ciclos">
 <h2>5.2.3 Ciclos<a class="headerlink" href="#ciclos" title="Link to this heading">#</a></h2>
 <p>Os ciclos em séries temporais referem-se a flutuações que ocorrem em intervalos de tempo mais longos e irregulares, diferentemente da sazonalidade, que apresenta uma periodicidade fixa. Enquanto a sazonalidade ocorre em períodos regulares e previsíveis, como a variação da temperatura ao longo do ano, os ciclos não seguem um padrão rígido e podem ser influenciados por fatores externos, como políticas econômicas ou mudanças climáticas.</p>
@@ -845,14 +809,14 @@ A terceira etapa envolve a aplicação de testes de autocorrelação para detect
 <p>Por fim, realizaremos uma análise espectral por meio da Transformada de Fourier (FFT), que permite identificar as frequências dominantes na série, destacando o período predominante da precipitação ao longo do tempo.</p>
 <section id="analise-exploratoria-inicial">
 <h3>5.2.3.1 Análise Exploratória Inicial<a class="headerlink" href="#analise-exploratoria-inicial" title="Link to this heading">#</a></h3>
-<p>A primeira etapa da análise consiste na visualização da série temporal completa da precipitação mensal ao longo do período de 1988 a 2024.</p>
+<p>Voltemos ao nosso estudo de caso. Inicialmente, vamos novamente visualizar a série temporal completa da precipitação mensal ao longo do período de 1988 a 2024.</p>
 <p><img alt="Figura 1" src="_images/fig5_14.png" /></p>
 <p>O gráfico apresenta a precipitação acumulada mensalmente ao longo do tempo. Para facilitar a identificação de padrões de longo prazo, aplicamos uma suavização LOESS, representada pela linha vermelha no gráfico. Esse método suaviza as variações curtas e destaca possíveis tendências na série.</p>
 <p>A análise visual sugere que, ao longo do tempo, houve um ligeiro aumento da precipitação até os anos 2000, seguido por uma estabilização. No entanto, a elevada variabilidade da precipitação ao longo dos anos indica que fatores sazonais e climáticos interanuais podem estar influenciando o regime de chuvas.</p>
 <p>A partir dessa análise inicial, fica evidente que a precipitação mensal não é constante e apresenta oscilações, o que pode indicar a presença de ciclos de longo prazo. Para investigar melhor essas dinâmicas, o próximo passo será decompor a série temporal, separando os componentes de tendência, sazonalidade e variação residual, permitindo uma análise mais detalhada das oscilações na precipitação ao longo dos anos.</p>
 </section>
-<section id="id1">
-<h3>5.2.3.2 Decomposição da Série Temporal<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<section id="decomposicao-da-serie-temporal">
+<h3>5.2.3.2 Decomposição da Série Temporal<a class="headerlink" href="#decomposicao-da-serie-temporal" title="Link to this heading">#</a></h3>
 <p>O estudo dos ciclos de longo prazo busca identificar oscilações periódicas que se repetem em escalas superiores à sazonalidade anual. A decomposição da série auxilia nesse processo ao separar a tendência, a sazonalidade e os resíduos, permitindo uma análise mais detalhada de cada um desses elementos.</p>
 <p>A figura abaixo apresenta a série temporal decomposta.</p>
 <p><img alt="Figura 1" src="_images/fig5_15.png" /></p>
@@ -907,7 +871,7 @@ A terceira etapa envolve a aplicação de testes de autocorrelação para detect
 <p>Essa análise permitirá entender melhor o comportamento dos resíduos e verificar se a série temporal contém padrões adicionais.</p>
 <section id="verificacao-da-distribuicao-dos-residuos">
 <h3>5.2.4.1 Verificação da Distribuição dos Resíduos<a class="headerlink" href="#verificacao-da-distribuicao-dos-residuos" title="Link to this heading">#</a></h3>
-<p>A partir da análise da distribuição dos resíduos, é possível verificar se eles seguem um comportamento aleatório e se a normalidade pode ser assumida. Para isso, utilizamos diferentes ferramentas gráficas e testes estatísticos.</p>
+<p>Voltemos ao nosso estudo de caso. A partir da análise da distribuição dos resíduos, é possível verificar se eles seguem um comportamento aleatório e se a normalidade pode ser assumida. Para isso, utilizamos diferentes ferramentas gráficas e testes estatísticos.</p>
 <p>Na figura abaixo temos a série temporal dos resíduos ao longo do tempo.</p>
 <p><img alt="Figura 1" src="_images/fig5_19.png" /></p>
 <p>A distribuição aparentemente aleatória dos valores sugere que o modelo removeu grande parte da estrutura dos dados, mas parece que ainda há variações significativas.</p>
@@ -924,7 +888,7 @@ Teste de Shapiro-Wilk:</p>
 <li><p>Valor-p = 3.999e-13</p></li>
 <li><p>Como o valor-p é extremamente pequeno (menor que 0.05), rejeitamos a hipótese nula de que os resíduos seguem uma distribuição normal.</p></li>
 </ul>
-<p>Teste de Kolmogorov-Smirnov:</p>
+<p><em>Teste de Kolmogorov-Smirnov:</em></p>
 <ul class="simple">
 <li><p>Estatística D = 0.085817</p></li>
 <li><p>Valor-p = 0.003448</p></li>
@@ -1108,14 +1072,10 @@ Em uma série bem ajustada, os resíduos devem ser independentes ao longo do tem
 <p><em>Identificação de Outliers com Desvio-Padrão</em> – Aplicaremos a técnica baseada no desvio-padrão, considerando como outliers os valores que excedem três desvios-padrão da média. Esse método é mais eficaz quando os dados seguem uma distribuição aproximadamente normal.</p>
 <p><em>Identificação de Outliers por Médias Móveis</em> – Por fim, usaremos a média móvel (MAMA) para suavizar variações de curto prazo e comparar os valores observados com suas tendências locais. Valores que se afastam excessivamente da média móvel serão considerados candidatos a outliers.</p>
 <p>Com essa abordagem combinada, conseguiremos identificar, interpretar e avaliar os outliers na série, verificando sua relevância e impacto na análise. Essa investigação nos permitirá compreender melhor a dinâmica dos resíduos e tomar decisões informadas sobre o tratamento desses valores extremos.</p>
-<section id="analise-visual-da-serie-temporal">
-<h4>5.2.5.1.1 Análise Visual da Série Temporal<a class="headerlink" href="#analise-visual-da-serie-temporal" title="Link to this heading">#</a></h4>
-<p>O gráfico abaixo apresenta a seŕie temporal mensal da pecipitação.</p>
+<p>O gráfico abaixo apresenta a seŕie temporal mensal da pecipitação em nosso estudo de caso.</p>
 <p><img alt="Figura 1" src="_images/fig5_26.png" /></p>
 <p>A análise visual sugere que a série apresenta valores extremos pontuais, que podem ser classificados como outliers. Alguns períodos específicos chamam a atenção por apresentarem valores excepcionalmente altos, como os anos próximos a 2010 e 2020, onde há picos que ultrapassam 500 mm de precipitação em um único mês. Esses valores são candidatos a outliers, pois se distanciam do padrão médio da série. No entanto, para confirmar se esses pontos são estatisticamente discrepantes, será necessário utilizar métodos quantitativos, como o boxplot, desvio-padrão e média móvel, que permitirão verificar se esses picos ultrapassam os limites estabelecidos para a detecção de valores atípicos.</p>
-</section>
-<section id="identificacao-de-outliers-com-boxplot">
-<h4>5.2.5.1.2 Identificação de Outliers com Boxplot<a class="headerlink" href="#identificacao-de-outliers-com-boxplot" title="Link to this heading">#</a></h4>
+<p><strong>a. Identificação de Outliers com Boxplot</strong></p>
 <p>O boxplot da precipitação mensal ao longo da série temporal é exibido na figura abaixo, permitindo uma visualização da distribuição dos dados e a identificação de possíveis valores extremos.</p>
 <p><img alt="Figura 1" src="_images/fig5_27.png" /></p>
 <p>O boxplot da precipitação mensal fornece uma visão clara da distribuição dos valores da série temporal, permitindo identificar valores extremos e a dispersão dos dados.
@@ -1182,9 +1142,7 @@ Ou seja, qualquer valor acima de 322.75 mm é considerado um outlier estatístic
 </div>
 <p>O gráfico abaixo mostra esses outliers na série temporal.</p>
 <p><img alt="Figura 1" src="_images/fig5_28.png" /></p>
-</section>
-<section id="identificacao-de-outliers-com-desvio-padrao">
-<h4>5.2.5.1.3 Identificação de Outliers com Desvio-Padrão<a class="headerlink" href="#identificacao-de-outliers-com-desvio-padrao" title="Link to this heading">#</a></h4>
+<p><strong>b. Identificação de Outliers com Desvio-Padrão</strong></p>
 <p>A identificação de outliers pelo desvio-padrão é um método estatístico que detecta valores extremos ao avaliar o quão distantes eles estão da média da distribuição. Esse método é útil especialmente quando os dados seguem uma distribuição aproximadamente normal, pois permite quantificar a variação esperada dentro de um intervalo estatístico bem definido.</p>
 <p>O processo segue três etapas principais. Primeiro, calcula-se a média e o desvio-padrão da precipitação mensal ao longo da série temporal. Em seguida, define-se um limite para a identificação de outliers, geralmente considerando valores que ultrapassam três desvios-padrão da média. Por fim, os meses cujos valores excedem esses limites são identificados como potenciais outliers, indicando períodos de precipitação anormalmente alta ou baixa.</p>
 <p>O critério adotado estabelece que valores que ultrapassam 3 desvios-padrão da média são estatisticamente raros e, portanto, considerados outliers. Isso significa que esses meses apresentam um comportamento significativamente diferente da tendência central dos dados, podendo indicar eventos climáticos extremos, erros na medição ou variações incomuns no regime de precipitação.
@@ -1238,9 +1196,7 @@ Nesta análise, identificamos 7 meses como outliers estatísticos ao considerar 
 </div>
 <p>O gráfico abaixo apresenta esses outliers na série temporal.</p>
 <p><img alt="Figura 1" src="_images/fig5_29.png" /></p>
-</section>
-<section id="identificacao-de-outliers-medias-moveis">
-<h4>5.2.5.1.4 Identificação de Outliers Médias Móveis<a class="headerlink" href="#identificacao-de-outliers-medias-moveis" title="Link to this heading">#</a></h4>
+<p><strong>c. Identificação de Outliers Médias Móveis</strong></p>
 <p>A análise de médias móveis é uma técnica eficaz para detectar valores extremos em séries temporais, pois suaviza flutuações de curto prazo e destaca padrões mais consistentes ao longo do tempo. Essa abordagem é amplamente utilizada na identificação de eventos climáticos anômalos, pois ajuda a diferenciar oscilações naturais de mudanças abruptas no regime de precipitação.</p>
 <p>O método consiste em três etapas principais: primeiro, calcula-se a média móvel considerando uma janela de meses adjacentes, criando uma versão suavizada da série. Em seguida, avalia-se a diferença entre o valor real da precipitação e a média móvel, identificando desvios significativos. Por fim, definem-se limiares estatísticos para determinar outliers, geralmente considerando valores que ultrapassam 3 desvios-padrão da média móvel.</p>
 <p>Esse método é vantajoso porque é mais sensível a mudanças locais, reduz o impacto de tendências e sazonalidade e melhora a identificação de eventos extremos, como períodos anômalos de seca ou chuvas intensas. Ele é especialmente útil quando se deseja analisar anomalias em um contexto local, evitando que a variabilidade natural distorça a detecção de outliers. A aplicação da média móvel permite uma análise mais precisa e adaptada à dinâmica climática, auxiliando na compreensão de fenômenos sazonais e extremos.</p>
@@ -1278,11 +1234,8 @@ Nesta análise, identificamos 7 meses como outliers estatísticos ao considerar 
 </div>
 <p>O gráfico abaixo apresenta esses outliers na série temporal.</p>
 <p><img alt="Figura 1" src="_images/fig5_30.png" /></p>
-</section>
-<section id="comparacao-entre-os-metodos">
-<h4>5.2.1.5.5 Comparação entre os métodos<a class="headerlink" href="#comparacao-entre-os-metodos" title="Link to this heading">#</a></h4>
-<p>A tabela abaixo apresenta a compilação dos resultados da identificação de outliers em nosso estudo de caso.
-Aqui está a tabela formatada em Markdown para comparar os outliers identificados por cada método:</p>
+<p><strong>Comparação entre os métodos</strong></p>
+<p>A tabela abaixo apresenta a compilação dos resultados da identificação de outliers em nosso estudo de caso.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Ano-Mês</p></th>
@@ -1375,12 +1328,11 @@ Aqui está a tabela formatada em Markdown para comparar os outliers identificado
 </table>
 </div>
 <p>Podemos observar que houve diferenças significativas na identificação de valores extremos. O método do intervalo interquartil (IQR) foi o mais abrangente, identificando 13 outliers, o que demonstra sua sensibilidade para capturar variações atípicas na série. Em contrapartida, o método do desvio-padrão foi mais conservador, detectando apenas 7 outliers, uma vez que assume uma distribuição normal e pode não ser eficaz em séries com assimetria ou caudas longas.</p>
-<p>A média móvel foi a técnica mais seletiva, identificando apenas 5 outliers. Esse método prioriza desvios locais mais evidentes, considerando a variação ao longo do tempo e suavizando flutuações globais.
-Um ponto relevante é que todos os outliers detectados pelos métodos de desvio-padrão e média móvel também foram identificados pelo IQR, o que reforça a robustez do IQR na análise de eventos extremos. Essa comparação evidencia que diferentes abordagens podem destacar distintos aspectos da variabilidade da série, sendo recomendável a aplicação combinada desses métodos para uma avaliação mais completa dos outliers.</p>
-</section>
+<p>A média móvel foi a técnica mais seletiva, identificando apenas 5 outliers. Esse método prioriza desvios locais mais evidentes, considerando a variação ao longo do tempo e suavizando flutuações globais.</p>
+<p>Um ponto relevante é que todos os outliers detectados pelos métodos de desvio-padrão e média móvel também foram identificados pelo IQR, o que reforça a robustez do IQR na análise de eventos extremos. Essa comparação evidencia que diferentes abordagens podem destacar distintos aspectos da variabilidade da série, sendo recomendável a aplicação combinada desses métodos para uma avaliação mais completa dos outliers.</p>
 </section>
 <section id="rupturas-estruturais-em-series-temporais">
-<h3>5.2.5.2 Rupturas Estruturais em Séries Temporais<a class="headerlink" href="#rupturas-estruturais-em-series-temporais" title="Link to this heading">#</a></h3>
+<h3>5.2.6 Rupturas Estruturais em Séries Temporais<a class="headerlink" href="#rupturas-estruturais-em-series-temporais" title="Link to this heading">#</a></h3>
 <p>As rupturas estruturais são mudanças abruptas nos padrões de uma série temporal, indicando alterações no processo gerador dos dados. Essas mudanças podem ocorrer na média, variância ou tendência da série e são frequentemente causadas por eventos como mudanças climáticas de longo prazo, impactos de eventos extremos (ex.: El Niño e La Niña), alterações no sistema de medição (troca de sensores meteorológicos) e mudanças no uso do solo ou políticas ambientais.</p>
 <p>A ocorrência de uma ruptura estrutural faz com que os padrões da série deixem de seguir a mesma distribuição estatística antes e depois do evento, tornando essencial sua identificação para evitar interpretações equivocadas e ajustes inadequados na modelagem.</p>
 <p><strong>Tipos de Rupturas Estruturais</strong></p>
@@ -1419,10 +1371,9 @@ Por exemplo, se uma ruptura estrutural coincide com eventos de El Niño, isso po
 <p>O CUSUM é um método de controle estatístico que monitora variações acumuladas ao longo do tempo. Ele é útil para detectar mudanças progressivas na série, mesmo que não sejam abruptas.
 Se os valores ultrapassam os limites críticos, sugere um desvio significativo na série.</p>
 <p>Indicado para detectar alterações sutis em tendências e padrões de variabilidade.</p>
-<section id="identificacao-de-rupturas-estruturas-da-serie-temporal-de-precipitacao">
-<h4>5.2.5.2.1 Identificação de rupturas estruturas da série temporal de precipitação<a class="headerlink" href="#identificacao-de-rupturas-estruturas-da-serie-temporal-de-precipitacao" title="Link to this heading">#</a></h4>
-<p>Nesta etapa, iremos verificar a existência de rupturas estruturais na série temporal de precipitação em estudo. A detecção dessas mudanças é essencial para entender alterações significativas no comportamento da série, garantindo que padrões inesperados sejam identificados e considerados na modelagem estatística.</p>
-<p><strong>Teste de Pettitt</strong></p>
+<p><strong>Identificação de rupturas estruturas da série temporal de precipitação</strong></p>
+<p>Voltemos ao nosso estudo de caso para verificar a existência de rupturas estruturais na série temporal de precipitação em estudo. A detecção dessas mudanças é essencial para entender alterações significativas no comportamento da série, garantindo que padrões inesperados sejam identificados e considerados na modelagem estatística.</p>
+<p><em>Teste de Pettitt</em></p>
 <p>O Teste de Pettitt é um teste não paramétrico que detecta um único ponto de mudança na mediana da série. Os resultados foram os seguintes:</p>
 <ul class="simple">
 <li><p>Estatística U* = 2240</p></li>
@@ -1430,19 +1381,18 @@ Se os valores ultrapassam os limites críticos, sugere um desvio significativo n
 <li><p>Provável ponto de mudança: observação 113</p></li>
 </ul>
 <p>O p-valor elevado (1.0) indica que não há evidências estatísticas suficientes para afirmar que ocorreu uma mudança estrutural significativa na série. Embora o teste aponte um possível ponto de mudança na observação 113, esse resultado não é estatisticamente significativo.</p>
-<p><strong>Método de Bai &amp; Perron</strong></p>
+<p><em>Método de Bai &amp; Perron</em></p>
 <p>O método de Bai &amp; Perron foi aplicado para detectar múltiplos pontos de ruptura nos resíduos suavizados com uma média móvel de 12 períodos. No entanto, o modelo retornou:</p>
 <p>print(modelo_bp$breakpoints)
 [1] NA</p>
 <p>O método não identificou pontos de ruptura estatisticamente significativos, o que reforça os achados do Teste de Pettitt. Isso pode indicar que a série é relativamente estável ao longo do tempo ou que eventuais mudanças são graduais, e não abruptas.</p>
-<p><strong>Gráfico CUSUM</strong></p>
+<p><em>Gráfico CUSUM</em></p>
 <p>O gráfico CUSUM (Cumulative Sum Control Chart) é um método de monitoramento que permite detectar desvios na média da série ao longo do tempo. A figura abaixo ilustra os resultados do teste CUSUM:</p>
 <p><img alt="Figura 1" src="_images/fig5_31.png" /></p>
 <p>O gráfico ilustra a evolução cumulativa dos resíduos ao longo do tempo, com as linhas vermelhas tracejadas representando os limites de controle. Caso a curva do CUSUM ultrapasse esses limites, isso indicaria a presença de mudanças estruturais. No entanto, na visualização apresentada, a série permanece dentro dos limites, sugerindo a ausência de alterações abruptas significativas.</p>
 <p><strong>Conclusão</strong></p>
 <p>A partir dos três métodos aplicados, não foram encontradas evidências estatísticas robustas de mudanças estruturais significativas nos resíduos. Embora o Teste de Pettitt tenha sugerido uma possível mudança na observação 113, o p-valor alto indica que essa alteração não é estatisticamente relevante. O método de Bai &amp; Perron não detectou pontos de ruptura, e o gráfico CUSUM sugere que a série se mantém dentro dos limites de controle, sem variações abruptas.</p>
 <p>Esses resultados indicam que os resíduos da série analisada não apresentam mudanças estruturais evidentes, reforçando a hipótese de que a série pode ser considerada estável ao longo do tempo.</p>
-</section>
 </section>
 </section>
 <section id="modelos-de-series-temporais">
@@ -1457,15 +1407,8 @@ Se os valores ultrapassam os limites críticos, sugere um desvio significativo n
 <h3>5.3.1.1 Modelos de Suavização<a class="headerlink" href="#modelos-de-suavizacao" title="Link to this heading">#</a></h3>
 <p>Os modelos de suavização são métodos simples e eficientes para capturar tendências e padrões sazonais. Eles são amplamente utilizados quando os dados apresentam estrutura clara e previsível.</p>
 <p><strong>Médias Móveis e Suavização Exponencial</strong></p>
-<ul class="simple">
-<li><p><strong>Médias Móveis (MA):</strong></p></li>
-</ul>
-<p>As médias móveis são usadas para suavizar flutuações de curto prazo e destacar tendências ou ciclos. A média móvel simples (SMA) calcula a média de um número fixo de observações anteriores. Outras variações incluem a média móvel ponderada (WMA) e a média móvel exponencial (EMA), que atribuem pesos diferentes às observações.</p>
-<ul class="simple">
-<li><p><strong>Suavização Exponencial:</strong></p></li>
-</ul>
-<p>A suavização exponencial é uma técnica que atribui pesos decrescentes aos valores passados, permitindo que o modelo responda mais rapidamente a mudanças recentes.</p>
-<p>O modelo mais simples é o <strong>Simple Exponential Smoothing (SES)</strong>, que é eficaz para séries sem tendência ou sazonalidade. Para séries com tendência, utiliza-se o <strong>Holt’s Linear Trend Model</strong>, e para séries com tendência e sazonalidade, o <strong>Holt-Winters Seasonal Model</strong>.</p>
+<p>As médias móveis são utilizadas para suavizar flutuações de curto prazo e destacar tendências ou ciclos em séries temporais. A média móvel simples (SMA) calcula a média de um número fixo de observações anteriores, proporcionando uma visão mais estável dos dados. Além da SMA, existem variações como a média móvel ponderada (WMA), que atribui pesos diferentes às observações, e a média móvel exponencial (EMA), que dá mais importância aos valores mais recentes, tornando a resposta às mudanças mais ágil.</p>
+<p>A suavização exponencial, por sua vez, é uma técnica que também atribui pesos decrescentes aos valores passados, permitindo que o modelo se ajuste mais rapidamente às mudanças recentes nos dados. O modelo mais básico dentro dessa abordagem é o <strong>Simple Exponential Smoothing (SES)</strong>, que é adequado para séries temporais sem tendência ou sazonalidade. Para séries com tendência, utiliza-se o <strong>Holt’s Linear Trend Model</strong>, que adiciona um componente de crescimento aos valores suavizados. Já para séries que apresentam tanto tendência quanto sazonalidade, o <strong>Holt-Winters Seasonal Model</strong> é a abordagem mais indicada, pois incorpora ambos os aspectos no processo de suavização.</p>
 </section>
 <section id="modelos-autorregressivos-e-arima">
 <h3>5.3.1.2 Modelos Autorregressivos e ARIMA<a class="headerlink" href="#modelos-autorregressivos-e-arima" title="Link to this heading">#</a></h3>
@@ -1473,29 +1416,21 @@ Se os valores ultrapassam os limites críticos, sugere um desvio significativo n
 <ul class="simple">
 <li><p><strong>Modelo Autoregressivo (AR):</strong></p></li>
 </ul>
-</section>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="modelo-autorregressivo-ar">
-<h1>Modelo Autorregressivo (AR)<a class="headerlink" href="#modelo-autorregressivo-ar" title="Link to this heading">#</a></h1>
-<p>O modelo <strong>AR</strong> prevê valores futuros com base em uma combinação linear de valores passados. A ordem do modelo (<strong>p</strong>) indica quantos termos passados são usados. Por exemplo, um <strong>AR(1)</strong> usa apenas o valor imediatamente anterior.</p>
-<p>Um modelo AR usa valores passados da própria série como preditores. A equação geral de um modelo <strong>AR(p)</strong> é:</p>
-<p>[
-Y_t = c + \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \dots + \phi_p Y_{t-p} + \epsilon_t
-]</p>
-<p>Onde:</p>
+<p>O modelo <strong>AR</strong> prevê valores futuros com base em uma combinação linear de valores passados. A ordem do modelo (<strong>p</strong>) indica quantos termos passados são usados. Por exemplo, um <strong>AR(1)</strong> usa apenas o valor imediatamente anterior. A equação geral de um modelo <strong>AR(p)</strong> é dada por:</p>
+<div class="math notranslate nohighlight">
+\[Y_t = c + \sum_{i=1}^{p} \phi_i Y_{t-i} + \epsilon_t\]</div>
+<p>onde:</p>
 <ul class="simple">
 <li><p>( Y_t ) é o valor atual da série.</p></li>
-<li><p>( \phi_p ) são os coeficientes autorregressivos.</p></li>
+<li><p>( c ) é uma constante.</p></li>
+<li><p>( \phi_i ) são os coeficientes autorregressivos (( i = 1, 2, \dots, p )).</p></li>
 <li><p>( \epsilon_t ) é um termo de erro aleatório.</p></li>
 <li><p><strong>Modelo de Média Móvel (MA):</strong></p></li>
 </ul>
-<p>O modelo <strong>MA</strong> prevê valores futuros com base em erros de previsão passados. A ordem do modelo (<strong>q</strong>) define quantos erros passados são considerados. Um <strong>MA(1)</strong> usa apenas o erro da previsão anterior.</p>
-<p>O modelo MA utiliza os erros passados para prever os valores futuros. Um modelo <strong>MA(q)</strong> tem a seguinte forma:</p>
-<p>[
-Y_t = \mu + \theta_1 \epsilon_{t-1} + \theta_2 \epsilon_{t-2} + \dots + \theta_q \epsilon_{t-q} + \epsilon_t
-]</p>
-<p>Onde:</p>
+<p>O modelo <strong>MA</strong> prevê valores futuros com base em erros de previsão passados. A ordem do modelo (<strong>q</strong>) define quantos erros passados são considerados. Um <strong>MA(1)</strong> usa apenas o erro da previsão anterior. A equação geral de um modelo <strong>MA(q)</strong> é dada por:</p>
+<div class="math notranslate nohighlight">
+\[Y_t = \mu + \theta_1 \epsilon_{t-1} + \theta_2 \epsilon_{t-2} + \dots + \theta_q \epsilon_{t-q} + \epsilon_t\]</div>
+<p>onde:</p>
 <ul class="simple">
 <li><p>( Y_t ) é o valor atual da série.</p></li>
 <li><p>( \mu ) é a média da série.</p></li>
@@ -1509,10 +1444,9 @@ Y_t = \mu + \theta_1 \epsilon_{t-1} + \theta_2 \epsilon_{t-2} + \dots + \theta_q
 <li><p><strong>q</strong> é a ordem do componente <strong>MA</strong> (Médias Móveis).</p></li>
 </ul>
 <p>A equação geral do modelo <strong>ARMA(p, q)</strong> é:</p>
-<p>[
-Y_t = c + \sum_{i=1}^{p} \phi_i Y_{t-i} + \sum_{j=1}^{q} \theta_j \epsilon_{t-j} + \epsilon_t
-]</p>
-<p>Onde:</p>
+<div class="math notranslate nohighlight">
+\[Y_t = c + \sum_{i=1}^{p} \phi_i Y_{t-i} + \sum_{j=1}^{q} \theta_j \epsilon_{t-j} + \epsilon_t\]</div>
+<p>onde:</p>
 <ul class="simple">
 <li><p>( Y_t ) é o valor atual da série.</p></li>
 <li><p>( c ) é uma constante.</p></li>
@@ -1522,7 +1456,7 @@ Y_t = c + \sum_{i=1}^{p} \phi_i Y_{t-i} + \sum_{j=1}^{q} \theta_j \epsilon_{t-j}
 </ul>
 <p>O modelo <strong>ARMA</strong> é amplamente utilizado para modelar séries temporais estacionárias, capturando tanto a dependência dos valores passados (AR) quanto o impacto dos erros passados (MA).</p>
 <section id="modelos-arima-e-sarima">
-<h2>5.3.1.3 Modelos ARIMA e SARIMA<a class="headerlink" href="#modelos-arima-e-sarima" title="Link to this heading">#</a></h2>
+<h4>5.3.1.3 Modelos ARIMA e SARIMA<a class="headerlink" href="#modelos-arima-e-sarima" title="Link to this heading">#</a></h4>
 <ul class="simple">
 <li><p><strong>Modelo ARIMA (Autoregressivo Integrado de Média Móvel):</strong></p></li>
 </ul>
@@ -1536,50 +1470,84 @@ A previsão é feita aplicando diferenciações sucessivas e ajustando component
 <li><p><strong>Modelo SARIMA (ARIMA Sazonal):</strong></p></li>
 </ul>
 <p>O SARIMA incorpora a sazonalidade ao ARIMA, sendo útil para séries com padrões sazonais. A ordem do modelo é definida por (p, d, q)(P, D, Q, s), onde (P, D, Q) representam os componentes sazonais e s é o período sazonal.</p>
-<p>Para séries temporais com sazonalidade, o modelo SARIMA adiciona termos sazonais:</p>
-<p>SARIMA(p,d,q)×(P,D,Q)mSARIMA(p,d,q) \times (P,D,Q)_m
-Onde:
-(P, D, Q) são os parâmetros sazonais.
-m é o período da sazonalidade (por exemplo, 12 para dados mensais).</p>
+<p>Para séries temporais com sazonalidade, o modelo <strong>SARIMA</strong> adiciona termos sazonais. A especificação completa do modelo é:</p>
+<div class="math notranslate nohighlight">
+\[SARIMA(p,d,q) \times (P,D,Q)_m\]</div>
+<p>onde:</p>
+<ul class="simple">
+<li><p>( (P, D, Q) ) são os parâmetros sazonais.</p></li>
+<li><p>( m ) é o período da sazonalidade (por exemplo, 12 para dados mensais).</p></li>
+</ul>
+</section>
 </section>
 <section id="modelos-avancados">
-<h2>5.3.2 Modelos Avançados<a class="headerlink" href="#modelos-avancados" title="Link to this heading">#</a></h2>
+<h3>5.3.2 Modelos Avançados<a class="headerlink" href="#modelos-avancados" title="Link to this heading">#</a></h3>
 <p>Com o avanço da tecnologia e a disponibilidade de grandes volumes de dados, modelos mais sofisticados têm sido desenvolvidos para lidar com séries temporais complexas. Esses modelos são baseados em técnicas de aprendizado de máquina e abordagens espaço-temporais.</p>
 <section id="modelos-baseados-em-aprendizado-de-maquina">
-<h3>5.3.2.1 Modelos Baseados em Aprendizado de Máquina<a class="headerlink" href="#modelos-baseados-em-aprendizado-de-maquina" title="Link to this heading">#</a></h3>
-<p>Com o avanço do aprendizado de máquina, diversas técnicas têm sido aplicadas à previsão de séries temporais.</p>
-<ul class="simple">
-<li><p><strong>Redes Neurais:</strong></p></li>
-</ul>
-<p>Redes neurais, como as <strong>Redes Neurais Recorrentes (RNN)</strong> e suas variações (<strong>LSTM</strong> e <strong>GRU</strong>), são eficazes para capturar padrões não lineares e dependências de longo prazo em séries temporais. Elas são especialmente úteis para dados complexos e de alta dimensionalidade.</p>
-<p>As RNNs são um tipo de rede neural que mantém memória de estados anteriores, tornando-se adequadas para séries temporais. Modelos como LSTMs (Long Short-Term Memory) e GRUs (Gated Recurrent Units) melhoram a retenção de informações ao longo do tempo.</p>
+<h4>5.3.2.1 Modelos Baseados em Aprendizado de Máquina<a class="headerlink" href="#modelos-baseados-em-aprendizado-de-maquina" title="Link to this heading">#</a></h4>
+<p>Com o avanço do aprendizado de máquina, diversas técnicas têm sido aplicadas à previsão de séries temporais, permitindo a modelagem de padrões mais complexos e não lineares. Diferentemente dos métodos estatísticos tradicionais, que assumem relações explícitas entre os dados, os modelos de aprendizado de máquina identificam automaticamente padrões e tendências ocultas. Entre essas abordagens, destacam-se as redes neurais, especialmente as <strong>Redes Neurais Recorrentes (RNN)</strong> e suas variações, como <strong>LSTM (Long Short-Term Memory)</strong> e <strong>GRU (Gated Recurrent Units)</strong>.</p>
+<p>As <strong>Redes Neurais Recorrentes (RNNs)</strong> são uma classe de redes neurais artificiais projetadas para lidar com dados sequenciais, tornando-as particularmente eficazes na previsão de séries temporais. Ao contrário das redes neurais tradicionais, que processam cada entrada de maneira independente, as RNNs possuem conexões recorrentes que permitem a retenção de informações passadas, criando um efeito de memória. No entanto, as RNNs padrão sofrem com o problema do <strong>desvanecimento do gradiente</strong>, dificultando a aprendizagem de dependências de longo prazo.</p>
+<p>Para contornar essa limitação, surgiram variações mais avançadas, como as <strong>LSTMs</strong> e <strong>GRUs</strong>, que são projetadas para capturar dependências de longo prazo em séries temporais. As <strong>LSTMs</strong> utilizam “células de memória” que regulam o fluxo de informações por meio de portas de entrada, saída e esquecimento, permitindo que a rede aprenda quais informações devem ser retidas ou descartadas ao longo do tempo. Já as <strong>GRUs</strong> são uma simplificação das LSTMs, com um funcionamento semelhante, mas com menos parâmetros, o que as torna mais eficientes computacionalmente, sem comprometer significativamente o desempenho.</p>
+<p>Esses modelos são comumente utilizados para prever séries temporais em contextos que envolvem grande volume de dados e relações não lineares complexas, como previsões financeiras, demanda de energia e detecção de padrões em sensores IoT.</p>
 </section>
 <section id="modelos-baseados-em-arvore-de-decisao">
-<h3>5.3.2.2. Modelos Baseados em Árvore de Decisão<a class="headerlink" href="#modelos-baseados-em-arvore-de-decisao" title="Link to this heading">#</a></h3>
-<p>Algoritmos como XGBoost, Random Forest e LightGBM podem ser usados para prever séries temporais considerando múltiplas variáveis exógenas.</p>
-<ul class="simple">
-<li><p><strong>XGBoost:</strong></p></li>
-</ul>
-<p>O XGBoost é um algoritmo de aprendizado de máquina baseado em árvores de decisão que pode ser aplicado a séries temporais. Ele é conhecido por sua eficiência e capacidade de lidar com dados heterogêneos. Para séries temporais, é comum usar técnicas de engenharia de características para transformar os dados em um formato adequado.</p>
+<h4>5.3.2.2. Modelos Baseados em Árvore de Decisão<a class="headerlink" href="#modelos-baseados-em-arvore-de-decisao" title="Link to this heading">#</a></h4>
+<p>Modelos baseados em árvores de decisão, como <strong>XGBoost, Random Forest e LightGBM</strong>, são comumente utilizados para a previsão de séries temporais, especialmente quando há múltiplas variáveis exógenas envolvidas. Diferentemente dos modelos estatísticos tradicionais, como ARIMA e SARIMA, esses algoritmos não modelam diretamente a estrutura temporal dos dados, mas podem capturar padrões complexos ao explorar a relação entre variáveis preditoras e valores passados da série.</p>
+<p>O <strong>XGBoost</strong> é um dos algoritmos mais eficientes para aprendizado de máquina e se baseia no conceito de <strong>boosting de árvores de decisão</strong>, construindo modelos sequenciais onde cada nova árvore corrige os erros da anterior. Sua aplicação em séries temporais exige a transformação dos dados por meio de técnicas como a criação de defasagens (lags), estatísticas sobre janelas móveis e a inclusão de variáveis sazonais, como mês do ano ou dia da semana, para capturar padrões cíclicos.</p>
+<p>O <strong>Random Forest</strong>, por sua vez, utiliza um método de <strong>bagging</strong>, onde múltiplas árvores de decisão independentes são treinadas com subconjuntos aleatórios dos dados. Apesar de sua robustez e resistência ao overfitting, esse modelo não captura diretamente a dependência temporal sequencial, sendo necessário o uso de variáveis explicativas que representem o comportamento da série ao longo do tempo.</p>
+<p>Já o <strong>LightGBM</strong> é uma versão otimizada do Gradient Boosting, projetada para ser mais rápida e eficiente, especialmente para grandes volumes de dados. Ele se diferencia do XGBoost pelo seu crescimento baseado em folhas (<strong>leaf-wise growth</strong>), que permite atingir bons desempenhos com menos iterações. Assim como no XGBoost, a aplicação do LightGBM a séries temporais exige engenharia de características para transformar os dados de maneira adequada.</p>
+<p>Embora esses modelos sejam altamente eficazes quando há múltiplas variáveis exógenas e um grande volume de dados, seu desempenho depende fortemente da qualidade das transformações aplicadas. Muitas vezes, são combinados com abordagens estatísticas para melhorar a precisão das previsões, aproveitando tanto a flexibilidade dos modelos baseados em árvores quanto a capacidade dos métodos tradicionais de capturar padrões temporais.</p>
 <section id="prophet">
-<h4>5.3.2.3 Prophet<a class="headerlink" href="#prophet" title="Link to this heading">#</a></h4>
-<p>Desenvolvido pelo Facebook, o Prophet é um modelo robusto para séries temporais, lidando bem com sazonalidade e feriados. Ele usa uma combinação de regressão e decomposição de séries temporais.</p>
+<h5>5.3.2.3 Prophet<a class="headerlink" href="#prophet" title="Link to this heading">#</a></h5>
+<p>O <strong>Prophet</strong> é um modelo de previsão de séries temporais desenvolvido pelo Facebook (Meta) que combina técnicas de <strong>regressão estatística e decomposição de séries temporais</strong> para capturar tendências, sazonalidades e eventos especiais, como feriados. Ele é particularmente útil para séries temporais com padrões sazonais fortes e dados irregulares, sendo amplamente aplicado em previsões de vendas, tráfego de sites e demanda por serviços.</p>
+<p>A abordagem do Prophet se baseia na decomposição da série temporal em três componentes principais:</p>
+<ol class="arabic simple">
+<li><p><strong>Tendência</strong>: Modelada por uma função de crescimento linear ou logístico, permitindo capturar variações de longo prazo nos dados.</p></li>
+<li><p><strong>Sazonalidade</strong>: Representada por funções periódicas que descrevem padrões recorrentes, como variações diárias, semanais ou anuais.</p></li>
+<li><p><strong>Eventos e feriados</strong>: Considera impactos pontuais no comportamento da série, permitindo que o modelo incorpore datas específicas que influenciam os dados, como promoções e feriados.</p></li>
+</ol>
+<p>Além disso, o Prophet lida bem com <strong>dados ausentes e valores discrepantes</strong>, ajustando automaticamente suas previsões sem a necessidade de pré-processamento extenso. Ele também permite a inclusão de <strong>variáveis exógenas</strong> para melhorar a precisão da previsão, tornando-o flexível para diferentes domínios. Sua implementação no Python e R é simples, tornando-o uma escolha popular entre analistas e cientistas de dados que precisam de previsões rápidas e interpretáveis.</p>
 </section>
 <section id="modelos-espaco-temporais">
-<h4>5.3.2.3 Modelos Espaço-Temporais<a class="headerlink" href="#modelos-espaco-temporais" title="Link to this heading">#</a></h4>
+<h5>5.3.2.4 Modelos Espaço-Temporais<a class="headerlink" href="#modelos-espaco-temporais" title="Link to this heading">#</a></h5>
+<p>Os <strong>modelos espaço-temporais</strong> combinam dependências espaciais e temporais para analisar fenômenos dinâmicos distribuídos no espaço e no tempo. Alguns dos principais modelos dessa categoria incluem o <strong>STARIMA (Spatial-Temporal Autoregressive Integrated Moving Average)</strong> e o <strong>GWR com Fator Temporal (Geographically Weighted Regression)</strong>.</p>
+<p>O STARIMA é uma extensão do ARIMA que incorpora interações entre localidades vizinhas, sendo amplamente utilizado em previsões climáticas, tráfego urbano e monitoramento ambiental.</p>
+<p>Já o GWR com Fator Temporal permite que os coeficientes da regressão variem espacialmente e, ao incluir um fator temporal, captura mudanças locais ao longo do tempo. Essa abordagem é indicada para estudar processos dinâmicos, como crescimento urbano, padrões de desmatamento e flutuações na produtividade agrícola, proporcionando análises mais precisas e contextualizadas.</p>
+</section>
+<section id="modelos-baseados-em-transformers">
+<h5>5.3.2.5 Modelos Baseados em Transformers<a class="headerlink" href="#modelos-baseados-em-transformers" title="Link to this heading">#</a></h5>
+<p>Os <strong>Transformers</strong> são modelos que revolucionaram o aprendizado de máquina em diversas áreas, incluindo o processamento de séries temporais. Diferentemente das redes neurais recorrentes (RNNs), que processam os dados de forma sequencial, os Transformers utilizam um mecanismo de <strong>self-attention</strong>, permitindo capturar dependências de longo alcance de forma mais eficiente.</p>
+<p>Entre os modelos baseados em Transformers aplicados a séries temporais, destacam-se:</p>
 <ul class="simple">
-<li><p><strong>STARIMA (Spatial-Temporal Autoregressive Integrated Moving Average):</strong></p></li>
+<li><p><strong>Temporal Fusion Transformer (TFT)</strong>: Desenvolvido especificamente para séries temporais multivariadas, esse modelo combina atenção temporal com mecanismos de interpretação de variáveis para prever eventos futuros. Ele é altamente flexível e pode lidar com padrões complexos e dados incompletos.</p></li>
+<li><p><strong>Informer</strong>: Uma variação eficiente dos Transformers para séries temporais, projetada para reduzir o custo computacional dos modelos tradicionais, tornando-os mais escaláveis para grandes conjuntos de dados.</p></li>
 </ul>
-<p>O STARIMA é uma extensão do ARIMA que incorpora dependências espaciais e temporais. É útil para dados que variam no tempo e no espaço, como previsões climáticas ou de tráfego.</p>
+<p>Os Transformers são indicados quando há múltiplas variáveis exógenas e a necessidade de capturar padrões não lineares complexos em grandes volumes de dados.</p>
+</section>
+<section id="modelos-bayesianos-para-series-temporais">
+<h5>5.3.2.6 Modelos Bayesianos para Séries Temporais<a class="headerlink" href="#modelos-bayesianos-para-series-temporais" title="Link to this heading">#</a></h5>
+<p>Os <strong>modelos bayesianos</strong> são uma abordagem estatística que incorpora <strong>incerteza e distribuição probabilística</strong> nas previsões. Ao contrário de modelos determinísticos, que fornecem apenas um valor predito, os métodos bayesianos geram distribuições de probabilidade para os valores futuros, permitindo estimar a incerteza associada às previsões.</p>
+<p>Entre os principais modelos bayesianos para séries temporais, destacam-se:</p>
 <ul class="simple">
-<li><p><strong>GWR com Fator Temporal (Geographically Weighted Regression):</strong></p></li>
+<li><p><strong>Gaussian Processes for Time Series (GP-TS)</strong>: Esse método utiliza processos gaussianos para modelar séries temporais, ajustando distribuições probabilísticas para diferentes padrões de variação. É especialmente útil quando há poucos dados e a estrutura da série é desconhecida.</p></li>
+<li><p><strong>Bayesian Structural Time Series (BSTS)</strong>: Baseado em decomposição de séries temporais, esse modelo combina componentes de tendência, sazonalidade e regressão com uma abordagem probabilística, sendo útil para previsão e detecção de anomalias.</p></li>
 </ul>
-<p>O GWR é um modelo de regressão que permite coeficientes variáveis espacialmente. Quando combinado com um fator temporal, ele pode ser usado para modelar relações espaço-temporais em dados geográficos.</p>
+<p>Os modelos bayesianos são frequentemente usados em cenários onde a estimativa da incerteza é fundamental, como previsões econômicas, financeiras e de demanda.</p>
+</section>
+<section id="modelos-para-series-temporais-irregulares-e-multivariadas">
+<h5>5.3.2.7 Modelos para Séries Temporais Irregulares e Multivariadas<a class="headerlink" href="#modelos-para-series-temporais-irregulares-e-multivariadas" title="Link to this heading">#</a></h5>
+<p>Nem todas as séries temporais seguem padrões regulares, e alguns métodos tradicionais falham ao lidar com dados irregulares, multivariados ou com grandes lacunas. Para esse tipo de dado, foram desenvolvidos modelos específicos que permitem capturar informações de forma mais eficiente.</p>
+<ul class="simple">
+<li><p><strong>N-BEATS (Neural Basis Expansion Analysis for Time Series)</strong>: Um modelo baseado em redes neurais que elimina a necessidade de engenharia de features, aprendendo representações diretamente dos dados. Ele se destaca por sua robustez para diferentes tipos de séries temporais, incluindo séries univariadas e multivariadas.</p></li>
+<li><p><strong>DeepAR</strong>: Desenvolvido pela Amazon, esse modelo usa redes neurais recorrentes para aprender padrões de séries temporais e gerar previsões probabilísticas, sendo ideal para cenários com múltiplas séries correlacionadas.</p></li>
+<li><p><strong>TCN (Temporal Convolutional Networks)</strong>: Um modelo baseado em redes convolucionais, que supera algumas limitações das redes recorrentes ao processar sequências temporais de forma paralela, tornando o treinamento mais eficiente.</p></li>
+</ul>
+<p>Esses modelos são frequentemente usados em aplicações em áreas como varejo, previsão de séries temporais médicas e sistemas de manutenção preditiva, onde os dados podem ser esparsos ou multivariados.</p>
 </section>
 </section>
 </section>
 <section id="escolha-do-modelo-adequado">
-<h2>5.3.3 Escolha do Modelo Adequado<a class="headerlink" href="#escolha-do-modelo-adequado" title="Link to this heading">#</a></h2>
+<h3>5.3.3 Escolha do Modelo Adequado<a class="headerlink" href="#escolha-do-modelo-adequado" title="Link to this heading">#</a></h3>
 <p>A escolha do modelo depende das características da série temporal, como estacionariedade, tendência, sazonalidade e presença de padrões não lineares. Além disso, é importante considerar o volume de dados, a complexidade do problema e a interpretabilidade do modelo.</p>
 <ul class="simple">
 <li><p><strong>Séries simples:</strong> Modelos clássicos como ARIMA ou suavização exponencial são suficientes.</p></li>
@@ -1619,12 +1587,13 @@ m é o período da sazonalidade (por exemplo, 12 para dados mensais).</p>
 </table>
 </div>
 </section>
+</section>
 <section id="avaliacao-e-comparacao-de-modelos-de-series-temporais">
 <h2>5.4 Avaliação e Comparação de Modelos de Séries Temporais<a class="headerlink" href="#avaliacao-e-comparacao-de-modelos-de-series-temporais" title="Link to this heading">#</a></h2>
 <p>A avaliação e comparação de modelos são etapas essenciais na análise de séries temporais, pois permitem identificar a abordagem mais adequada ao problema e garantir previsões precisas e confiáveis. Para isso, utilizam-se métricas de avaliação, técnicas de comparação e estratégias para selecionar o melhor modelo.</p>
 <p>A qualidade de um modelo preditivo está diretamente relacionada à sua capacidade de generalização, ou seja, à habilidade de prever corretamente valores futuros com base nos dados históricos. Para avaliar essa capacidade, aplicam-se diferentes técnicas de validação e métricas de desempenho. Uma avaliação criteriosa é fundamental para evitar problemas como o overfitting, que ocorre quando o modelo se ajusta excessivamente aos dados de treinamento, comprometendo sua capacidade de previsão em novos cenários.</p>
 <p>A avaliação de modelos tem quatro objetivos principais: medir a precisão das previsões, garantindo que o modelo forneça resultados confiáveis; evitar o overfitting, assegurando que o modelo generalize bem para novos dados; comparar diferentes abordagens, permitindo a escolha do modelo mais adequado ao problema; e identificar oportunidades de melhoria, possibilitando ajustes nos parâmetros ou a inclusão de novas variáveis relevantes.</p>
-<p>Ao compreender e aplicar corretamente essas técnicas, é possível desenvolver modelos mais robustos e eficazes, tornando as previsões mais seguras e úteis para a tomada de decisão.</p>
+<p>Ao compreender e aplicar corretamente essas técnicas, é possível desenvolver modelos mais robustos, tornando as previsões mais seguras e úteis para a tomada de decisão.</p>
 <section id="metricas-de-avaliacao">
 <h3>5.4.1 Métricas de Avaliação<a class="headerlink" href="#metricas-de-avaliacao" title="Link to this heading">#</a></h3>
 <p>A avaliação do desempenho de um modelo de previsão é fundamental para garantir que ele forneça resultados confiáveis. Para isso, utilizam-se diferentes métricas que quantificam o erro das previsões em relação aos valores reais. A escolha da métrica mais adequada depende do tipo de problema e dos objetivos da análise. Algumas métricas penalizam erros grandes, outras são mais robustas contra outliers, e algumas permitem comparações entre séries de diferentes escalas.</p>
@@ -1632,55 +1601,48 @@ m é o período da sazonalidade (por exemplo, 12 para dados mensais).</p>
 <section id="metricas-baseadas-em-erro">
 <h4>5.4.1.1 Métricas Baseadas em Erro<a class="headerlink" href="#metricas-baseadas-em-erro" title="Link to this heading">#</a></h4>
 <p>As métricas baseadas em erro quantificam a diferença entre os valores previstos e os valores observados. Elas são amplamente utilizadas para medir o desempenho dos modelos preditivos.</p>
-<ul>
-<li><p><strong>Erro Quadrático Médio (MSE - Mean Squared Error):</strong></p>
-<p>[
-MSE = \frac{1}{n} \sum_{t=1}^{n} (y_t - \hat{y}_t)^2
-]</p>
-<p>Onde:</p>
+<ul class="simple">
+<li><p><strong>Erro Quadrático Médio (MSE - Mean Squared Error):</strong></p></li>
+</ul>
+<p>O <strong>MSE</strong> mede o erro médio ao elevar ao quadrado a diferença entre os valores reais e as previsões. Ele penaliza erros maiores de forma mais intensa, sendo útil quando se deseja minimizar grandes desvios. No entanto, por ser sensível a outliers, pode superestimar o impacto de valores extremos.</p>
+<div class="math notranslate nohighlight">
+\[MSE = \frac{1}{n} \sum_{t=1}^{n} (y_t - \hat{y}_t)^2\]</div>
+<p>onde:</p>
 <ul class="simple">
 <li><p>( n ) é o número total de observações.</p></li>
 <li><p>( y_t ) é o valor real da série no instante ( t ).</p></li>
 <li><p>( \hat{y}_t ) é o valor previsto pelo modelo no instante ( t ).</p></li>
 <li><p>A diferença ( (y_t - \hat{y}_t) ) representa o erro da previsão para cada ponto da série.</p></li>
 <li><p>O erro é elevado ao quadrado para penalizar desvios maiores de forma mais intensa.</p></li>
+<li><p><strong>Erro Absoluto Médio (MAE - Mean Absolute Error):</strong></p></li>
 </ul>
-</li>
-</ul>
-<p>O <strong>MSE</strong> mede o erro médio ao elevar ao quadrado a diferença entre os valores reais e as previsões. Ele penaliza erros maiores de forma mais intensa, sendo útil quando se deseja minimizar grandes desvios. No entanto, por ser sensível a outliers, pode superestimar o impacto de valores extremos.</p>
-<ul>
-<li><p><strong>Erro Absoluto Médio (MAE - Mean Absolute Error):</strong></p>
-<p>[
-MAE = \frac{1}{n} \sum_{t=1}^{n} |y_t - \hat{y}_t|
-]</p>
-<p>Onde:</p>
+<p>O <strong>MAE</strong> calcula a média dos erros absolutos, sem elevar ao quadrado. Isso o torna mais fácil de interpretar e menos sensível a outliers do que o MSE. Ele representa o erro médio em unidades da variável original, facilitando a compreensão do desempenho do modelo.</p>
+<div class="math notranslate nohighlight">
+\[MAE = \frac{1}{n} \sum_{t=1}^{n} |y_t - \hat{y}_t|\]</div>
+<p>onde:</p>
 <ul class="simple">
 <li><p>( n ) é o número total de observações.</p></li>
 <li><p>( y_t ) é o valor real da série no instante ( t ).</p></li>
 <li><p>( \hat{y}_t ) é o valor previsto pelo modelo no instante ( t ).</p></li>
 <li><p>A diferença absoluta ( |y_t - \hat{y}_t| ) representa o erro da previsão sem considerar a direção do erro (positivo ou negativo).</p></li>
-</ul>
-</li>
-</ul>
-<p>O <strong>MAE</strong> calcula a média dos erros absolutos, sem elevar ao quadrado. Isso o torna mais fácil de interpretar e menos sensível a outliers do que o MSE. Ele representa o erro médio em unidades da variável original, facilitando a compreensão do desempenho do modelo.</p>
-<ul>
-<li><p><strong>Raiz do Erro Quadrático Médio (RMSE - Root Mean Squared Error):</strong></p>
-<p>[
-RMSE = \sqrt{MSE}
-]</p>
-</li>
-</ul>
-<p>Onde:</p>
-<ul class="simple">
-<li><p>O <strong>RMSE</strong> é simplesmente a raiz quadrada do MSE.</p></li>
+<li><p><strong>Raiz do Erro Quadrático Médio (RMSE - Root Mean Squared Error):</strong></p></li>
 </ul>
 <p>O <strong>RMSE</strong> expressa os erros na mesma unidade dos dados originais, tornando sua interpretação mais intuitiva. Como mantém a característica de penalizar desvios maiores, é uma das métricas mais utilizadas em previsões.</p>
-<ul>
-<li><p><strong>Erro Percentual Absoluto Médio (MAPE - Mean Absolute Percentage Error):</strong></p>
-<p>[
-MAPE = \frac{1}{n} \sum_{t=1}^{n} \left| \frac{y_t - \hat{y}_t}{y_t} \right| \times 100
-]</p>
-<p>Onde:</p>
+<ul class="simple">
+<li><p><strong>Raiz do Erro Quadrático Médio (RMSE - Root Mean Squared Error):</strong></p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[RMSE = \sqrt{MSE}\]</div>
+<p>onde:</p>
+<ul class="simple">
+<li><p>O <strong>RMSE</strong> é simplesmente a raiz quadrada do MSE.</p></li>
+<li><p><strong>Erro Percentual Absoluto Médio (MAPE - Mean Absolute Percentage Error):</strong></p></li>
+</ul>
+<p>O <strong>MAPE</strong> mede o erro médio absoluto em termos percentuais, permitindo comparar modelos aplicados a séries temporais com escalas diferentes. Entretanto, ele pode ser problemático quando os valores reais se aproximam de zero, pois pequenos erros podem gerar valores percentuais muito elevados.</p>
+<p>Aqui está a versão corrigida e formatada corretamente para o <strong>Jupyter Book</strong>:</p>
+<div class="math notranslate nohighlight">
+\[MAPE = \frac{1}{n} \sum_{t=1}^{n} \left| \frac{y_t - \hat{y}_t}{y_t} \right| \times 100\]</div>
+<p>onde:</p>
 <ul class="simple">
 <li><p>( n ) é o número total de observações.</p></li>
 <li><p>( y_t ) é o valor real da série no instante ( t ).</p></li>
@@ -1688,19 +1650,17 @@ MAPE = \frac{1}{n} \sum_{t=1}^{n} \left| \frac{y_t - \hat{y}_t}{y_t} \right| \ti
 <li><p>A fração ( \frac{y_t - \hat{y}_t}{y_t} ) representa o erro relativo em relação ao valor real.</p></li>
 <li><p>O resultado é multiplicado por 100 para ser expresso em porcentagem.</p></li>
 </ul>
-</li>
-</ul>
-<p>O <strong>MAPE</strong> mede o erro médio absoluto em termos percentuais, permitindo comparar modelos aplicados a séries temporais com escalas diferentes. Entretanto, ele pode ser problemático quando os valores reais se aproximam de zero, pois pequenos erros podem gerar valores percentuais muito elevados.</p>
 </section>
 <section id="metricas-baseadas-em-acuracia">
 <h4>5.4.1.2 Métricas Baseadas em Acurácia<a class="headerlink" href="#metricas-baseadas-em-acuracia" title="Link to this heading">#</a></h4>
 <p>As métricas baseadas em acurácia avaliam o quão bem o modelo explica a variabilidade dos dados e a qualidade do ajuste.</p>
-<ul>
-<li><p><strong>Coeficiente de Determinação (R²):</strong></p>
-<p>[
-R^2 = 1 - \frac{\sum_{t=1}^{n} (y_t - \hat{y}<em>t)^2}{\sum</em>{t=1}^{n} (y_t - \bar{y})^2}
-]</p>
-<p>Onde:</p>
+<ul class="simple">
+<li><p><strong>Coeficiente de Determinação (( R^2 )) - R-Squared:</strong></p></li>
+</ul>
+<p>O <strong>R²</strong> mede a proporção da variância dos dados que é explicada pelo modelo. Seu valor varia de 0 a 1, sendo que valores mais próximos de 1 indicam que o modelo é capaz de explicar melhor a variabilidade da série. No entanto, ele pode ser enganoso em séries temporais, especialmente quando há dependência temporal forte, pois pode superestimar a qualidade da previsão.</p>
+<div class="math notranslate nohighlight">
+\[R^2 = 1 - \frac{\sum_{t=1}^{n} (y_t - \hat{y}_t)^2}{\sum_{t=1}^{n} (y_t - \bar{y})^2}\]</div>
+<p>onde:</p>
 <ul class="simple">
 <li><p>( y_t ) é o valor real da série no instante ( t ).</p></li>
 <li><p>( \hat{y}_t ) é o valor previsto pelo modelo no instante ( t ).</p></li>
@@ -1708,25 +1668,20 @@ R^2 = 1 - \frac{\sum_{t=1}^{n} (y_t - \hat{y}<em>t)^2}{\sum</em>{t=1}^{n} (y_t -
 <li><p>O numerador representa o erro residual (diferença entre os valores reais e os previstos pelo modelo).</p></li>
 <li><p>O denominador representa a variância total dos dados.</p></li>
 </ul>
-<p>O <strong>R²</strong> mede a proporção da variância dos dados que é explicada pelo modelo. Seu valor varia de 0 a 1, sendo que valores mais próximos de 1 indicam que o modelo é capaz de explicar melhor a variabilidade da série. No entanto, ele pode ser enganoso em séries temporais, especialmente quando há dependência temporal forte, pois pode superestimar a qualidade da previsão.</p>
-</li>
-</ul>
 </section>
-<section id="metricas-para-series-temporais">
-<h4>5.4.1.3 Métricas para Séries Temporais<a class="headerlink" href="#metricas-para-series-temporais" title="Link to this heading">#</a></h4>
+<section id="metricas-especificas-para-series-temporais">
+<h4>5.4.1.3 Métricas específicas para Séries Temporais<a class="headerlink" href="#metricas-especificas-para-series-temporais" title="Link to this heading">#</a></h4>
 <p>Além das métricas gerais de erro e acurácia, algumas métricas são específicas para séries temporais, levando em conta a estrutura temporal dos dados.</p>
-<ul class="simple">
-<li><p><strong>Erro de Previsão Acumulado (Cumulative Forecast Error - CFE):</strong><br />
-O <strong>CFE</strong> mede o viés do modelo ao longo do tempo. Um erro acumulado muito positivo ou muito negativo indica que o modelo está consistentemente subestimando ou superestimando os valores reais, o que pode exigir ajustes.</p></li>
-<li><p><strong>Mean Absolute Scaled Error (MASE):</strong><br />
-O <strong>MASE</strong> compara o erro do modelo com o erro de um modelo de referência, como a previsão ingênua (por exemplo, assumir que o próximo valor será igual ao último observado). Isso permite avaliar se o modelo realmente está agregando valor em relação a previsões simples. Ele é útil quando há necessidade de comparar modelos em séries temporais de diferentes escalas.</p></li>
-</ul>
+<p><strong>Erro de Previsão Acumulado (Cumulative Forecast Error - CFE):</strong></p>
+<p>O <strong>CFE</strong> mede o viés do modelo ao longo do tempo. Um erro acumulado muito positivo ou muito negativo indica que o modelo está consistentemente subestimando ou superestimando os valores reais, o que pode exigir ajustes.</p>
+<p><strong>Mean Absolute Scaled Error (MASE):</strong></p>
+<p>O <strong>MASE</strong> compara o erro do modelo com o erro de um modelo de referência, como a previsão ingênua (por exemplo, assumir que o próximo valor será igual ao último observado). Isso permite avaliar se o modelo realmente está agregando valor em relação a previsões simples. Ele é útil quando há necessidade de comparar modelos em séries temporais de diferentes escalas.</p>
 <p>Essas métricas fornecem diferentes perspectivas sobre o desempenho dos modelos de previsão e devem ser escolhidas de acordo com as características da série temporal e os objetivos da análise.</p>
 </section>
 </section>
 <section id="tecnicas-de-comparacao-de-modelos">
 <h3>5.4.2 Técnicas de Comparação de Modelos<a class="headerlink" href="#tecnicas-de-comparacao-de-modelos" title="Link to this heading">#</a></h3>
-<p>Para garantir que um modelo de previsão seja eficaz, é necessário compará-lo com outras abordagens utilizando técnicas que proporcionem uma avaliação justa e robusta. Isso evita a escolha de um modelo inadequado para a tarefa e melhora a capacidade de generalização da solução.</p>
+<p>Para garantir que um modelo de previsão seja eficaz, é necessário compará-lo com outras abordagens utilizando técnicas que proporcionem uma avaliação robusta. Isso evita a escolha de um modelo inadequado para a tarefa e melhora a capacidade de generalização da solução.</p>
 <section id="divisao-dos-dados">
 <h4>5.4.2.1 Divisão dos Dados<a class="headerlink" href="#divisao-dos-dados" title="Link to this heading">#</a></h4>
 <p>A divisão dos dados é uma etapa básica na avaliação de modelos de séries temporais. Diferente de outras abordagens de aprendizado de máquina, em que os dados podem ser divididos aleatoriamente, em séries temporais é necessário preservar a sequência temporal para evitar vazamento de informações futuras no treinamento.</p>
@@ -1746,25 +1701,20 @@ O <strong>MASE</strong> compara o erro do modelo com o erro de um modelo de refe
 </ul>
 <p>Esse método divide os dados em várias partes, respeitando a ordem cronológica. Cada subconjunto posterior é usado como conjunto de teste, enquanto os dados anteriores são usados para treino. Isso permite avaliar a estabilidade do modelo ao longo do tempo.</p>
 <p>Outras abordagens para validação cruzada em séries temporais incluem:</p>
+<p><strong>Validação por divisão simples (Train-Test Split):</strong></p>
 <ul class="simple">
-<li><p><strong>Validação por divisão simples (Train-Test Split):</strong></p>
-<ul>
 <li><p>Separa os dados em dois conjuntos: um para treinamento e outro para teste.</p></li>
 <li><p>O modelo é treinado com a parte mais antiga e avaliado com os dados mais recentes.</p></li>
 </ul>
-</li>
-<li><p><strong>Validação em janelas deslizantes (Rolling Forecast Origin ou Walk Forward Validation):</strong></p>
-<ul>
+<p><strong>Validação em janelas deslizantes (Rolling Forecast Origin ou Walk Forward Validation):</strong></p>
+<ul class="simple">
 <li><p>Treina o modelo em uma janela de tempo fixa e avalia na próxima janela.</p></li>
 <li><p>O processo se repete ao longo da série, permitindo testar a estabilidade da previsão ao longo do tempo.</p></li>
 </ul>
-</li>
-<li><p><strong>Expanding Window Validation:</strong></p>
-<ul>
+<p><strong>Expanding Window Validation:</strong></p>
+<ul class="simple">
 <li><p>Semelhante à abordagem de janelas deslizantes, mas a cada iteração a janela de treinamento cresce, incorporando novos dados antes de realizar a previsão.</p></li>
 <li><p>Permite que o modelo aprenda continuamente com mais informações históricas.</p></li>
-</ul>
-</li>
 </ul>
 <p>Essas técnicas garantem que a validação seja realizada de maneira fiel à realidade, evitando que o modelo utilize informações futuras para treinar, o que poderia levar a previsões irreais.</p>
 </section>
@@ -1773,7 +1723,8 @@ O <strong>MASE</strong> compara o erro do modelo com o erro de um modelo de refe
 <h3>5.4.3 Testes Estatísticos<a class="headerlink" href="#testes-estatisticos" title="Link to this heading">#</a></h3>
 <p>Além das métricas de erro e das técnicas de validação, os testes estatísticos desempenham um papel fundamental na comparação de modelos, pois permitem verificar se as diferenças no desempenho são estatisticamente significativas.</p>
 <p>O <strong>teste de Diebold-Mariano</strong> é utilizado para comparar a precisão preditiva de dois modelos, avaliando se a diferença entre seus erros de previsão é relevante do ponto de vista estatístico, o que auxilia na determinação do modelo mais adequado.</p>
-<p>Já o <strong>teste de Wilcoxon</strong>, um método não paramétrico, é especialmente útil para comparar modelos emparelhados, sendo aplicado quando há múltiplas séries temporais e se deseja testar se um modelo supera consistentemente outro. A aplicação desses testes garante que a escolha do melhor modelo seja fundamentada em evidências estatísticas, evitando decisões baseadas apenas em métricas isoladas.</p>
+<p>Já o <strong>teste de Wilcoxon</strong>, um método não paramétrico, é especialmente útil para comparar modelos emparelhados, sendo aplicado quando há múltiplas séries temporais e se deseja testar se um modelo supera consistentemente outro.</p>
+<p>A aplicação desses testes garante que a escolha do melhor modelo seja fundamentada em evidências estatísticas, evitando decisões baseadas apenas em métricas isoladas.</p>
 </section>
 <section id="estrategias-para-selecao-do-melhor-modelo">
 <h3>5.4.4 Estratégias para Seleção do Melhor Modelo<a class="headerlink" href="#estrategias-para-selecao-do-melhor-modelo" title="Link to this heading">#</a></h3>
@@ -1870,28 +1821,15 @@ O <strong>MASE</strong> compara o erro do modelo com o erro de um modelo de refe
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">5. INTRODUÇÃO ÀS SÉRIES TEMPORAIS</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estudo-de-caso-analise-de-padroes-e-anomalias-na-precipitacao-em-bage-rs">5.1 Estudo de caso: Análise de Padrões e Anomalias na Precipitação em Bagé (RS)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#caracteristicas-fundamentais-das-series-temporais">5.2 Características Fundamentais das Séries Temporais</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tendencia">5.2.1 Tendência</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analisando-a-tendencia-da-precipitacao-estacao-meteorologica-inmet-83980">5.2.1.1 Analisando a Tendência da Precipitação - estação meteorológica INMET 83980</a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#media-movel-30-dias">5.2.1.1.1 Média Móvel (30 dias)</a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#regressao-linear-para-identificacao-da-tendencia">5.2.1.1.2 Regressão Linear para Identificação da Tendência</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tendencia">5.2.1 Tendência</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#sazonalidade">5.2.2 Sazonalidade</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-da-sazonalidade-da-precipitacao-estacao-meteorologica-inmet-83980">5.2.2.1 Análise da Sazonalidade da Precipitação – Estação Meteorológica INMET 83980</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuicao-mensal-da-precipitacao">5.2.2.1.1 Distribuição Mensal da Precipitação</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decomposicao-da-serie-temporal">5.2.2.1.2 Decomposição da Série Temporal</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-da-funcao-de-autocorrelacao-acf-e-autocorrelacao-parcial-pacf">5.2.2.1.3 Análise da Função de Autocorrelação (ACF) e Autocorrelação Parcial (PACF)</a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ciclos">5.2.3 Ciclos</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-exploratoria-inicial">5.2.3.1 Análise Exploratória Inicial</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">5.2.3.2 Decomposição da Série Temporal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#decomposicao-da-serie-temporal">5.2.3.2 Decomposição da Série Temporal</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-de-autocorrelacao-de-longo-prazo-acf-pacf">5.2.3.3 Análise de Autocorrelação de Longo Prazo (ACF/PACF)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-espectral-transformada-de-fourier">5.2.3.4. Análise Espectral (Transformada de Fourier)</a></li>
 </ul>
@@ -1906,45 +1844,37 @@ O <strong>MASE</strong> compara o erro do modelo com o erro de um modelo de refe
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deteccao-de-eventos-extremos-e-anomalias-na-serie-temporal">5.2.5 Detecção de Eventos Extremos e Anomalias na Série Temporal</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacao-estatistica-de-outliers">5.2.5.1 Identificação Estatística de Outliers</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-visual-da-serie-temporal">5.2.5.1.1 Análise Visual da Série Temporal</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacao-de-outliers-com-boxplot">5.2.5.1.2 Identificação de Outliers com Boxplot</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacao-de-outliers-com-desvio-padrao">5.2.5.1.3 Identificação de Outliers com Desvio-Padrão</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacao-de-outliers-medias-moveis">5.2.5.1.4 Identificação de Outliers Médias Móveis</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#comparacao-entre-os-metodos">5.2.1.5.5 Comparação entre os métodos</a></li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rupturas-estruturais-em-series-temporais">5.2.5.2 Rupturas Estruturais em Séries Temporais</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacao-de-rupturas-estruturas-da-serie-temporal-de-precipitacao">5.2.5.2.1 Identificação de rupturas estruturas da série temporal de precipitação</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacao-estatistica-de-outliers">5.2.5.1 Identificação Estatística de Outliers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rupturas-estruturais-em-series-temporais">5.2.6 Rupturas Estruturais em Séries Temporais</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-de-series-temporais">5.3 Modelos de Séries Temporais</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-classicos">5.3.1 Modelos Clássicos</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-de-suavizacao">5.3.1.1 Modelos de Suavização</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-autorregressivos-e-arima">5.3.1.2 Modelos Autorregressivos e ARIMA</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-autorregressivos-e-arima">5.3.1.2 Modelos Autorregressivos e ARIMA</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-arima-e-sarima">5.3.1.3 Modelos ARIMA e SARIMA</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-avancados">5.3.2 Modelos Avançados</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-baseados-em-aprendizado-de-maquina">5.3.2.1 Modelos Baseados em Aprendizado de Máquina</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-baseados-em-arvore-de-decisao">5.3.2.2. Modelos Baseados em Árvore de Decisão</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#prophet">5.3.2.3 Prophet</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-espaco-temporais">5.3.2.4 Modelos Espaço-Temporais</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-baseados-em-transformers">5.3.2.5 Modelos Baseados em Transformers</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-bayesianos-para-series-temporais">5.3.2.6 Modelos Bayesianos para Séries Temporais</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-para-series-temporais-irregulares-e-multivariadas">5.3.2.7 Modelos para Séries Temporais Irregulares e Multivariadas</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#modelo-autorregressivo-ar">Modelo Autorregressivo (AR)</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-arima-e-sarima">5.3.1.3 Modelos ARIMA e SARIMA</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-avancados">5.3.2 Modelos Avançados</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-baseados-em-aprendizado-de-maquina">5.3.2.1 Modelos Baseados em Aprendizado de Máquina</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-baseados-em-arvore-de-decisao">5.3.2.2. Modelos Baseados em Árvore de Decisão</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#prophet">5.3.2.3 Prophet</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#modelos-espaco-temporais">5.3.2.3 Modelos Espaço-Temporais</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#escolha-do-modelo-adequado">5.3.3 Escolha do Modelo Adequado</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#escolha-do-modelo-adequado">5.3.3 Escolha do Modelo Adequado</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#avaliacao-e-comparacao-de-modelos-de-series-temporais">5.4 Avaliação e Comparação de Modelos de Séries Temporais</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-de-avaliacao">5.4.1 Métricas de Avaliação</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-baseadas-em-erro">5.4.1.1 Métricas Baseadas em Erro</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-baseadas-em-acuracia">5.4.1.2 Métricas Baseadas em Acurácia</a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-para-series-temporais">5.4.1.3 Métricas para Séries Temporais</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-especificas-para-series-temporais">5.4.1.3 Métricas específicas para Séries Temporais</a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tecnicas-de-comparacao-de-modelos">5.4.2 Técnicas de Comparação de Modelos</a><ul class="nav section-nav flex-column">
