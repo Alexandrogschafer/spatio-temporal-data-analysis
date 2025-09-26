@@ -13,8 +13,6 @@ kernelspec:
 ---
 
 
-
-
 # 2. SÉRIES TEMPORAIS E AUTOCORRELAÇÃO
 
 [**Abrir no Google Colab**](https://colab.research.google.com/github/Alexandrogschafer/spatio-temporal-data-analysis/blob/main/capitulo2.ipynb)
@@ -28,6 +26,7 @@ kernelspec:
     <a href="audio/capitulo2.mp3">Baixar MP3</a>
   </audio>
 </section>
+```
 
 
 

@@ -25,7 +25,7 @@ kernelspec:
     <a href="audio/capitulo1.mp3">Baixar MP3</a>
   </audio>
 </section>
-
+```
 
 A análise de dados espaciais e espaço-temporais é uma área interdisciplinar que reúne técnicas de geografia, estatística, ciência da computação e outras disciplinas para investigar fenômenos dinâmicos que variam no espaço e no tempo. Essa abordagem está diretamente relacionada ao contexto do geoprocessamento.
 
