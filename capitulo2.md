@@ -17,7 +17,6 @@ kernelspec:
 
 # 2. SÉRIES TEMPORAIS E AUTOCORRELAÇÃO
 
-# 2. TÍTULO DO CAPÍTULO
 
 [**Abrir no Google Colab**](https://colab.research.google.com/github/Alexandrogschafer/spatio-temporal-data-analysis/blob/main/capitulo2.ipynb)
 
