@@ -1,10 +1,17 @@
-
 ---
 jupytext:
-  formats: md:myst,ipynb
-  text_representation: {extension: .md, format_name: myst}
-kernelspec: {name: python3, display_name: Python 3}
+  formats: md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.16.4
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
 ---
+
 
 # **2.1 Introdução às Séries Temporais**
 
@@ -122,10 +129,6 @@ Ao separar tendência, sazonalidade, ciclos e ruído, conseguimos:
 
 Essa visão mais detalhada é a base para qualquer estudo de séries temporais, inclusive quando integramos dados espaciais (em mapas) e temporais ao mesmo tempo.
 
-```
-
-🔹 É só substituir no seu arquivo. O Jupyter Book renderiza do mesmo jeito, apenas com os títulos “a), b), c), d)” no lugar de “1., 2., 3., 4.”. Quer que eu já siga esse padrão com as seções seguintes também?
-```
 
 
 
