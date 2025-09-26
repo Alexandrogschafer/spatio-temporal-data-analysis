@@ -1,0 +1,34 @@
+name: Build Jupyter Book
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up micromamba
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: env/environment.yml
+          cache-environment: true
+          cache-downloads: true
+          micromamba-version: 'latest'
+
+      - name: Build Jupyter Book (root)
+        shell: bash -l {0}
+        run: |
+          jupyter-book build .
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: _build/html
+          force_orphan: true

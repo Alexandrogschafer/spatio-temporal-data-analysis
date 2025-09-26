@@ -1,0 +1,16 @@
+name: st-book
+channels: [conda-forge]
+dependencies:
+  - python=3.11
+  - jupyter-book=1.0.2
+  - jupytext=1.16.*
+  - nbclient>=0.10
+  - ipykernel
+  - pandas=2.2.*
+  - numpy=1.26.*
+  - matplotlib=3.8.*
+  - statsmodels=0.14.*
+  - scikit-learn=1.5.*
+  - pip
+  - pip:
+      - pmdarima==2.0.4
