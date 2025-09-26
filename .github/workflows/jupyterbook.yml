@@ -25,6 +25,12 @@ jobs:
         run: |
           jupyter-book build .
 
+
+      - name: Copiar pasta de áudio para o site gerado
+        run: |
+          mkdir -p _build/html/audio
+          cp -rf audio/* _build/html/audio/ || true
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
@@ -32,3 +38,4 @@ jobs:
           publish_branch: gh-pages
           publish_dir: _build/html
           force_orphan: true
+

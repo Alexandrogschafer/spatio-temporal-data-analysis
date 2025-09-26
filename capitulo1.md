@@ -16,6 +16,17 @@ kernelspec:
 
 # 1. INTRODUÇÃO A ANÁLISE ESPAÇO-TEMPORAL
 
+```{raw} html
+<section class="cap-audio">
+  <p><strong>Ouça o resumo do capítulo em áudio:</strong></p>
+  <audio controls preload="none" style="width:100%;max-width:720px">
+    <source src="audio/capitulo1.mp3" type="audio/mpeg">
+    Seu navegador não suporta a reprodução de áudio.
+    <a href="audio/capitulo1.mp3">Baixar MP3</a>
+  </audio>
+</section>
+
+
 A análise de dados espaciais e espaço-temporais é uma área interdisciplinar que reúne técnicas de geografia, estatística, ciência da computação e outras disciplinas para investigar fenômenos dinâmicos que variam no espaço e no tempo. Essa abordagem está diretamente relacionada ao contexto do geoprocessamento.
 
 Os avanços tecnológicos das últimas décadas têm revolucionado a análise espaço-temporal, permitindo a coleta, armazenamento e processamento de grandes volumes de dados com alta granularidade espacial e temporal. Organizações públicas e privadas disponibilizam informações detalhadas sobre aspectos sociais, econômicos, ambientais e de saúde pública, frequentemente coletadas em alta frequência e com precisão geoespacial. 
