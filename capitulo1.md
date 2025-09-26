@@ -12,7 +12,10 @@ kernelspec:
   name: python3
 ---
 
-
+<audio controls>
+  <source src="audio/capitulo1.mp4" type="audio/mp4">
+  Seu navegador não suporta o elemento de áudio.
+</audio>
 
 # 1. INTRODUÇÃO ANÁLISE ESPAÇO-TEMPORAL
 

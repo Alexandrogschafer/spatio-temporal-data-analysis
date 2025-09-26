@@ -12,8 +12,17 @@ kernelspec:
   name: python3
 ---
 
+[Baixar o notebook deste capítulo](capitulo2.ipynb)
 
-# 2 SÉRIES TEMPORAIS E AUTOCORRELAÇÃO
+
+<audio controls>
+  <source src="audio/capitulo2.mp4" type="audio/mp4">
+  Seu navegador não suporta o elemento de áudio.
+</audio>
+
+
+
+# 2. SÉRIES TEMPORAIS E AUTOCORRELAÇÃO
 
 Uma série temporal é um conjunto de dados organizados na ordem em que foram coletados ao longo do tempo. Em outras palavras, é um registro de como um fenômeno muda de um momento para outro.  
 O foco não está apenas nos valores em si, mas na evolução desses valores com o passar do tempo.
@@ -543,8 +552,9 @@ A essa semelhança chamamos **autocorrelação**.
 
 Tecnicamente, a autocorrelação no **lag** (defasagem) $k$ é a correlação entre $y_t$ e $y_{t-k}$:
 
-```{math}
-\rho_k = \text{corr}\bigl(y_t,\; y_{t-k}\bigr)
+$$
+\rho_k = \text{corr}\bigl(y_t,\, y_{t-k}\bigr)
+$$
 
 
 
