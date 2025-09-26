@@ -13,7 +13,7 @@ kernelspec:
 ---
 
 
-# **2.1 Introdução às Séries Temporais**
+# **2 SÉRIES TEMPORAIS E AUTOCORRELAÇ
 
 Uma série temporal é um conjunto de dados organizados na ordem em que foram coletados ao longo do tempo. Em outras palavras, é um registro de como um fenômeno muda de um momento para outro.  
 O foco não está apenas nos valores em si, mas na evolução desses valores com o passar do tempo.
@@ -31,12 +31,12 @@ Podemos imaginar uma série temporal como um “filme” do fenômeno observado:
 Logo abaixo, podemos visualizar um exemplo real de série temporal para o caso de temperatura mensal.
 O gráfico mostra a temperatura média mensal registrada ao longo de vários anos pela Estação Climatológica A827 do INMET, localizada no município de Bagé-RS.
 
-```{figure} images/cap2_1.png
-:name: cap2_1
-Série temporal da temperatura média mensal (°C) – Estação Climatológica A827/INMET, Bagé-RS.
-```
+![Figura 1](images/fig2_1.png)
 
-## **Diferença entre dados transversais (espaciais) e dados temporais**
+Figura 1: Série temporal da temperatura média mensal (°C) – Estação Climatológica A827/INMET, Bagé-RS.
+
+
+**Diferença entre dados transversais (espaciais) e dados temporais**
 
 ```{admonition} Dados transversais ou espaciais
 :class: note
@@ -60,25 +60,25 @@ Entender primeiro as séries temporais é essencial para depois combinar essas d
 
 
 
-# **2.2 Componentes de uma Série Temporal**
+## **2.1 Componentes de uma Série Temporal**
 
 Uma série temporal pode parecer apenas uma sequência de números ao longo do tempo, mas por trás dela existem padrões e comportamentos que podemos identificar. Para entender melhor, costumamos “dividir” mentalmente uma série temporal em componentes. Cada componente mostra uma parte diferente do comportamento dos dados.
 
 Esses componentes ajudam a interpretar a série e a preparar análises mais avançadas, como previsões ou detecção de anomalias. Vamos conhecer os principais:
 
-## **a) Tendência**
+**a) Tendência**
 
 A tendência mostra se, ao longo do tempo, os valores estão aumentando, diminuindo ou permanecendo estáveis.  
 Exemplo: a média das temperaturas anuais de uma cidade pode estar subindo gradualmente por conta das mudanças climáticas.
 
 Ao identificar a tendência, conseguimos ver o comportamento geral do fenômeno, sem nos perder nas variações do dia a dia.
 
-```{figure} images/cap2_2.png
-:name: cap2_2
-Tendência (STL) da série temporal – Estação Climatológica A827/INMET, Bagé-RS.
-```
+![Figura 1](images/fig2_2.png)
 
-## **b) Sazonalidade**
+Figura 2: Tendência (STL) da série temporal – Estação Climatológica A827/INMET, Bagé-RS.
+
+
+**b) Sazonalidade**
 
 A sazonalidade representa padrões que se repetem regularmente em intervalos de tempo previsíveis.
 Exemplo: aumento das vendas no comércio no final do ano; maior quantidade de chuvas no verão.
@@ -87,12 +87,12 @@ São variações ligadas a fatores como estações do ano, meses, dias da semana
 
 Reconhecer a sazonalidade é útil para diferenciar o que é um padrão normal do que é uma variação atípica.
 
-```{figure} images/cap2_3.png
-:name: cap2_3
-Sazonalidade (STL) da série temporal – Estação Climatológica A827/INMET, Bagé-RS.
-```
+![Figura 1](images/fig2_3.png)
 
-## **c) Ciclos**
+Figura 3: Sazonalidade (STL) da série temporal – Estação Climatológica A827/INMET, Bagé-RS.
+
+
+**c) Ciclos**
 
 Os ciclos também são variações ao longo do tempo, mas não têm intervalos fixos como a sazonalidade.
 Exemplo: períodos de crescimento e retração na economia, que podem durar anos e não seguem um calendário definido.
@@ -107,19 +107,19 @@ São movimentos de médio ou longo prazo, mais difíceis de prever.
 
 (Neste exemplo, os ciclos de longo prazo estão embutidos no gráfico de tendência. Eles podem aparecer como oscilações suaves ao longo dos anos.)
 
-## **d) Ruído (ou irregularidade)**
+**d) Ruído (ou irregularidade)**
 
 O ruído é a parte da série que não segue nenhum padrão aparente. São as variações aleatórias, provocadas por fatores imprevisíveis ou erros de medição.
 Exemplo: um dia chuvoso inesperado em meio a uma semana seca; uma falha de sensor.
 
 Embora o ruído seja inevitável, ele pode ser reduzido ou filtrado em análises para que possamos ver mais claramente os outros componentes.
 
-```{figure} images/cap2_4.png
-:name: cap2_4
-Resíduo (ruído) da série temporal – Estação Climatológica A827/INMET, Bagé-RS.
-```
+![Figura 1](images/fig2_4.png)
 
-## **Por que separar os componentes?**
+Figura 4: Resíduo (ruído) da série temporal – Estação Climatológica A827/INMET, Bagé-RS.
+
+
+**Por que separar os componentes?**
 
 Ao separar tendência, sazonalidade, ciclos e ruído, conseguimos:
 
@@ -133,15 +133,15 @@ Essa visão mais detalhada é a base para qualquer estudo de séries temporais, 
 
 
 
-# **2.3 Preparação dos Dados Temporais**
+## **2.2 Preparação dos Dados Temporais**
 
 Antes de começar qualquer análise, é essencial organizar os dados. Essa etapa é chamada de **preparação dos dados temporais**. Ela garante que as informações estejam no formato certo, completas e bem estruturadas para que possamos aplicar gráficos, cálculos e métodos de análise sem erros.
 
 Podemos imaginar essa fase como **arrumar a mesa de trabalho antes do projeto**: se tudo estiver organizado, o trabalho flui muito mais rápido e os resultados ficam mais confiáveis.
 
-## **Como estamos fazendo isso no notebook**
+**Como estamos fazendo isso no notebook**
 
-### **a) Imports e estilo**
+**a) Imports e estilo**
 
 O código começa importando as bibliotecas que serão usadas ao longo do capítulo (pandas, numpy, matplotlib, statsmodels etc.) e configurando parâmetros de estilo para que os gráficos fiquem com aparência consistente.
 
@@ -168,7 +168,7 @@ plt.rcParams["axes.labelsize"] = 11
 
 *(As funções auxiliares serão apresentadas conforme forem utilizadas nas próximas seções para facilitar a compreensão.)*
 
-### **b) Carregamento e organização das datas**
+**b) Carregamento e organização das datas**
 
 Em seguida carregamos o arquivo `temperatura_mensal_a827.csv` com `pandas.read_csv`, informando:
 
@@ -180,8 +180,8 @@ Em seguida carregamos o arquivo `temperatura_mensal_a827.csv` com `pandas.read_c
 # carregamento dos dados
 mensal = (
     pd.read_csv(
-        "temperatura_mensal_a827.csv",
-        sep=";",        # troque para "\t" se o arquivo for TSV (tab)
+        "dados/temperatura_mensal_a827.csv",
+        sep=";",        
         decimal=",",    # vírgula como separador decimal
         parse_dates=["Data"]
     )
@@ -193,7 +193,7 @@ mensal = (
 mensal.head()
 ```
 
-### **c) Deduplicação, grade mensal contínua e interpolação curta**
+**c) Deduplicação, grade mensal contínua e interpolação curta**
 
 Depois garantimos que:
 
@@ -220,7 +220,7 @@ y.name   = "TempMensal"  # nome amigável
 
 No fim desse bloco temos a série **`y`** — a nossa série temporal já **limpa e pronta** para análises.
 
-### **d) Ficha descritiva dos dados**
+**d) Ficha descritiva dos dados**
 
 O bloco seguinte monta uma pequena “ficha técnica” com:
 
@@ -302,7 +302,7 @@ plt.xticks(range(1,13), ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','
 plt.show()
 ```
 
-*Interpretação:* fica evidente a **sazonalidade anual** — verões mais quentes (dez–fev) e invernos mais frios (jun–jul). Essa informação é essencial para a decomposição da série em **tendência e sazonalidade**.
+*Interpretação:* fica evidente a sazonalidade anual — verões mais quentes (dez–fev) e invernos mais frios (jun–jul). Essa informação é essencial para a decomposição da série em tendência e sazonalidade.
 
 3. **Boxplot por mês**
 
@@ -316,7 +316,7 @@ plt.grid(True, axis="y")
 plt.show()
 ```
 
-*Interpretação:* o boxplot detalha a **dispersão mês a mês**. Nota-se maior variação em meses de transição (maio, setembro) e valores mais concentrados nos meses de inverno. Alguns outliers podem aparecer, refletindo episódios atípicos de calor ou frio.
+*Interpretação:* o boxplot detalha a dispersão mês a mês. Nota-se maior variação em meses de transição (maio, setembro) e valores mais concentrados nos meses de inverno. Alguns outliers podem aparecer, refletindo episódios atípicos de calor ou frio.
 
 ## **Resumo do Diagnóstico**
 
@@ -342,11 +342,11 @@ Com os dados bem preparados, conseguimos:
 
 
 
-# **2.4 Visualização inicial da série temporal**
+## **2.3 Visualização inicial da série temporal**
 
 Nesta seção vamos visualizar a série temporal em um gráfico e aprender a fazer uma **leitura básica**: compreender o eixo do tempo, o eixo dos valores e reconhecer padrões visuais, como picos, vales e repetições sazonais.
 
-## **Como plotamos a série (o que o código faz)**
+**Como plotamos a série (o que o código faz)**
 
 O bloco abaixo desenha o gráfico da série mensal de temperatura:
 
@@ -359,13 +359,13 @@ ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
 plt.show()
 ```
 
-## **Como ler o gráfico (leituras básicas)**
+**Como ler o gráfico (leituras básicas)**
 
 * **Eixo do tempo (X):** vai da esquerda (2007) para a direita (2024). Cada ponto da linha representa um mês. É possível perceber repetições anuais (um ciclo por ano).
 * **Eixo dos valores (Y):** mostra a temperatura em °C. A escala está aproximadamente entre 10 °C e 26 °C, indicando a amplitude típica da série.
 * **Linha da série:** picos (valores altos) e vales (valores baixos) se repetem ano a ano. A espessura e a continuidade da linha ajudam a ver a trajetória mês a mês.
 
-## **Observação inicial de padrões (o que já dá para concluir)**
+**Observação inicial de padrões (o que já dá para concluir)**
 
 * **Sazonalidade forte:** há um padrão anual claro de picos no verão e vales no inverno (a linha sobe e desce em ondas regulares a cada ano).
 * **Tendência de longo prazo pouco marcada:** a altura média da série não parece subir ou descer de forma persistente ao longo dos 17 anos — isso será confirmado na decomposição.
@@ -382,9 +382,9 @@ Nas próximas seções, vamos **quantificar essas percepções** com decomposiç
 
 
 
-# **2.5 Decomposição de Séries Temporais**
+## **2.4 Decomposição de Séries Temporais**
 
-Quando observamos uma série temporal, vemos apenas uma linha única que sobe e desce ao longo do tempo. No entanto, por trás desse traçado existem **padrões diferentes acontecendo simultaneamente**.  
+Quando observamos uma série temporal, vemos apenas uma linha única que sobe e desce ao longo do tempo. No entanto, por trás desse traçado existem padrões diferentes acontecendo simultaneamente.  
 A **decomposição** é a técnica que nos permite separar essa linha em três componentes básicos — **tendência**, **sazonalidade** e **resíduo** — para entender com mais clareza o comportamento dos dados.
 
 No gráfico abaixo, a série mensal de temperatura da Estação Climatológica A827/INMET (Bagé-RS) foi decomposta pelo método **STL**. O resultado aparece em quatro painéis: a série original, a tendência de longo prazo, a sazonalidade anual e o resíduo (o que sobra após retirar tendência e sazonalidade).
@@ -409,7 +409,7 @@ axes[-1].set_xlabel('Tempo')
 plt.tight_layout(); plt.show()
 ```
 
-## **Como interpretar cada painel**
+**Como interpretar cada painel**
 
 * **Série Original:** mostra os valores mensais tal como foram observados. É possível perceber, a olho nu, ondas regulares correspondentes às estações do ano.
 * **Tendência (STL):** destaca o movimento suave de longo prazo. No nosso caso, a temperatura média mensal oscila entre aproximadamente 17,7 °C e 19 °C ao longo dos anos, sem uma subida ou descida persistente. Isso indica que, embora haja pequenas flutuações multianuais, não há uma tendência forte e constante no período analisado.
@@ -418,7 +418,7 @@ plt.tight_layout(); plt.show()
 
 O cálculo adicional feito no notebook — a **força sazonal** — fornece um número entre 0 e 1 que indica o peso da sazonalidade. Valores próximos de 1 significam sazonalidade muito forte. Para esta série, a força sazonal está em torno de **0,9**, confirmando que o padrão anual domina os dados.
 
-## **A decomposição na prática (tabela)**
+**A decomposição na prática (tabela)**
 
 Além dos gráficos, o notebook mostra uma tabela com as colunas **TempMensal (Série)**, **Tendência**, **Sazonalidade** e **Resíduo**:
 
@@ -444,7 +444,7 @@ Exemplo prático:
 
 Na tabela, a coluna “Sazonalidade” mostra valores positivos nos meses quentes e negativos nos meses frios; a “Tendência” varia suavemente de um ano para outro; e o “Resíduo” aparece como desvios pequenos ou grandes do padrão esperado.
 
-## **Por que isso importa**
+#**Por que isso importa**
 
 Separar tendência, sazonalidade e resíduo não é um exercício abstrato:
 
@@ -459,7 +459,7 @@ Esta visão mais detalhada é a base para análises mais avançadas que virão n
 
 
 
-# **2.6 Médias Móveis**
+## **2.5 Médias Móveis**
 
 Quando observamos uma série mensal, como a de temperatura, vemos uma linha cheia de **picos e vales**. Esses movimentos refletem a **sazonalidade**, mas podem dificultar a percepção da **tendência geral**.  
 Uma forma simples de **suavizar** a série e visualizar essa tendência é usar a **média móvel**.
@@ -467,7 +467,7 @@ Uma forma simples de **suavizar** a série e visualizar essa tendência é usar 
 A **média móvel simples** consiste em calcular, para cada ponto no tempo, a média dos valores em torno dele dentro de uma “janela” de períodos definida.  
 Por exemplo, uma média móvel de **12 meses** calcula, para cada mês, a média dos 12 meses vizinhos. Isso reduz as flutuações sazonais e deixa evidente a evolução de longo prazo.
 
-## **Exemplo 1 – Média Móvel de 12 meses**
+**Exemplo 1 – Média Móvel de 12 meses**
 
 O gráfico abaixo mostra a série mensal de temperatura (linha cinza) e, sobre ela, a média móvel de 12 meses (linha laranja). Essa suavização permite ver como a temperatura média evolui sem as oscilações anuais.
 
@@ -486,13 +486,13 @@ plt.grid(True); plt.legend()
 plt.show()
 ```
 
-### **Como interpretar**
+**Como interpretar**
 
 * A linha laranja mostra a **tendência de longo prazo**.
 * No nosso caso, ela permanece entre ~18 °C e ~19 °C ao longo dos anos, com pequenas oscilações multianuais.
 * A série original (cinza) continua mostrando picos e vales sazonais, mas a média móvel os “alisa”, facilitando ver se há uma **subida ou descida geral**.
 
-## **Exemplo 2 – Comparação de diferentes janelas (6, 12 e 24 meses)**
+**Exemplo 2 – Comparação de diferentes janelas (6, 12 e 24 meses)**
 
 Podemos escolher **janelas menores ou maiores**, dependendo do nível de suavização desejado.
 No gráfico abaixo, a série original aparece em cinza claro, enquanto as médias móveis aparecem em cores diferentes: **6 meses (azul)**, **12 meses (laranja)** e **24 meses (verde)**.
@@ -512,7 +512,7 @@ plt.title('Médias Móveis (6, 12 e 24 meses)')
 plt.xlabel('Tempo'); plt.ylabel('°C'); plt.legend(); plt.show()
 ```
 
-### **Como interpretar**
+#**Como interpretar**
 
 * **MM 6 meses (azul):** suaviza pouco; ainda é possível ver bastante da variação sazonal, mas com menos “ruído”.
 * **MM 12 meses (laranja):** suaviza um ciclo completo anual; elimina quase toda a sazonalidade e mostra a tendência de longo prazo.
@@ -521,7 +521,7 @@ plt.xlabel('Tempo'); plt.ylabel('°C'); plt.legend(); plt.show()
 Em resumo: quanto **maior** a janela da média móvel, mais a série fica “lisa” e mais lenta é a resposta a mudanças recentes.
 Janelas **curtas** são boas para ver tendências rápidas; janelas **longas** são melhores para tendências muito suaves.
 
-## **Por que usar médias móveis**
+**Por que usar médias móveis**
 
 * Suavizar flutuações sazonais ou aleatórias.
 * Evidenciar a tendência sem precisar de métodos complexos.
@@ -534,7 +534,7 @@ No nosso caso, as médias móveis confirmam que a série tem **tendência estáv
 
 
 
-# **2.7 Autocorrelação**
+## **2.6 Autocorrelação**
 
 Ao analisar uma série temporal, queremos saber se “o hoje” se parece com “algum tempo atrás”. A essa semelhança chamamos **autocorrelação**.  
 Tecnicamente, a autocorrelação no **lag** (defasagem) \(k\) é a correlação entre \(y_t\) e \(y_{t-k}\): \(\rho_k = \text{corr}(y_t, y_{t-k})\).  
@@ -547,7 +547,7 @@ Em séries **mensais**, por exemplo, **lag 1** = “um mês antes”, **lag 12**
 - **Autocorrelação próxima de zero**: não há relação clara com o passado nesse lag.
 ```
 
-## **Como medir autocorrelação (na prática)**
+**Como medir autocorrelação (na prática)**
 
 Você pode medir $\rho_k$ de forma simples com correlação de Pearson entre a série e uma cópia defasada:
 
@@ -567,7 +567,7 @@ for k in (1, 6, 12):
 
 
 
-## **ACF — Autocorrelação total (vários lags)**
+### **2.6.1 ACF — Autocorrelação total (vários lags)**
 
 A **ACF** (Autocorrelation Function) mostra, de uma vez, $\rho_k$ para vários lags $k$.
 Ela é excelente para **detectar sazonalidade** (picos em 12, 24, 36 meses…) e para ter uma visão geral de persistência na série.
@@ -581,7 +581,7 @@ plt.title('ACF — Original')
 plt.show()
 ```
 
-### **Como ler o gráfico ACF (passo a passo)**
+**Como ler o gráfico ACF (passo a passo)**
 
 * **Picos em 12, 24, 36…** → forte **sazonalidade anual** (a série “se parece” com ela mesma a cada 12 meses).
 * **Barras acima da faixa azul** → autocorrelação **significativa** (em geral ~95% de confiança sob hipótese de ruído branco).
@@ -595,7 +595,7 @@ A faixa azul é um **intervalo de confiança**; barras que ficam totalmente **fo
 
 
 
-## **PACF — Autocorrelação parcial**
+### **2.6.2 PACF — Autocorrelação parcial**
 
 A **PACF** (Partial Autocorrelation Function) mede a correlação entre $y_t$ e $y_{t-k}$ **removendo** o efeito dos lags intermediários $1, 2, \dots, k-1$.
 Ela ajuda a identificar **ordens AR (auto-regressivas)** na parte **não sazonal**.
@@ -609,7 +609,7 @@ plt.title('PACF — Original')
 plt.show()
 ```
 
-### **Como ler o gráfico PACF (passo a passo)**
+**Como ler o gráfico PACF (passo a passo)**
 
 * **Pico forte em lag 1** (às vezes também em lag 2) → indício de componente **AR** de baixa ordem na parte não sazonal.
 * **Picos sazonais (12, 24)** tendem a ser **menos marcantes** do que na ACF, porque a PACF “limpa” os efeitos intermediários.
@@ -617,7 +617,7 @@ plt.show()
 
 
 
-## **Erros comuns ao interpretar ACF/PACF**
+**Erros comuns ao interpretar ACF/PACF**
 
 ```{admonition} Atenção
 :class: warning
@@ -626,7 +626,7 @@ plt.show()
 - Interpretar barras levemente fora da faixa como “certeza absoluta” — sempre combine com a **história da série** e outros diagnósticos.
 ```
 
-## **Resumo**
+**Resumo**
 
 * A **ACF** revela **padrões repetitivos** (como a sazonalidade anual) e a **persistência** ao longo do tempo.
 * A **PACF** evidencia a **dependência direta** em poucos lags e sugere **ordens AR** não sazonais.
@@ -640,7 +640,7 @@ plt.show()
 
 
 
-# **2.8 Introdução à Previsão Simples**
+## **2.7 Introdução à Previsão Simples**
 
 Depois de conhecer e decompor uma série temporal, um passo natural é **estimar os valores futuros** — o que chamamos de **previsão**.  
 De forma intuitiva, previsão é usar os padrões do passado — **nível**, **tendência** e **sazonalidade** — para inferir o que provavelmente acontecerá nos próximos períodos.  
@@ -656,7 +656,7 @@ Ele é bastante útil q uando a série apresenta **padrões sazonais estáveis**
 
 
 
-## **Previsão com Holt–Winters aditivo**
+**Previsão com Holt–Winters aditivo**
 
 No gráfico abaixo apresentamos o resultado do ajuste do modelo **Holt–Winters aditivo** à série de temperaturas mensais da Estação Climatológica A827 (INMET).  
 O modelo foi treinado com os dados históricos e fez uma **previsão para os 12 meses seguintes**.
@@ -681,7 +681,7 @@ plt.title('Holt–Winters (aditivo): ajuste e previsão')
 plt.xlabel('Tempo'); plt.ylabel('°C'); plt.legend(); plt.show()
 ```
 
-### **Leitura do gráfico**
+**Leitura do gráfico**
 
 * **Histórico (linha preta):** valores observados mês a mês.
 * **Ajuste do modelo (linha azul):** o Holt–Winters reproduz bem os picos de verão e os vales de inverno, acompanhando o padrão sazonal do histórico.
@@ -698,7 +698,7 @@ Esse método é uma forma simples e rápida de projetar o comportamento futuro d
 
 
 
-# **2.9 Intervalos de Confiança e Diagnóstico de Resíduos**
+## **2.8 Intervalos de Confiança e Diagnóstico de Resíduos**
 
 Prever valores futuros é útil, mas tão importante quanto isso é **medir a incerteza da previsão** e **avaliar se o modelo capturou bem os padrões da série**.  
 Nesta seção, usamos o mesmo ajuste de **Holt–Winters aditivo** da seção anterior para:
@@ -707,7 +707,7 @@ Nesta seção, usamos o mesmo ajuste de **Holt–Winters aditivo** da seção an
 2. Fazer um **diagnóstico dos resíduos**, verificando se se comportam como ruído branco.
 
 
-## **2.9.1 Bandas de incerteza (~95%)**
+### **2.8.1 Bandas de incerteza (~95%)**
 
 A linha prevista nunca é uma verdade absoluta. Para comunicar a margem de erro, adicionamos uma banda de cerca de 95% ao redor de cada ponto previsto.  
 
@@ -736,7 +736,7 @@ plt.grid(True); plt.legend()
 plt.show()
 ```
 
-### **Como ler o gráfico**
+**Como ler o gráfico**
 
 * **Linha preta (Observado):** valores mensais registrados. Cada subida representa o verão; cada descida, o inverno.
 * **Linha azul (Ajustado):** modelo Holt–Winters reproduzindo o histórico, acompanhando picos e vales.
@@ -752,7 +752,7 @@ Em análises mais avançadas, é possível construir intervalos mais rigorosos (
 
 
 
-## **2.9.2 Diagnóstico de resíduos (Holt–Winters)**
+### **2.8.2 Diagnóstico de resíduos (Holt–Winters)**
 
 Chamamos de **resíduo** a diferença entre o valor observado e o valor ajustado pelo modelo no período conhecido.
 Em um bom ajuste, os resíduos devem se parecer com **ruído branco**:
@@ -761,7 +761,7 @@ Em um bom ajuste, os resíduos devem se parecer com **ruído branco**:
 * Ter variância aproximadamente constante.
 * Não apresentar autocorrelação.
 
-### **(a) Série temporal dos resíduos**
+**(a) Série temporal dos resíduos**
 
 ```{code-cell} python
 # Série temporal dos resíduos — Holt–Winters
@@ -780,7 +780,7 @@ Picos isolados podem ocorrer, mas não há padrão persistente.
 
 
 
-### **(b) ACF e PACF dos resíduos**
+**(b) ACF e PACF dos resíduos**
 
 ```{code-cell} python
 # ACF e PACF dos resíduos — Holt–Winters
@@ -807,7 +807,7 @@ Para alunos leigos: esses gráficos são como “exames de saúde” do modelo. 
 
 
 
-### **(c) Teste de Ljung–Box (lags 12 e 24)**
+**(c) Teste de Ljung–Box (lags 12 e 24)**
 
 ```{code-cell} python
 # Teste de Ljung–Box nos resíduos (lags sazonais)
@@ -828,7 +828,7 @@ Para alunos leigos: esse teste é como um exame final dos erros do modelo. Ele v
 
 
 
-## **2.9.3 O que levar desta seção**
+### **2.8.3 O que levar desta seção**
 
 * **Bandas de incerteza** comunicam que a previsão é uma faixa provável, não um valor único.
 * **Resíduos ~ ruído branco = ajuste adequado**:
@@ -848,7 +848,7 @@ Na próxima seção, veremos como modelos **SARIMA** lidam explicitamente com de
 
 
 
-# **2.10 Modelos Avançados para Previsão**
+## **2.9 Modelos Avançados para Previsão**
 
 Até aqui aprendemos a **visualizar** a série, **decompor** seus componentes e construir **previsões simples** com médias móveis e Holt–Winters.  
 Esses métodos são ótimos para começar, mas têm limitações: não explicam de forma explícita todas as dependências temporais nem oferecem parâmetros formais para avaliar a estrutura da série.
@@ -863,7 +863,7 @@ Para quem está começando, pense assim:
 
 
 
-## **2.10.1 Modelos Avançados de Previsão – Visão Geral**
+### **2.9.1 Modelos Avançados de Previsão – Visão Geral**
 
 Quando falamos em “modelos avançados”, não nos limitamos a um único método.  
 Existem diversas abordagens estatísticas e computacionais para previsão de séries temporais, por exemplo:
@@ -885,7 +885,7 @@ Modelos mais complexos (neuronais, híbridos, Prophet, etc.) podem ser explorado
 
 
 
-## **2.10.2 O que são ARIMA e SARIMA — ideia básica**
+### **2.9.2 O que são ARIMA e SARIMA — ideia básica**
 
 Dentro dos modelos avançados, dois são especialmente conhecidos:
 
@@ -917,7 +917,7 @@ Esses modelos permitem:
 
 
 
-## **2.10.3 Diferenciação e leitura de ACF/PACF (guia para as ordens)**
+### **2.9.3 Diferenciação e leitura de ACF/PACF (guia para as ordens)**
 
 Antes de escolher as ordens do ARIMA/SARIMA, é comum **remover tendência e sazonalidade persistente** para deixar a série mais próxima de **estacionária** (isto é, com média e variância mais estáveis ao longo do tempo).  
 Para séries **mensais**, um caminho simples e eficaz é aplicar:
@@ -938,20 +938,20 @@ plot_pacf(y_d12_1, lags=36, method='ywm', ax=ax[1]); ax[1].set_title('PACF — D
 plt.show()
 ```
 
-### **Como ler os gráficos (passo a passo, para leigos)**
+**Como ler os gráficos (passo a passo, para leigos)**
 
 * **Eixo X (lag/defasagem):** “meses atrás”. Ex.: lag 1 = 1 mês antes; lag 12 = 1 ano antes.
 * **Barras:** medem o “quanto o hoje se parece com o passado”.
 * **Faixa azul:** intervalo de confiança (~95%). Barras **dentro** da faixa sugerem correlação **não significativa** (pode ser acaso).
 
-#### 1) ACF — o que observar
+**1) ACF — o que observar**
 
 * Depois das diferenças, **desaparecem os picos regulares** em 12, 24, 36… (sinal de que a **sazonalidade foi removida**).
 * A maior parte das barras fica **baixa** e **dentro** da faixa azul → série mais **estacionária**.
 * **Picos iniciais na ACF** (se existirem) costumam sugerir **componentes MA** (q) **de baixa ordem**.
 * Pequenas ondulações residuais perto de 12 ou 24 podem indicar **parte sazonal fraca** (Q pequeno).
 
-#### 2) PACF — o que observar
+**2) PACF — o que observar**
 
 * Mede a correlação **direta** com cada lag, **descontando** os lags intermediários.
 * **Picos iniciais na PACF** (se existirem) sugerem **componentes AR** (p) **de baixa ordem**.
@@ -965,7 +965,7 @@ plt.show()
 - Se quase tudo fica dentro da faixa azul após diferenciar → tente ordens **pequenas** (0 ou 1) para p, q, P e Q.
 ```
 
-### **Interpretação do seu caso (temperatura mensal, após `diff(12)` e depois `diff(1)`):**
+**Interpretação do seu caso (temperatura mensal, após `diff(12)` e depois `diff(1)`):**
 
 * **ACF:** barras baixas e dispersas, sem picos fortes em 12 ou 24 → **sazonalidade removida com sucesso**; possíveis efeitos de curto prazo fracos.
 * **PACF:** também sem picos grandes → **dependência direta curta** (se existir, algo como AR(1) é suficiente).
@@ -983,7 +983,7 @@ Use o **AIC** para escolher o melhor candidato e, em seguida, **valide pelos res
 ```
 
 
-## **2.10.4 Busca por ordens e ajuste do modelo (AIC)**
+### **2.9.4 Busca por ordens e ajuste do modelo (AIC)**
 
 Depois de analisar os correlogramas e aplicar as diferenças, precisamos **testar combinações de ordens** para encontrar o SARIMA mais adequado.  
 Faremos uma busca **didática** em uma grade pequena para mostrar o processo passo a passo.
@@ -1021,7 +1021,7 @@ sarima = best['model']
 print(f"Melhor AIC: {best['aic']:.2f} | ordem={best['order']} | sazonal={best['sorder']}")
 ```
 
-### **Como interpretar a saída**
+**Como interpretar a saída**
 
 A execução acima imprime:
 
@@ -1049,7 +1049,7 @@ $$
 
 
 
-## **2.10.5 Ajuste e Previsão com SARIMA**
+### **2.9.5 Ajuste e Previsão com SARIMA**
 
 Depois de escolher o modelo com menor AIC, ajustamos o **SARIMA** à série de temperatura mensal e fazemos a previsão para os próximos 12 meses.  
 O código abaixo realiza o ajuste, gera as previsões e calcula automaticamente os intervalos de confiança de 95%.
@@ -1072,7 +1072,7 @@ plt.gca().yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
 plt.show()
 ```
 
-### Interpretação do gráfico
+**Interpretação do gráfico**
 
 Linha preta (Observado): representa a série histórica de temperatura mensal. Cada oscilação corresponde a um ano completo, com picos no verão e vales no inverno.
 
@@ -1084,11 +1084,11 @@ Faixa azul clara (Intervalo de Confiança 95%): indica a incerteza associada a c
 
 Linha tracejada vertical: marca a divisão entre período observado (à esquerda) e período projetado (à direita).
 
-### Explicação didática
+**Explicação**
 
 O SARIMA aprendeu o ritmo da série: subida no verão e queda no inverno. Para prever os próximos meses, ele repete esse ritmo e mostra uma faixa azul clara que indica que o valor pode variar um pouco para cima ou para baixo. Essa faixa funciona como uma margem de segurança: não é uma previsão exata, mas uma estimativa com intervalo provável.
 
-### Conclusão parcial
+**Conclusão parcial**
 
 O modelo captou bem tendência e sazonalidade do histórico.
 A previsão de 12 meses mantém o padrão anual coerente com o clima local.
@@ -1097,7 +1097,7 @@ A faixa azul clara comunica a incerteza: valores futuros não são únicos, mas 
 
 
 
-## **2.10.6 Diagnóstico dos Resíduos (Autocorrelação)**
+### **2.9.6 Diagnóstico dos Resíduos (Autocorrelação)**
 
 Depois de ajustar o modelo **SARIMA**, é necessário verificar se os **resíduos** — isto é, os erros do modelo no período conhecido — se comportam como **ruído branco**.  
 
@@ -1117,7 +1117,7 @@ plot_pacf(resid, lags=36, method='ywm', ax=ax[1]); ax[1].set_title('PACF — Res
 plt.show()
 ```
 
-### Interpretação dos gráficos ACF e PACF dos resíduos
+**Interpretação dos gráficos ACF e PACF dos resíduos**
 
 * Cada barra representa a **autocorrelação** entre o resíduo atual e o de meses passados.
 * A **faixa azul** é um intervalo de confiança de aproximadamente 95%.
@@ -1146,7 +1146,7 @@ else:
     print("✓ Sem evidência de autocorrelação sazonal remanescente nos resíduos.")
 ```
 
-### Interpretação do teste de Ljung–Box
+**Interpretação do teste de Ljung–Box**
 
 * **Hipótese nula (H₀):** não há autocorrelação até o lag testado.
 * **Regra prática:**
@@ -1157,7 +1157,7 @@ else:
 Nos resultados apresentados, os **p-values são muito menores que 0,05**, o que indica **autocorrelação residual nos lags sazonais 12 e 24**, mesmo que visualmente os gráficos pareçam limpos.
 Esse resultado sugere que ainda pode existir **estrutura sazonal não explicada pelo modelo**, possivelmente de magnitude pequena, mas estatisticamente significativa.
 
-### Conclusão
+**Conclusão**
 
 O modelo SARIMA reproduziu bem o padrão geral, porém os testes estatísticos indicam que ainda há algum “eco” sazonal nos resíduos.
 Isso não invalida o uso do modelo para previsões de curto prazo, mas sinaliza que é possível tentar **ordens sazonais maiores**, **ajustar diferenciações** ou **incluir covariáveis (SARIMAX)** para melhorar o ajuste.
@@ -1167,7 +1167,7 @@ A decisão sobre refinar ou não o modelo deve combinar a **análise visual** do
 
 
 
-## **2.10.7 Comparação Visual: Holt–Winters × SARIMA**
+### **2.9.7 Comparação Visual: Holt–Winters × SARIMA**
 
 Depois de ajustar os dois modelos, é fundamental comparar suas previsões para entender **semelhanças e diferenças práticas**.  
 O gráfico abaixo mostra, lado a lado, o histórico, os ajustes e as previsões de Holt–Winters e SARIMA para 12 meses à frente, com a banda de incerteza do SARIMA.
@@ -1195,7 +1195,7 @@ plt.gca().yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
 plt.show()
 ```
 
-### Interpretação do Gráfico
+**Interpretação do Gráfico**
 
 * **Linha preta (Observado):** série histórica de temperatura mensal. Cada ciclo de subida representa o verão; cada descida, o inverno.
 * **Linha azul (Holt–Winters ajustado):** o modelo HW acompanha bem os picos e vales do histórico, mostrando que captou o padrão anual.
@@ -1205,7 +1205,7 @@ plt.show()
 * **Faixa azul clara (IC 95% SARIMA):** intervalo de confiança das previsões SARIMA, representando a margem provável de erro para cada mês futuro.
 * **Linha tracejada vertical:** separa o período observado do período projetado pelos modelos.
 
-### Conclusão
+**Conclusão**
 
 Quando há **sazonalidade estável** e **tendência discreta**, como nesta série de temperatura, **Holt–Winters e SARIMA produzem previsões muito semelhantes no curto prazo**.
 A principal diferença é que **SARIMA oferece maior flexibilidade** para capturar autocorrelações específicas e, futuramente, incluir variáveis externas (como chuva, vento ou outros fatores) usando SARIMAX.
@@ -1215,14 +1215,14 @@ O **Holt–Winters**, por sua vez, é mais simples de implementar e interpretar,
 
 
 
-## **2.10.8 Avaliação Fora da Amostra (Hold-Out de 12 Meses)**
+### **2.9.8 Avaliação Fora da Amostra (Hold-Out de 12 Meses)**
 
 Para avaliar a capacidade preditiva dos modelos, reservamos os **12 últimos meses** como conjunto de teste (hold-out).  
 Os modelos são ajustados apenas nos dados anteriores (treino) e depois comparamos suas previsões com os valores reais do teste.
 
 
 
-### **Previsão no Período de Teste**
+**Previsão no Período de Teste**
 
 ```{code-cell} python
 # Separar treino e teste (últimos 12 meses para teste)
@@ -1268,7 +1268,7 @@ Visualmente, as duas previsões acompanham bem os valores reais, mantendo o padr
 
 
 
-### **Métricas de Erro (MAPE e RMSE)**
+**Métricas de Erro (MAPE e RMSE)**
 
 ```{code-cell} python
 # Resumo de métricas de erro no período de teste
@@ -1301,14 +1301,14 @@ Mesmo assim, o Holt–Winters também foi muito bem, mostrando que para horizont
 
 
 
-## **2.10.9 Diagnóstico Final por Mês (SARIMA)**
+### **2.9.9 Diagnóstico Final por Mês (SARIMA)**
 
 Além de olhar os correlogramas e o teste de Ljung–Box, é útil verificar se os **resíduos do SARIMA** apresentam algum padrão sistemático ao longo dos **meses do ano**.  
 A ideia é simples: se o modelo capturou bem a sazonalidade, os erros médios devem ser próximos de zero em todos os meses e a dispersão (variabilidade) parecida entre eles.
 
 
 
-### **Boxplot dos Resíduos por Mês**
+**Boxplot dos Resíduos por Mês**
 
 ```{code-cell} python
 # Boxplot dos resíduos por mês (SARIMA)
@@ -1327,7 +1327,7 @@ plt.show()
 ```
 
 
-### **Interpretação do Gráfico**
+**Interpretação do Gráfico**
 
 * Cada caixa (boxplot) resume os resíduos daquele mês ao longo dos anos.
 * A **linha horizontal dentro da caixa** é a mediana (valor típico dos resíduos).
@@ -1346,7 +1346,7 @@ No gráfico:
 
 
 
-### **Como Usar Esse Diagnóstico**
+**Como Usar Esse Diagnóstico**
 
 Se os resíduos estiverem equilibrados como no gráfico, isso indica que o SARIMA capturou bem o padrão sazonal médio.
 Se houver meses sistematicamente com resíduos positivos/negativos ou variância bem maior, considere:
@@ -1354,10 +1354,6 @@ Se houver meses sistematicamente com resíduos positivos/negativos ou variância
 * **Tratar outliers** e refazer o ajuste.
 * **Testar ordens sazonais maiores** no SARIMA.
 * **Incluir covariáveis exógenas** (chuva, vento etc.) usando SARIMAX.
-
-
-
-### **Mensagem-Chave**
 
 * O boxplot mensal é um complemento visual ao Ljung–Box e aos correlogramas.
 * Ele mostra se os resíduos ainda guardam memória sazonal em determinados meses.
@@ -1371,10 +1367,7 @@ Se houver meses sistematicamente com resíduos positivos/negativos ou variância
 
 
 
-
-
-
-## **2.11 Validação Temporal**
+## **2.10 Validação Temporal**
 
 Ao trabalhar com séries temporais, **a ordem do tempo é sagrada**.  
 Diferente de conjuntos de dados “estáticos”, **não podemos embaralhar os registros** para treinar e testar modelos.  
@@ -1385,9 +1378,9 @@ separar um período futuro inteiro para teste e treinar o modelo apenas com dado
 Isso garante que o modelo seja avaliado em condições semelhantes às de uso real.
 
 
-### **Esquemas mais comuns de validação temporal**
+**Esquemas mais comuns de validação temporal**
 
-#### (a) Hold-out final (um único corte)
+*(a) Hold-out final (um único corte)*
 
 - **Como funciona:** separam-se os últimos *H* períodos (por exemplo, 12 meses) para teste.  
   O modelo é treinado com todos os dados até a data de corte e faz previsões para esse bloco final.
@@ -1399,7 +1392,7 @@ Isso garante que o modelo seja avaliado em condições semelhantes às de uso re
 - **Limitação:** mede o desempenho apenas em um cenário (aquele último ano).  
   Se esse período for muito atípico, pode subestimar ou superestimar o erro.
 
-#### (b) Rolling ou Expanding Origin (janelas deslizantes)
+*(b) Rolling ou Expanding Origin (janelas deslizantes)*
 
 - **Ideia:** repetir o processo de **treinar → prever** várias vezes, movendo a “origem da previsão” no tempo.  
   Assim obtém-se vários erros e um retrato mais robusto do desempenho.
@@ -1415,7 +1408,7 @@ Isso garante que o modelo seja avaliado em condições semelhantes às de uso re
 
 
 
-### **Por que isso importa**
+**Por que isso importa**
 
 - **Evita vazamento de informação:** o modelo só “vê” os dados que estariam disponíveis na época da previsão.  
 - **Torna o rigor explícito:** documenta claramente o horizonte previsto, a data do corte e o procedimento de avaliação.  
@@ -1423,7 +1416,7 @@ Isso garante que o modelo seja avaliado em condições semelhantes às de uso re
 
 
 
-### **Boas práticas (checklist rápido)**
+**Boas práticas (checklist rápido)**
 
 - Defina o horizonte *H* de acordo com o uso (ex.: operação mensal → H = 1 ou H = 12).  
 - Re-treine o modelo a cada origem no *rolling* ou *expanding* (não reutilize parâmetros do futuro).  
@@ -1433,11 +1426,9 @@ Isso garante que o modelo seja avaliado em condições semelhantes às de uso re
 
 
 
-### **Resumo aplicado e encerramento**
+**Resumo aplicado e encerramento**
 
 Neste capítulo já usamos o **hold-out final de 12 meses** para comparar Holt–Winters e SARIMA.  
 Em projetos reais, recomenda-se **complementar** com um *rolling* ou *expanding origin* simples para obter métricas médias mais robustas e reduzir o risco de conclusões baseadas em um único período.
 
 Com isso, encerramos este capítulo mostrando não apenas como **visualizar, decompor e modelar séries temporais** (de métodos simples, como médias móveis e Holt–Winters, a modelos mais estruturados, como SARIMA), mas também as **boas práticas para validar previsões no tempo**. Essa abordagem evita conclusões enganosas e garante que os resultados obtidos representem cenários realistas. Ao dominar esses conceitos, o leitor passa a ter uma base sólida para aplicar, comparar e refinar modelos preditivos em séries temporais reais, ampliando a confiabilidade das análises e criando um ponto de partida seguro para técnicas mais avançadas.
-
-
