@@ -12,13 +12,6 @@ kernelspec:
   name: python3
 ---
 
-[Baixar o notebook deste capítulo](capitulo2.ipynb)
-
-
-<audio controls>
-  <source src="audio/capitulo2.mp4" type="audio/mp4">
-  Seu navegador não suporta o elemento de áudio.
-</audio>
 
 
 
