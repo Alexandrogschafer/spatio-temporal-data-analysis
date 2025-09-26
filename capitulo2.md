@@ -13,7 +13,7 @@ kernelspec:
 ---
 
 
-# **2 SÉRIES TEMPORAIS E AUTOCORRELAÇ
+# 2 SÉRIES TEMPORAIS E AUTOCORRELAÇÃO
 
 Uma série temporal é um conjunto de dados organizados na ordem em que foram coletados ao longo do tempo. Em outras palavras, é um registro de como um fenômeno muda de um momento para outro.  
 O foco não está apenas nos valores em si, mas na evolução desses valores com o passar do tempo.
@@ -29,7 +29,7 @@ Podemos imaginar uma série temporal como um “filme” do fenômeno observado:
 ```
 
 Logo abaixo, podemos visualizar um exemplo real de série temporal para o caso de temperatura mensal.
-O gráfico mostra a temperatura média mensal registrada ao longo de vários anos pela Estação Climatológica A827 do INMET, localizada no município de Bagé-RS.
+O gráfico mostra a temperatura média mensal registrada ao longo de vários anos pela Estação Climatológica A827 do INMET, localizDada no município de Bagé-RS.
 
 ![Figura 1](images/fig2_1.png)
 
@@ -271,7 +271,7 @@ if dups_n > 0:
 * **Completude**: não há dados faltantes após a preparação.
 * **Variação**: valores mínimos próximos de 10 °C e máximos próximos de 26 °C.
 
-### **e) Verificação inicial com gráficos simples**
+**e) Verificação inicial com gráficos simples**
 
 Para conhecer melhor os dados, mostramos três visualizações básicas:
 
@@ -318,7 +318,7 @@ plt.show()
 
 *Interpretação:* o boxplot detalha a dispersão mês a mês. Nota-se maior variação em meses de transição (maio, setembro) e valores mais concentrados nos meses de inverno. Alguns outliers podem aparecer, refletindo episódios atípicos de calor ou frio.
 
-## **Resumo do Diagnóstico**
+**Resumo do Diagnóstico**
 
 ```{admonition} Insights do Diagnóstico
 :class: tip
@@ -536,9 +536,20 @@ No nosso caso, as médias móveis confirmam que a série tem **tendência estáv
 
 ## **2.6 Autocorrelação**
 
-Ao analisar uma série temporal, queremos saber se “o hoje” se parece com “algum tempo atrás”. A essa semelhança chamamos **autocorrelação**.  
-Tecnicamente, a autocorrelação no **lag** (defasagem) \(k\) é a correlação entre \(y_t\) e \(y_{t-k}\): \(\rho_k = \text{corr}(y_t, y_{t-k})\).  
-Em séries **mensais**, por exemplo, **lag 1** = “um mês antes”, **lag 12** = “um ano antes”.
+Ao analisar uma série temporal, queremos saber se **“o hoje” se parece com “algum tempo atrás”**.  
+A essa semelhança chamamos **autocorrelação**.
+
+Tecnicamente, a autocorrelação no **lag** (defasagem) \(k\) é a correlação entre \(y_t\) e \(y_{t-k}\):
+
+\[
+\rho_k = \text{corr}\bigl(y_t,\, y_{t-k}\bigr)
+\]
+
+Em séries **mensais**, por exemplo:
+
+- **lag 1** = “um mês antes”  
+- **lag 12** = “um ano antes”
+
 
 ```{admonition} Intuição rápida
 :class: tip
@@ -1271,6 +1282,21 @@ Visualmente, as duas previsões acompanham bem os valores reais, mantendo o padr
 **Métricas de Erro (MAPE e RMSE)**
 
 ```{code-cell} python
+# Funções utilitárias para métricas de erro
+from sklearn.metrics import mean_squared_error
+
+def mape(y_true, y_hat):
+    """Mean Absolute Percentage Error (%)"""
+    y_true = pd.Series(y_true).astype(float)
+    y_hat  = pd.Series(y_hat).astype(float).reindex(y_true.index)
+    return np.mean(np.abs((y_true - y_hat) / y_true)) * 100
+
+def rmse(y_true, y_hat):
+    """Root Mean Squared Error"""
+    y_true = pd.Series(y_true).astype(float)
+    y_hat  = pd.Series(y_hat).astype(float).reindex(y_true.index)
+    return np.sqrt(mean_squared_error(y_true, y_hat))
+
 # Resumo de métricas de erro no período de teste
 resumo = pd.DataFrame({
     'Modelo': ['Holt–Winters', f'SARIMA{order_opt}{sorder_opt}'],
