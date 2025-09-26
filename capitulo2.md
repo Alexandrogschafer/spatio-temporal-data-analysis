@@ -318,6 +318,7 @@ plt.show()
 
 *Interpretação:* o boxplot detalha a dispersão mês a mês. Nota-se maior variação em meses de transição (maio, setembro) e valores mais concentrados nos meses de inverno. Alguns outliers podem aparecer, refletindo episódios atípicos de calor ou frio.
 
+
 **Resumo do Diagnóstico**
 
 ```{admonition} Insights do Diagnóstico
@@ -539,11 +540,13 @@ No nosso caso, as médias móveis confirmam que a série tem **tendência estáv
 Ao analisar uma série temporal, queremos saber se **“o hoje” se parece com “algum tempo atrás”**.  
 A essa semelhança chamamos **autocorrelação**.
 
-Tecnicamente, a autocorrelação no **lag** (defasagem) \(k\) é a correlação entre \(y_t\) e \(y_{t-k}\):
 
-\[
-\rho_k = \text{corr}\bigl(y_t,\, y_{t-k}\bigr)
-\]
+Tecnicamente, a autocorrelação no **lag** (defasagem) $k$ é a correlação entre $y_t$ e $y_{t-k}$:
+
+```{math}
+\rho_k = \text{corr}\bigl(y_t,\; y_{t-k}\bigr)
+
+
 
 Em séries **mensais**, por exemplo:
 
