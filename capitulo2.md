@@ -30,7 +30,8 @@ kernelspec:
 
 
 
-Uma série temporal é um conjunto de dados organizados na ordem em que foram coletados ao longo do tempo. Em outras palavras, é um registro de como um fenômeno muda de um momento para outro.  
+Uma série temporal é um conjunto de dados organizados na ordem em que foram coletados ao longo do tempo. Em outras palavras, é um registro de como um fenômeno muda de um momento para outro. 
+ 
 O foco não está apenas nos valores em si, mas na evolução desses valores com o passar do tempo.
 
 Podemos imaginar uma série temporal como um “filme” do fenômeno observado: cada ponto de dados é um quadro desse filme, mostrando o que aconteceu em um instante específico. Ao juntar todos os quadros na sequência correta, conseguimos ver o comportamento do fenômeno ao longo do tempo.
