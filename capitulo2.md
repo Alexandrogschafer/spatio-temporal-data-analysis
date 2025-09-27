@@ -13,11 +13,9 @@ kernelspec:
 ---
 
 
+
 # 2. SÉRIES TEMPORAIS E AUTOCORRELAÇÃO
 
-[**Abrir no Google Colab**](https://colab.research.google.com/github/Alexandrogschafer/spatio-temporal-data-analysis/blob/main/capitulo2.ipynb)
-
-```{raw} html
 <section class="cap-audio">
   <p><strong>Ouça o resumo do capítulo em áudio:</strong></p>
   <audio controls preload="none" style="width:100%;max-width:720px">
@@ -26,8 +24,9 @@ kernelspec:
     <a href="audio/capitulo2.mp3">Baixar MP3</a>
   </audio>
 </section>
-```
 
+
+[**Abrir no Google Colab**](https://colab.research.google.com/github/Alexandrogschafer/spatio-temporal-data-analysis/blob/main/capitulo2.ipynb)
 
 
 
