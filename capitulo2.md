@@ -28,7 +28,6 @@ kernelspec:
 ```
 
 
-[**Abrir no Google Colab**](https://colab.research.google.com/github/Alexandrogschafer/spatio-temporal-data-analysis/blob/main/capitulo2.ipynb)
 
 Uma série temporal é um conjunto de dados organizados na ordem em que foram coletados ao longo do tempo. Em outras palavras, é um registro de como um fenômeno muda de um momento para outro.  
 O foco não está apenas nos valores em si, mas na evolução desses valores com o passar do tempo.
