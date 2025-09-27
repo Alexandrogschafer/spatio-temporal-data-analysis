@@ -45,7 +45,7 @@ Podemos imaginar uma série temporal como um “filme” do fenômeno observado:
 ```
 
 Logo abaixo, podemos visualizar um exemplo real de série temporal para o caso de temperatura mensal.
-O gráfico mostra a temperatura média mensal registrada ao longo de vários anos pela Estação Climatológica A827 do INMET, localizDada no município de Bagé-RS.
+O gráfico mostra a temperatura média mensal registrada ao longo de vários anos pela Estação Climatológica A827 do INMET, localizada no município de Bagé-RS.
 
 ![Figura 1](images/fig2_1.png)
 
