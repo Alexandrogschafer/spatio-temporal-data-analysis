@@ -25,7 +25,7 @@ kernelspec:
   </audio>
 </section>
 
-[**Abrir no Google Colab**](https://colab.research.google.com/github/Alexandrogschafer/spatio-temporal-data-analysis/blob/main/capitulo2.ipynb)
+[**Abrir no Google Colab**](https://colab.research.google.com/github/Alexandrogschafer/spatio-temporal-data-analysis/blob/main/notebooks/capitulo2.ipynb)
 
 
 
