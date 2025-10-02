@@ -14,10 +14,18 @@ kernelspec:
 
 
 
-# 3. ANÁLISE ESPAÇO-TEMPORAL GLOBAL E LOCAL
+# 3. AUTOCORRELAÇÃO E DEPENDÊNCIA ESPAÇO-TEMPORAL (ANÁLISE ESPAÇO-TEMPORAL GLOBAL E LOCAL)
 
+<section class="cap-audio">
+  <p><strong>Ouça o resumo do capítulo em áudio:</strong></p>
+  <audio controls preload="none" style="width:100%;max-width:720px">
+    <source src="audio/capitulo3.mp3" type="audio/mpeg">
+    Seu navegador não suporta a reprodução de áudio.
+    <a href="audio/capitulo3.mp3">Baixar MP3</a>
+  </audio>
+</section>
 
-A análise espaço-temporal desempenha um papel fundamental na compreensão de fenômenos que variam ao longo do tempo e do espaço, permitindo a identificação de padrões de distribuição e dependência. Fenômenos espaciais frequentemente não seguem uma distribuição aleatória, mas sim padrões específicos influenciados pela proximidade geográfica e pela continuidade temporal. Para investigar essas relações, utilizam-se métricas de autocorrelação, que quantificam a dependência entre valores de uma variável considerando tanto o espaço quanto o tempo.
+A análise espaço-temporal desempenha um importante papel na compreensão de fenômenos que variam ao longo do tempo e do espaço, permitindo a identificação de padrões de distribuição e dependência. Fenômenos espaciais frequentemente não seguem uma distribuição aleatória, mas sim padrões específicos influenciados pela proximidade geográfica e pela continuidade temporal. Para investigar essas relações, utilizam-se métricas de autocorrelação, que quantificam a dependência entre valores de uma variável considerando tanto o espaço quanto o tempo.
 
 A autocorrelação é a correlação de uma variável com ela mesma ao longo de diferentes localizações ou momentos no tempo. No contexto espaço-temporal, considera-se a autocorrelação espacial, temporal e espaço-temporal. A autocorrelação espacial mede a relação entre valores de uma variável em diferentes locais. Se valores semelhantes estão próximos, há autocorrelação positiva (clusters). Se valores diferentes estão próximos, há autocorrelação negativa (dispersão). A Figura 1 ilustra exemplos de diferentes tipos de autocorrelação espacial.
 
@@ -39,6 +47,16 @@ A escolha entre análise global e local depende do objetivo do estudo. A anális
 Para ilustrar os conceitos discutidos anteriormente, este estudo de caso analisa a distribuição do número de avaliações de hospedagens no bairro de Copacabana, Rio de Janeiro, ao longo do ano de 2024. O objetivo principal é aplicar tanto métricas globais quanto locais de autocorrelação espacial, temporal e espaço-temporal, buscando identificar padrões de agrupamento e dispersão das avaliações, detectar hotspots e coldspots e comparar os resultados das diferentes abordagens. Essa aplicação prática demonstrará como utilizar estatísticas de autocorrelação em um cenário real, oferecendo subsídios concretos paraa tomada de decisão com base em dados.
 
 O bairro de Copacabana foi escolhido não apenas por sua relevância turística, mas também pela disponibilidade pública dos dados do Airbnb no Rio de Janeiro, o que facilita a aplicação prática das metodologias de análise espaço-temporal. Com uma alta concentração de hospedagens, restaurantes e atrações, o bairro oferece um ambiente ideal para explorar padrões sazonais de avaliações online e identificar áreas de maior demanda turística ao longo do ano. A análise abrange 3.395 imóveis cadastrados na região, que juntos somaram 20.591 avaliações em 2024. 
+
+O arquivo contendo o código em R e os dados está disponível em:  
+[semana_3_codigoR_dados.zip](https://github.com/Alexandrogschafer/spatio-temporal-data-analysis/blob/main/dados/semana_3_codigoR_dados.zip)
+
+Você também pode acompanhar a execução passo a passo em nosso canal no YouTube:  
+[▶Assista ao vídeo da Semana 3](https://youtu.be/Gf9UMUEtPqA)
+
+> **Observação:** em alguns trechos, o código mostrado no vídeo pode estar ligeiramente diferente do arquivo disponibilizado. Isso acontece porque alguns pacotes foram atualizados, exigindo pequenos ajustes no código da versão mais recente.
+
+
 
 No quadro 1 apresentam-se as estatísticas das avaliações por imóvel:
 

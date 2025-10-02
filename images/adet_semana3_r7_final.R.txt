@@ -1,0 +1,1115 @@
+# Análise Espaço-Temporal Global e Local
+
+
+
+
+# ============================================================
+# Etapa 1: Preparação – pacotes e diretório de trabalho
+# ============================================================
+
+# ------------------------------------------------------------
+# 1.1 - Instalar pacotes necessários (caso ainda não estejam instalados)
+# ------------------------------------------------------------
+
+# Pacotes essenciais para análise espaço-temporal
+# install.packages("sf")        # Manipulação de dados espaciais
+# install.packages("tmap")      # Visualização de mapas estáticos e interativos
+# install.packages("data.table") # Manipulação eficiente de dados
+# install.packages("ggplot2")   # Criação de gráficos
+# install.packages("leaflet")   # Mapas interativos
+# install.packages("viridis")   # Paleta de cores para gráficos
+# install.packages("spdep")     # Análise de vizinhança espacial
+# install.packages("dplyr")     # Manipulação de dados
+# install.packages("tidyr")     # Transformação de dados
+# install.packages("xts")       # Estrutura de dados para séries temporais
+
+# ------------------------------------------------------------
+# 1.2 - Carregar pacotes necessários
+# ------------------------------------------------------------
+
+library(sf)
+library(tmap)
+library(data.table)
+library(ggplot2)
+library(leaflet)
+library(viridis)
+library(spdep)
+library(dplyr)
+library(tidyr)
+
+
+# ------------------------------------------------------------
+# 1.3 - Definir o diretório de trabalho
+# ------------------------------------------------------------
+
+setwd("C:/Users/Alexandro/Desktop/airbnb")
+
+
+
+
+
+
+
+
+# ============================================================
+# Etapa 2: Carregamento e pré-processamento dos dados
+# ============================================================
+
+# Importar os dados
+airbnb_avaliacoes <- fread("airbnb_avaliacoes_2024.csv")
+
+
+# Explorar a estrutura inicial dos dados
+str(airbnb_avaliacoes)
+print(head(airbnb_avaliacoes))
+
+
+# Ajustar formato da coluna 'mes'
+airbnb_avaliacoes[, mes := as.Date(paste0(mes, "-01"))]  # Converte para Date
+airbnb_avaliacoes[, mes := format(mes, "%Y_%m")]  # Converte para formato "YYYY_MM"
+
+str(airbnb_avaliacoes)
+
+# Converter 'id' para character (evita problemas com integer64)
+airbnb_avaliacoes[, id := as.character(id)]
+
+
+# Criar um objeto `sf` (dados espaciais)
+airbnb_sf <- st_as_sf(
+  airbnb_avaliacoes, 
+  coords = c("longitude", "latitude"),  # Define coordenadas espaciais
+  crs = 4326  # Define CRS como WGS 84 (padrão global)
+)
+
+print(head(airbnb_sf))
+
+
+# Identificar valores ausentes (NA) em colunas importantes
+na_counts <- data.table(
+  geometry = sum(is.na(st_coordinates(airbnb_sf)[,1])),  # Verifica pontos inválidos
+  avaliacoes = sum(is.na(airbnb_sf$avaliacoes))  # Verifica valores ausentes
+)
+
+# Exibir os resultados de NA
+print(na_counts)
+
+
+# Garantir que `avaliacoes` seja numérico
+airbnb_sf$avaliacoes <- as.numeric(airbnb_sf$avaliacoes)
+
+
+# Exibir estrutura final dos dados espaciais
+str(airbnb_sf)
+print(airbnb_sf)
+
+
+
+
+
+
+
+
+
+# ============================================================
+# Etapa 3: Estatísticas descritivas e análise exploratória
+# ============================================================
+
+# Análise dos dados anuais
+
+# Calcular o número total de avaliações por imóvel ao longo de 2024
+avaliacoes_total_imovel <- airbnb_avaliacoes[, .(total_avaliacoes = sum(avaliacoes)), by = id]
+
+# Ordenar os imóveis pelo total de avaliações
+avaliacoes_total_imovel <- avaliacoes_total_imovel[order(-total_avaliacoes)]
+
+# Juntar o total de avaliações com as coordenadas dos imóveis
+avaliacoes_mapa <- merge(airbnb_sf, avaliacoes_total_imovel, by = "id")
+
+# Remover colunas desnecessárias
+avaliacoes_mapa <- avaliacoes_mapa[, c("id", "total_avaliacoes", "geometry")]
+
+
+
+# Criar o mapa estático e o mapa interativo
+
+# Mapa estático
+tmap_mode("plot")
+tm_shape(avaliacoes_mapa) +
+  tm_dots(size = 0.05, col = "total_avaliacoes", palette = "Reds",
+          title = "Total de Avaliações", style = "quantile") +
+  tm_layout(legend.position = c("right", "bottom"),
+            legend.title.size = 0.8, legend.text.size = 0.6)
+
+
+# Mapa interativo
+# Criar a paleta de cores baseada no número total de avaliações
+intervalo_avaliacoes <- range(avaliacoes_mapa$total_avaliacoes, na.rm = TRUE)
+pal_avaliacoes <- colorNumeric(palette = "Reds", domain = intervalo_avaliacoes)
+
+# Criar o mapa interativo para todas as avaliações do ano
+leaflet(data = avaliacoes_mapa) %>%
+  addTiles() %>%  # Adiciona o mapa base
+  addCircleMarkers(
+    radius = ~log1p(total_avaliacoes) * 1.2,  # Reduz o fator de escala dos pontos
+    color = ~pal_avaliacoes(total_avaliacoes),  # Aplica a paleta de cores ao número de avaliações
+    fillColor = ~pal_avaliacoes(total_avaliacoes),  # Preenchimento com a mesma cor
+    fillOpacity = 0.7,  # Torna os pontos mais transparentes para melhor visualização
+    stroke = FALSE,  # Remove a borda dos pontos
+    popup = ~paste("ID:", id, "<br>Total de Avaliações:", total_avaliacoes)
+  ) %>%
+  addLegend(
+    "bottomright",
+    pal = pal_avaliacoes,
+    values = avaliacoes_mapa$total_avaliacoes,
+    title = "Nº Total de Avaliações",
+    opacity = 1
+  )
+
+
+
+# Definir a paleta de cores baseada no número total de avaliações
+intervalo_avaliacoes <- range(avaliacoes_mapa$total_avaliacoes, na.rm = TRUE)
+pal_avaliacoes <- colorNumeric(palette = "Reds", domain = intervalo_avaliacoes)
+
+# Criar o mapa interativo com o mapa de fundo CartoDB Positron (mais claro e neutro)
+leaflet(data = avaliacoes_mapa) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%  # Mapa base claro e neutro
+  addCircleMarkers(
+    radius = ~log1p(total_avaliacoes) * 1.2,  
+    color = ~pal_avaliacoes(total_avaliacoes),  
+    fillColor = ~pal_avaliacoes(total_avaliacoes),  
+    fillOpacity = 0.7,  
+    stroke = FALSE,  
+    popup = ~paste("ID:", id, "<br>Total de Avaliações:", total_avaliacoes)
+  ) %>%
+  addLegend(
+    "bottomright",
+    pal = pal_avaliacoes,
+    values = avaliacoes_mapa$total_avaliacoes,
+    title = "Nº Total de Avaliações",
+    opacity = 1
+  )
+
+
+
+
+# ------------------------------------------------------------
+# 3.1 - Estatísticas descritivas gerais de avaliações
+# ------------------------------------------------------------
+
+avaliacoes_dt <- as.data.table(avaliacoes_mapa)
+estatisticas_avaliacoes <- avaliacoes_dt[, .(
+  total_registros = .N,
+  total_imoveis = uniqueN(id),
+  min_avaliacoes = min(total_avaliacoes, na.rm = TRUE),
+  max_avaliacoes = max(total_avaliacoes, na.rm = TRUE),
+  media_avaliacoes = mean(total_avaliacoes, na.rm = TRUE),
+  mediana_avaliacoes = median(total_avaliacoes, na.rm = TRUE),
+  desvio_padrao = sd(total_avaliacoes, na.rm = TRUE),
+  q1 = quantile(total_avaliacoes, 0.25, na.rm = TRUE),
+  q3 = quantile(total_avaliacoes, 0.75, na.rm = TRUE),
+  iqr = IQR(total_avaliacoes, na.rm = TRUE)
+)]
+print(estatisticas_avaliacoes)
+
+
+# Visualização da distribuição dos dados
+
+# Histograma
+ggplot(avaliacoes_dt, aes(x = total_avaliacoes)) +
+  geom_histogram(bins = 30, fill = "blue", color = "white", alpha = 0.7) +
+  ggtitle("Distribuição do Número Total de Avaliações por Imóvel") +
+  xlab("Total de Avaliações") + ylab("Frequência") + theme_minimal()
+
+
+# Identificação de Outliers
+limite_superior <- estatisticas_avaliacoes$q3 + 1.5 * estatisticas_avaliacoes$iqr
+outliers <- avaliacoes_dt[total_avaliacoes > limite_superior]
+print(outliers)
+
+
+
+# ------------------------------------------------------------
+# 3.2 - Análise dos dados mensais
+# ------------------------------------------------------------
+
+# Converter airbnb_sf para data.table sem a geometria
+airbnb_dt <- as.data.table(airbnb_sf)[, geometry := NULL]
+
+
+# Calcular o número total de avaliações por mês
+avaliacoes_mensais <- airbnb_dt[, .(total_avaliacoes = sum(avaliacoes, na.rm = TRUE)), by = mes]
+avaliacoes_mensais <- avaliacoes_mensais[order(mes)]
+
+
+# Gráfico de evolução do total de avaliações por mês
+ggplot(avaliacoes_mensais, aes(x = mes, y = total_avaliacoes, group = 1)) +
+  geom_line(color = "blue", linewidth = 1) +
+  geom_point(color = "red", size = 3) +
+  ggtitle("Evolução do Número Total de Avaliações por Mês - 2024") +
+  xlab("Mês") + ylab("Total de Avaliações") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+# Distribuição mensal das avaliações
+# Boxplot mensal
+ggplot(airbnb_dt, aes(x = as.factor(mes), y = avaliacoes)) +
+  geom_boxplot(fill = "orange", outlier.color = "red", outlier.size = 2) +
+  ggtitle("Distribuição Mensal das Avaliações") +
+  xlab("Mês") + ylab("Número de Avaliações") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Histogramas mensais
+ggplot(airbnb_dt, aes(x = avaliacoes)) +
+  geom_histogram(bins = 30, fill = "blue", color = "white", alpha = 0.7) +
+  facet_wrap(~mes, ncol = 4) +
+  ggtitle("Distribuição do Número de Avaliações por Registro - Mensal") +
+  xlab("Número de Avaliações") + ylab("Frequência") +
+  theme_minimal()
+
+
+# Mapas mensais de avaliações
+
+# Ajustar intervalos baseados no máximo real de avaliações
+max_avaliacoes <- max(airbnb_sf$avaliacoes, na.rm = TRUE)
+intervalos_avaliacoes <- unique(sort(c(0, 3, 6, 10, max_avaliacoes + 1)))
+
+# Criar mapas mensais
+lista_mapas <- lapply(unique(airbnb_sf$mes), function(mes) {
+  tm_shape(airbnb_sf[airbnb_sf$mes == mes, ]) +
+    tm_dots(size = 0.01, col = "avaliacoes", palette = "Reds",
+            title = mes, breaks = intervalos_avaliacoes) +
+    tm_layout(legend.position = c("right", "bottom"),
+              legend.text.size = 0.3, legend.title.size = 0.5,
+              legend.bg.color = "white", legend.bg.alpha = 0.5)
+})
+tmap_arrange(plotlist = lista_mapas, ncol = 3, nrow = 4)
+
+
+# Mapas específicos (abril e setembro)
+meses_selecionados <- c("2024_04", "2024_09")
+mapas_selecionados <- lapply(meses_selecionados, function(mes) {
+  tm_shape(airbnb_sf[airbnb_sf$mes == mes, ]) +
+    tm_dots(size = 0.02, col = "avaliacoes", palette = "Reds",
+            title = mes, breaks = intervalos_avaliacoes) +
+    tm_layout(legend.position = c("right", "bottom"),
+              legend.text.size = 0.3, legend.title.size = 0.5,
+              legend.bg.color = "white", legend.bg.alpha = 0.5)
+})
+tmap_arrange(plotlist = mapas_selecionados, ncol = 2, nrow = 1)
+
+
+# Mapa interativo para janeiro de 2024
+airbnb_janeiro <- airbnb_sf[airbnb_sf$mes == "2024_01", ]
+
+# Criar a paleta de cores baseada no número de avaliações
+intervalo_avaliacoes <- range(airbnb_janeiro$avaliacoes, na.rm = TRUE)  # Garante que a paleta cobre todos os valores
+pal_avaliacoes <- colorNumeric(palette = "Reds", domain = intervalo_avaliacoes)  
+
+# Criar o mapa interativo corrigido
+leaflet(data = airbnb_janeiro) %>%
+  addTiles() %>%  # Adiciona o mapa base
+  addCircleMarkers(
+    radius = ~log1p(avaliacoes) * 3,  # Aplica escala logarítmica para melhor visualização
+    color = ~pal_avaliacoes(avaliacoes),  # Aplica a paleta de cores ao número de avaliações
+    fillColor = ~pal_avaliacoes(avaliacoes),  # Preenchimento com a mesma cor
+    fillOpacity = 0.8,
+    stroke = FALSE,  # Remove a borda dos pontos
+    popup = ~paste("ID:", id, "<br>Avaliações:", avaliacoes, "<br>Mês:", mes)
+  ) %>%
+  addLegend(
+    "bottomright",
+    pal = pal_avaliacoes,
+    values = airbnb_janeiro$avaliacoes,
+    title = "Nº de Avaliações",
+    opacity = 1
+  )
+
+
+
+
+
+
+
+# ============================================================
+# Etapa 4: Construção da matriz de vizinhança espacial
+# ============================================================
+
+# Exibir uma prévia dos dados espaciais
+print(head(airbnb_sf))
+
+# Criar estrutura para armazenar as matrizes de vizinhança
+matrizes_vizinhanca <- list()
+
+# Construção da matriz de vizinhança por mês
+for (mes_atual in unique(airbnb_sf$mes)) {
+  
+  # Filtrar os dados do mês atual
+  dados_mes <- airbnb_sf[airbnb_sf$mes == mes_atual, ]
+  
+  # Remover pontos duplicados
+  dados_mes <- dados_mes[!duplicated(st_coordinates(dados_mes)), ]
+  
+  # Exibir o número de pontos antes e depois da remoção de duplicados
+  cat("Mês:", mes_atual, 
+      "| Pontos originais:", nrow(airbnb_sf[airbnb_sf$mes == mes_atual, ]), 
+      "| Pontos únicos:", nrow(dados_mes), "\n")
+  
+  # Verificar se há pontos suficientes para criar a matriz
+  if (nrow(dados_mes) > 1) {
+    
+    # Construção da matriz de vizinhança baseada nos 3 vizinhos mais próximos
+    vizinhos <- knn2nb(knearneigh(st_coordinates(dados_mes), k = 3))
+    
+    # Verificar se há subgrafos desconectados
+    componentes <- n.comp.nb(vizinhos)$nc
+    cat("Mês:", mes_atual, "| Número de subgrafos:", componentes, "\n")
+    
+    # Criar pesos espaciais a partir da matriz de vizinhança
+    pesos_vizinhos <- nb2listw(vizinhos, style = "W", zero.policy = TRUE)
+    
+    # Armazenar a matriz de vizinhança e os dados únicos
+    matrizes_vizinhanca[[as.character(mes_atual)]] <- list(
+      pesos = pesos_vizinhos,
+      dados = dados_mes
+    )
+    
+    # Exibir mensagem informativa
+    cat("Mês:", mes_atual, "| Matriz de vizinhança (KNN k=3) criada.\n")
+    
+  } else {
+    
+    cat("Mês:", mes_atual, "| Dados insuficientes para criar matriz de vizinhança.\n")
+    
+  }
+}
+
+
+
+# ------------------------------------------------------------
+# 4.1 - Visualização da matriz de vizinhança para um mês específico
+# ------------------------------------------------------------
+
+# Selecionar o mês para visualização (com underscore conforme o padrão)
+mes_para_visualizacao <- "2024_01"
+
+# Verificar se a matriz do mês selecionado existe
+if (mes_para_visualizacao %in% names(matrizes_vizinhanca)) {
+  
+  # Obter os dados e a matriz de vizinhança do mês selecionado
+  matriz_visualizacao <- matrizes_vizinhanca[[mes_para_visualizacao]]
+  dados_visualizacao <- matriz_visualizacao$dados
+  
+  # Plotar os pontos espaciais
+  plot(st_geometry(dados_visualizacao), 
+       main = paste("Matriz de Vizinhança - Mês:", mes_para_visualizacao), 
+       pch = 16, col = rgb(0, 0, 1, alpha = 0.5), cex = 0.2)  # Azul com transparência e tamanho reduzido
+  
+  # Adicionar as conexões da matriz de vizinhança
+  plot(matriz_visualizacao$pesos, st_coordinates(dados_visualizacao), 
+       add = TRUE, col = rgb(1, 0, 0, alpha = 0.5), lwd = 0.5)  # Vermelho com transparência e espessura reduzida
+  
+  cat("Visualização da matriz de vizinhança para o mês:", mes_para_visualizacao, "concluída.\n")
+  
+} else {
+  cat("Mês selecionado não possui matriz de vizinhança disponível.\n")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+# ============================================================
+# Etapa 5: Análise Global - Cálculo do Índice de Moran Global
+# ============================================================
+
+
+# ------------------------------------------------------------
+# 5.1 - Cálculo do Índice de Moran Esperado (Baseado no Número Total de Imóveis)
+# ------------------------------------------------------------
+
+
+# Determinar o número total de imóveis cadastrados no banco de dados
+n_total_imoveis <- uniqueN(airbnb_avaliacoes$id)  # Conta imóveis únicos
+
+# Criar um data.table para armazenar os valores esperados para cada mês
+moran_esperado_df <- data.table(mes = unique(airbnb_sf$mes), 
+                                moran_esperado = -1 / (n_total_imoveis - 1))
+
+# Exibir os valores esperados do Índice de Moran
+print(moran_esperado_df)
+
+
+# ------------------------------------------------------------
+# 5.2 - Cálculo do Índice de Moran (Ajustado)
+# ------------------------------------------------------------
+
+# Inicializar lista para armazenar os resultados
+moran_resultados <- list()
+
+# Loop para calcular o Índice de Moran Global por mês
+for (mes_atual in unique(airbnb_sf$mes)) {
+  
+  # Verificar se a matriz de vizinhança existe
+  if (!mes_atual %in% names(matrizes_vizinhanca)) {
+    message(paste("Mês", mes_atual, ": Matriz de vizinhança não encontrada. Pulando cálculo."))
+    next
+  }
+  
+  # Obter dados únicos e matriz de vizinhança correspondentes
+  dados_mes <- matrizes_vizinhanca[[mes_atual]]$dados
+  pesos_vizinhos <- matrizes_vizinhanca[[mes_atual]]$pesos
+  
+  # Verificar se há pontos suficientes e variância positiva
+  if (nrow(dados_mes) > 1 && var(dados_mes$avaliacoes, na.rm = TRUE) > 0) {
+    
+    # Calcular o Índice de Moran Global com tratamento de erro
+    moran_test <- tryCatch({
+      moran.test(dados_mes$avaliacoes, pesos_vizinhos, zero.policy = TRUE)
+    }, error = function(e) {
+      message(paste("Erro ao calcular Moran's I para", mes_atual, ":", e$message))
+      return(NULL)
+    })
+    
+    # Armazenar os resultados se o teste foi bem-sucedido
+    if (!is.null(moran_test)) {
+      moran_i_valor <- ifelse(is.null(moran_test$estimate["Moran I statistic"]), NA, as.numeric(moran_test$estimate["Moran I statistic"]))
+      p_valor <- as.numeric(moran_test$p.value)
+      
+      moran_resultados[[mes_atual]] <- data.table(
+        mes = as.character(mes_atual),  
+        moran_i = moran_i_valor,  
+        p_valor = p_valor
+      )
+    }
+  } else {
+    message(paste("Mês", mes_atual, ": Variância zero ou dados insuficientes para Moran's I."))
+  }
+}
+
+
+
+
+# Combinar e organizar os resultados
+if (length(moran_resultados) > 0) {
+  moran_df <- rbindlist(Filter(Negate(is.null), moran_resultados), fill = TRUE)
+} else {
+  moran_df <- data.table(mes = NA, moran_i = NA, p_valor = NA)
+}
+
+# Ordenar os meses corretamente
+moran_df <- moran_df[order(mes)]
+
+# Exibir os resultados
+print(moran_df)
+
+
+
+# Visualização do Índice de Moran Global ao longo do tempo
+
+# Criar um fator ordenado para os meses, garantindo a sequência correta
+moran_df[, mes := factor(mes, levels = paste0("2024_", sprintf("%02d", 1:12)))]
+
+# Criar o gráfico do Índice de Moran Global ao longo do tempo
+ggplot(moran_df, aes(x = mes, y = moran_i, group = 1)) +
+  geom_line(color = "blue", linewidth = 1) +  # Linha azul conectando os pontos
+  geom_point(aes(color = p_valor < 0.05), size = 3) +  # Pontos coloridos para significância estatística
+  scale_color_manual(values = c("TRUE" = "red", "FALSE" = "black"), 
+                     labels = c("Não Signif." = "FALSE", "Signif. (p < 0.05)" = "TRUE")) +
+  ggtitle("Correlograma do Índice de Moran Global (2024)") +
+  xlab("Mês") + 
+  ylab("Índice de Moran Global") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  # Rotacionar os meses no eixo X
+  labs(color = "Significância Estatística")
+
+
+# ------------------------------------------------------------
+# 5.3 - Comparação entre Moran Calculado e Moran Esperado
+# ------------------------------------------------------------
+
+# Garantir que os meses estejam no mesmo formato antes da fusão
+moran_df[, mes := as.character(mes)]
+moran_esperado_df[, mes := as.character(mes)]
+
+# Mesclar os valores esperados com os valores calculados
+moran_comparacao <- merge(moran_df, moran_esperado_df, by = "mes", all.x = TRUE)
+
+# Ordenar os meses corretamente
+moran_comparacao <- moran_comparacao[order(mes)]
+
+# Exibir os resultados finais
+print(moran_comparacao)
+
+
+# Visualização da Comparação entre Moran Calculado e Moran Esperado
+ggplot(moran_comparacao, aes(x = mes, group = 1)) +
+  geom_line(aes(y = moran_i, color = "Moran Calculado"), linewidth = 1) +
+  geom_line(aes(y = moran_esperado, color = "Moran Esperado"), linewidth = 1, linetype = "dashed") +
+  ggtitle("Comparação entre Moran Calculado e Moran Esperado") +
+  xlab("Mês") + ylab("Índice de Moran") +
+  scale_color_manual(values = c("Moran Calculado" = "blue", "Moran Esperado" = "red")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+# ------------------------------------------------------------
+# 5.4 - Análise da autocorrelação temporal do Índice de Moran
+# ------------------------------------------------------------
+
+# Carregar o pacote xts para análise temporal
+library(xts)
+
+# Ordenar os dados corretamente
+dados_temporais <- moran_df %>%
+  mutate(mes = factor(mes, levels = paste0("2024_", sprintf("%02d", 1:12)))) %>%  # Garantir ordem correta dos meses
+  arrange(mes)
+
+
+# Criar uma série temporal (xts)
+dados_xts <- xts(dados_temporais$moran_i, order.by = as.Date(paste0(dados_temporais$mes, "-01"), format = "%Y_%m-%d"))
+
+
+# Calcular a Autocorrelação Temporal (ACF)
+acf_result <- acf(dados_xts, plot = FALSE)  # Evita o gráfico automático
+
+
+# Criar o Correlograma Temporal
+ggplot(data.frame(lag = acf_result$lag, acf = acf_result$acf), aes(x = lag, y = acf)) +
+  geom_bar(stat = "identity", fill = "blue", alpha = 0.7) +  # Barras para representar os coeficientes
+  geom_hline(yintercept = 0, linetype = "dashed") +  # Linha zero para referência
+  ggtitle("Correlograma Temporal do Índice de Moran") +
+  xlab("Defasagem Temporal (Lags)") +
+  ylab("Autocorrelação") +
+  theme_minimal()
+
+
+# ------------------------------------------------------------
+# 5.5 - Análise da autocorrelação espaço-temporal com Moran I
+# -----------------------------------------------------------
+
+# Inicializar lista para armazenar os resultados do Moran Espaço-Temporal
+moran_st_resultados <- list()
+
+# Obter todos os meses disponíveis
+meses_disponiveis <- unique(airbnb_sf$mes)
+
+# Incluir o mês de Janeiro na análise, mesmo sem mês anterior
+for (i in 1:length(meses_disponiveis)) {
+  mes_atual <- meses_disponiveis[i]
+  mes_anterior <- ifelse(i > 1, meses_disponiveis[i - 1], NA)
+  
+  # Filtrar os dados do mês atual
+  dados_atual <- airbnb_sf %>% filter(mes == mes_atual)
+  dados_atual <- dados_atual[!duplicated(st_coordinates(dados_atual)), ]
+  
+  # Se não houver mês anterior, realizar apenas a análise espacial
+  if (is.na(mes_anterior)) {
+    if (nrow(dados_atual) > 1) {
+      pesos_espaciais <- matrizes_vizinhanca[[mes_atual]]$pesos
+      moran_espaco <- tryCatch({
+        moran.test(dados_atual$avaliacoes, pesos_espaciais, zero.policy = TRUE)
+      }, error = function(e) {
+        message(paste("Erro no Moran Espaço para", mes_atual, ":", e$message))
+        return(NULL)
+      })
+      
+      if (!is.null(moran_espaco)) {
+        moran_st_resultados[[mes_atual]] <- data.frame(
+          mes = mes_atual,
+          moran_st = moran_espaco$estimate["Moran I statistic"],
+          p_valor = moran_espaco$p.value
+        )
+      }
+    }
+    next
+  }
+  
+  # Para os demais meses, seguir com a análise espaço-temporal
+  dados_anterior <- airbnb_sf %>% filter(mes == mes_anterior)
+  dados_anterior <- dados_anterior[!duplicated(st_coordinates(dados_anterior)), ]
+  
+  if (nrow(dados_atual) > 1 & nrow(dados_anterior) > 1) {
+    vizinhanca_temp <- knearneigh(st_coordinates(dados_anterior), k = 1)
+    vizinhanca_temp <- knn2nb(vizinhanca_temp)
+    pesos_temp <- nb2listw(vizinhanca_temp, style = "W", zero.policy = TRUE)
+    
+    pesos_espaciais <- matrizes_vizinhanca[[mes_atual]]$pesos
+    
+    moran_espaco <- tryCatch({
+      moran.test(dados_atual$avaliacoes, pesos_espaciais, zero.policy = TRUE)
+    }, error = function(e) {
+      message(paste("Erro no Moran Espaço para", mes_atual, ":", e$message))
+      return(NULL)
+    })
+    
+    moran_tempo <- tryCatch({
+      moran.test(dados_anterior$avaliacoes, pesos_temp, zero.policy = TRUE)
+    }, error = function(e) {
+      message(paste("Erro no Moran Tempo para", mes_anterior, ":", e$message))
+      return(NULL)
+    })
+    
+    if (!is.null(moran_espaco) & !is.null(moran_tempo)) {
+      moran_st <- (moran_espaco$estimate["Moran I statistic"] + moran_tempo$estimate["Moran I statistic"]) / 2
+      
+      p_valor_st <- 1 - pchisq(-2 * (log(moran_espaco$p.value) + log(moran_tempo$p.value)), df = 4)
+      
+      moran_st_resultados[[mes_atual]] <- data.frame(
+        mes = mes_atual,
+        moran_st = moran_st,
+        p_valor = p_valor_st
+      )
+    }
+  } else {
+    message(paste("Mês", mes_atual, ": Dados insuficientes após a remoção de duplicados. Pulando cálculo."))
+  }
+}
+
+moran_st_df <- bind_rows(moran_st_resultados)
+
+print(moran_st_df)
+
+
+
+
+
+
+# Visualização do Índice de Moran Espaço-Temporal ao longo do tempo
+ggplot(moran_st_df, aes(x = mes, y = moran_st, group = 1)) +
+  geom_line(color = "blue", linewidth = 1) +  
+  geom_point(aes(color = p_valor < 0.05), size = 3) +  
+  scale_color_manual(values = c("TRUE" = "red", "FALSE" = "black"), 
+                     labels = c("Não Signif." = "FALSE", "Signif. (p < 0.05)" = "TRUE")) +
+  ggtitle("Índice de Moran Espaço-Temporal ao Longo do Tempo") +
+  xlab("Mês") + 
+  ylab("Índice de Moran Espaço-Temporal") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  
+  labs(color = "Significância Estatística")
+
+
+
+
+
+
+
+
+# ============================================================
+# Etapa 6: Análise local - Cálculo do Moran Local (LISA) e Identificação de Clusters Espaciais
+# ============================================================
+
+
+# Inicializar lista para armazenar os resultados do Moran Local
+moran_local_resultados <- list()
+
+# Loop para calcular o Moran Local (LISA) para cada mês
+for (mes_atual in unique(airbnb_sf$mes)) {
+  
+  # Filtrar os dados do mês atual e manter apenas os pontos únicos
+  dados_mes <- airbnb_sf %>% 
+    filter(mes == mes_atual) %>%
+    filter(!duplicated(st_coordinates(.)))
+  
+  # Verificar se há pontos suficientes para análise
+  if (nrow(dados_mes) > 1 && var(dados_mes$avaliacoes, na.rm = TRUE) > 0) {
+    
+    # Verificar se a matriz de vizinhança existe e acessar o objeto 'pesos' corretamente
+    if (!mes_atual %in% names(matrizes_vizinhanca) || is.null(matrizes_vizinhanca[[mes_atual]]$pesos)) {
+      message(paste("Mês", mes_atual, ": Matriz de vizinhança não encontrada ou vazia. Pulando cálculo."))
+      next
+    }
+    
+    pesos_vizinhos <- matrizes_vizinhanca[[mes_atual]]$pesos
+    
+    # Calcular o Moran Local (LISA)
+    moran_local <- localmoran(dados_mes$avaliacoes, pesos_vizinhos, zero.policy = TRUE)
+    
+    # Adicionar os resultados ao dataframe
+    dados_mes$moran_i <- moran_local[, "Ii"]
+    dados_mes$p_valor <- moran_local[, "Pr(z != E(Ii))"]
+    
+    # Calcular Z-score para as avaliações
+    dados_mes$z_score <- scale(dados_mes$avaliacoes, center = TRUE, scale = TRUE)
+    
+    # Classificar os clusters corretamente
+    dados_mes <- dados_mes %>%
+      mutate(
+        cluster = case_when(
+          z_score > 0 & moran_i > 0 & p_valor < 0.05 ~ "Alto-Alto (Hotspot)",
+          z_score < 0 & moran_i > 0 & p_valor < 0.05 ~ "Baixo-Baixo (Coldspot)",
+          z_score < 0 & moran_i < 0 & p_valor < 0.05 ~ "Baixo-Alto (Outlier)",
+          z_score > 0 & moran_i < 0 & p_valor < 0.05 ~ "Alto-Baixo (Outlier)",
+          TRUE ~ "Sem Significância"
+        ),
+        cluster = factor(cluster, levels = c("Baixo-Baixo (Coldspot)", "Alto-Alto (Hotspot)", "Baixo-Alto (Outlier)", "Alto-Baixo (Outlier)", "Sem Significância"))
+      )
+    
+    # Armazenar os resultados na lista
+    moran_local_resultados[[mes_atual]] <- dados_mes
+  } else {
+    message(paste("Mês", mes_atual, ": Variância zero ou dados insuficientes para Moran Local."))
+  }
+}
+
+# Combinar os resultados em um único data.frame
+if (length(moran_local_resultados) > 0) {
+  moran_local_df <- do.call(rbind, moran_local_resultados)
+} else {
+  moran_local_df <- data.frame(id = NA, mes = NA, avaliacoes = NA, moran_i = NA, p_valor = NA, z_score = NA, cluster = NA)
+}
+
+# Exibir os primeiros resultados
+print(head(moran_local_df))
+
+
+
+
+
+
+# Visualização espacial dos clusters
+
+# Configurar modo de visualização
+tmap_mode("plot")
+
+# Criar lista de mapas para cada mês
+lista_mapas <- lapply(unique(moran_local_df$mes), function(mes_atual) {
+  dados_mes <- moran_local_df %>% filter(mes == mes_atual)
+  
+  # Converter para sf se necessário
+  dados_mes <- st_as_sf(dados_mes)
+  
+  tm_shape(dados_mes) +
+    tm_dots(
+      col = "cluster",
+      palette = c("blue", "red", "purple", "orange", "gray"),  
+      size = 0.05,
+      title = paste("Clusters LISA -", mes_atual)
+    ) +
+    tm_layout(
+      legend.position = c("right", "bottom"),  # Legenda no canto inferior direito do mapa
+      legend.text.size = 0.5,  # Tamanho do texto da legenda
+      legend.title.size = 0.7,  # Tamanho do título da legenda
+      legend.bg.color = "white",  # Fundo branco para melhor contraste
+      legend.bg.alpha = 0.8,  # Transparência para não cobrir completamente o mapa
+      legend.frame = FALSE  # Remove a linha de contorno da legenda
+    )
+})
+
+# Exibir mapas organizados
+tmap_arrange(plotlist = lista_mapas, ncol = 3)
+
+
+
+# Criar o boxplot para comparar a distribuição do Moran Local por mês
+
+# Remover valores ausentes
+moran_local_df <- moran_local_df %>% filter(!is.na(moran_i))
+
+# Criar o boxplot
+ggplot(moran_local_df, aes(x = factor(mes), y = moran_i)) +
+  geom_boxplot(fill = "lightblue", color = "black", outlier.color = "red", outlier.shape = 16) +
+  labs(
+    title = "Distribuição do Moran Local (LISA) por Mês",
+    x = "Mês",
+    y = "Índice de Moran Local"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),  # Rotaciona os rótulos do eixo X para melhor leitura
+    plot.title = element_text(hjust = 0.5)  # Centraliza o título
+  )
+
+
+
+
+# Visualizar os meses de junho e novembro
+
+# Configurar modo de visualização
+tmap_mode("plot")
+
+# Definir os meses que serão visualizados
+meses_para_plotar <- c("2024_06", "2024_11")
+
+# Criar lista de mapas para os meses selecionados
+lista_mapas <- lapply(meses_para_plotar, function(mes_atual) {
+  dados_mes <- moran_local_df %>% filter(mes == mes_atual)
+  
+  # Converter para sf se necessário
+  dados_mes <- st_as_sf(dados_mes)
+  
+  tm_shape(dados_mes) +
+    tm_dots(
+      col = "cluster",
+      palette = c("blue", "red", "purple", "orange", "gray"),  
+      size = 0.05,
+      title = paste("Clusters LISA -", mes_atual)
+    ) +
+    tm_layout(
+      legend.position = c("right", "bottom"),  # Legenda dentro do mapa no canto inferior direito
+      legend.text.size = 0.5,  # Tamanho do texto da legenda
+      legend.title.size = 0.7,  # Tamanho do título da legenda
+      legend.bg.color = "white",  # Fundo branco para melhor contraste
+      legend.bg.alpha = 0.8,  # Transparência para não cobrir completamente o mapa
+      legend.frame = FALSE  # Remove a linha de contorno da legenda
+    )
+})
+
+# Exibir mapas organizados em 2 colunas
+tmap_arrange(plotlist = lista_mapas, ncol = 2)
+
+
+
+
+# Teste de Kruskal-Wallis para verificar se há diferenças estatísticas entre os meses
+kruskal_result <- kruskal.test(moran_i ~ mes, data = moran_local_df)
+
+# Exibir resultado do teste de Kruskal-Wallis
+print(kruskal_result)
+
+
+
+
+
+
+
+
+# ============================================================
+# Etapa 7: Análise local - Cálculo do Getis-Ord Gi* e análise de persistência espacial
+# ============================================================
+
+# Inicializar lista para armazenar os resultados do Getis-Ord Gi*
+getis_ord_resultados <- list()
+
+# Loop para calcular o Getis-Ord Gi* para cada mês
+for (mes_atual in unique(airbnb_sf$mes)) {
+  
+  
+  # Filtrar os dados do mês atual e remover pontos duplicados
+  dados_mes <- airbnb_sf %>%
+    filter(mes == mes_atual) %>%
+    filter(!duplicated(st_coordinates(.)))
+  
+  # Verificar se há pontos suficientes para análise
+  if (nrow(dados_mes) > 1 && var(dados_mes$avaliacoes, na.rm = TRUE) > 0) {
+    
+    # Verificar se a matriz de vizinhança já foi criada
+    if (!mes_atual %in% names(matrizes_vizinhanca) || is.null(matrizes_vizinhanca[[mes_atual]]$pesos)) {
+      message(paste("Mês", mes_atual, ": Matriz de vizinhança não encontrada ou vazia. Pulando cálculo."))
+      next
+    }
+    
+    pesos_vizinhos <- matrizes_vizinhanca[[mes_atual]]$pesos
+    
+    # Calcular o índice Getis-Ord Gi*
+    getis_ord <- localG(dados_mes$avaliacoes, pesos_vizinhos, zero.policy = TRUE)
+    
+    # Armazenar os resultados no data.frame
+    dados_mes <- dados_mes %>%
+      mutate(
+        getis_ord_g = as.numeric(getis_ord),
+        p_valor = 2 * (1 - pnorm(abs(getis_ord_g))) # Cálculo do p-valor (bicaudal)
+      )
+    
+    # Adicionar os resultados à lista
+    getis_ord_resultados[[mes_atual]] <- dados_mes
+  } else {
+    message(paste("Mês", mes_atual, ": Variância zero ou dados insuficientes para Getis-Ord Gi."))
+  }
+}
+
+# Combinar os resultados em um único data.table
+if (length(getis_ord_resultados) > 0) {
+  getis_ord_df <- do.call(rbind, getis_ord_resultados)
+} else {
+  getis_ord_df <- data.table(mes = NA, getis_ord_g = NA, p_valor = NA)
+}
+
+# Exibir os primeiros resultados
+print(head(getis_ord_df))
+
+
+
+# Classificação dos hotspots e coldspots
+# Definir categorias com base no Getis-Ord Gi*
+getis_ord_df <- getis_ord_df %>%
+  mutate(
+    categoria = case_when(
+      getis_ord_g > 1.96 & p_valor < 0.05 ~ "Hotspot (99%)",  
+      getis_ord_g > 1.65 & p_valor < 0.10 ~ "Hotspot (95%)",  
+      getis_ord_g < -1.65 & p_valor < 0.10 ~ "Coldspot (95%)",  # Mantido para consistência
+      getis_ord_g < -1.28 & p_valor < 0.20 ~ "Coldspot (80%)",  # Novo limiar mais permissivo
+      TRUE ~ "Sem padrão significativo"  
+    )
+  )
+
+# Verificar a distribuição das categorias
+table(getis_ord_df$categoria)
+
+
+
+# Definir categorias com base no Getis-Ord Gi*
+getis_ord_df <- getis_ord_df %>%
+  mutate(
+    categoria = case_when(
+      getis_ord_g > 1.96 & p_valor < 0.05 ~ "Hotspot (99%)",  
+      getis_ord_g > 1.65 & p_valor < 0.10 ~ "Hotspot (95%)",  
+      getis_ord_g < -1.65 & p_valor < 0.10 ~ "Coldspot (95%)",
+      getis_ord_g < -1.28 & p_valor < 0.20 ~ "Coldspot (80%)",  # Novo limiar mais permissivo
+      TRUE ~ "Sem padrão significativo"  
+    )
+  )
+
+# Visualização espacial dos hotspots e coldspots
+# Definir apenas as cores das categorias presentes
+cores_fixas <- c(
+  "Coldspot (80%)" = "blue", 
+  "Sem padrão significativo" = "gray80",
+  "Hotspot (95%)" = "red", 
+  "Hotspot (99%)" = "darkred"
+)
+
+getis_ord_df <- getis_ord_df %>%
+  mutate(categoria = factor(categoria, levels = names(cores_fixas)),
+         mes = factor(mes, levels = paste0("2024_", sprintf("%02d", 1:12)))) 
+
+# Criar lista de mapas para cada mês, garantindo a ordem correta
+lista_mapas <- lapply(levels(getis_ord_df$mes), function(mes_atual) {
+  dados_mes <- getis_ord_df %>% filter(mes == mes_atual)
+  
+  tm_shape(dados_mes) +
+    tm_dots(
+      col = "categoria", 
+      palette = cores_fixas,
+      size = 0.05,
+      title = mes_atual
+    ) +
+    tm_layout(
+      legend.position = c("right", "bottom"),
+      legend.text.size = 0.3, 
+      legend.title.size = 0.5
+    )
+})
+
+# Plotar os mapas na ordem correta
+tmap_arrange(plotlist = lista_mapas, ncol = 3, nrow = 4)
+
+
+
+
+
+
+
+
+
+# Mapas específicos de hotspots e coldspots para meses selecionados
+meses_selecionados <- c("2024_01", "2024_06") 
+
+mapas_selecionados <- lapply(meses_selecionados, function(mes_atual) {
+  dados_mes <- getis_ord_df %>% filter(mes == mes_atual)
+  
+  tm_shape(dados_mes) +
+    tm_dots(
+      col = "categoria",
+      palette = cores_fixas, 
+      size = 0.1,
+      title = paste(mes_atual)
+    ) +
+    tm_layout(
+      legend.position = c("right", "bottom"),
+      legend.text.size = 0.5,
+      legend.title.size = 0.8
+    )
+})
+
+tmap_arrange(plotlist = mapas_selecionados, ncol = 2, nrow = 1)
+
+
+
+# Análise da correlação espacial entre os meses
+dados_correlacao <- getis_ord_df %>%
+  select(mes, id, getis_ord_g) %>%
+  st_drop_geometry() %>%  
+  spread(key = mes, value = getis_ord_g)
+
+dados_correlacao[, -1] <- lapply(dados_correlacao[, -1], as.numeric)
+
+dados_correlacao <- na.omit(dados_correlacao)
+
+correlacao_matriz <- cor(dados_correlacao[, -1], use = "pairwise.complete.obs", method = "pearson")
+
+correlacao_df <- melt(correlacao_matriz)
+
+ggplot(correlacao_df, aes(Var1, Var2, fill = value)) +
+  geom_tile() +
+  geom_text(aes(label = round(value, 2)), color = "black") +
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0, 
+                       limits = c(-1,1), name = "Correlação") +
+  theme_minimal() +
+  labs(title = "Correlação Espacial entre Meses", x = "Mês", y = "Mês") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+
+
+# ------------------------------------------------------------
+# 7.1 - Análise da persistência espacial dos padrões ao longo do tempo
+# ------------------------------------------------------------
+
+persistencia_df <- getis_ord_df %>%
+  group_by(id, geometry) %>%
+  summarise(
+    freq_hotspot = sum(categoria %in% c("Hotspot (95%)", "Hotspot (99%)")),
+    freq_coldspot = sum(categoria %in% c("Coldspot (80%)"))
+  ) %>%
+  ungroup()
+
+persistencia_df <- persistencia_df %>%
+  mutate(
+    categoria_persistencia = case_when(
+      freq_hotspot > freq_coldspot ~ "Hotspot Persistente",
+      freq_coldspot > freq_hotspot ~ "Coldspot Persistente",
+      TRUE ~ "Neutro"
+    )
+  )
+
+
+# Visualização da persistência espacial
+cores_persistencia <- c(
+  "Hotspot Persistente" = "darkred",
+  "Coldspot Persistente" = "darkblue",
+  "Neutro" = "gray80"
+)
+
+mapa_persistencia <- tm_shape(persistencia_df) +
+  tm_dots(col = "categoria_persistencia", palette = cores_persistencia, size = 0.1, title = "Persistência") +
+  tm_layout(legend.position = c("right", "bottom"))
+
+tmap_mode("plot")
+print(mapa_persistencia)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
