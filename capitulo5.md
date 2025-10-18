@@ -29,14 +29,25 @@ kernelspec:
 
 <section class="cap-video">
   <p><strong>Assista ao resumo do capítulo em vídeo:</strong></p>
-  <video controls preload="metadata" style="width:100%;max-width:720px" poster="video/capitulo5-poster.jpg">
-    <source src="video/capitulo5.mp4" type="video/mp4">
-    <!-- (opcional) legenda/captions em VTT -->
-    <track kind="captions" src="video/capitulo5.pt.vtt" srclang="pt" label="Português" default>
-    Seu navegador não suporta a reprodução de vídeo.
-    <a href="video/capitulo5.mp4">Baixar MP4</a>
-  </video>
+
+  <!-- wrapper responsivo 16:9 -->
+  <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;border-radius:8px;background:#000;">
+    <iframe
+      src="https://www.youtube-nocookie.com/embed/dtBbKE8FRXQ"
+      title="Vídeo do capítulo"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+      style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;">
+    </iframe>
+  </div>
+
+  <p style="margin-top:0.5rem;">
+    Se o vídeo não carregar, <a href="https://www.youtube.com/watch?v=dtBbKE8FRXQ" target="_blank" rel="noopener">assista no YouTube</a>.
+  </p>
 </section>
+
 
 
 
