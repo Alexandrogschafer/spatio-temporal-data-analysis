@@ -64,37 +64,43 @@ A krigagem parte de uma decomposição simples: o que observamos em cada lugar e
 $$
 Z(\mathbf{s}, t) = m(\mathbf{s}, t) + \varepsilon(\mathbf{s}, t),
 $$
-em que \(m(\mathbf{s}, t)\) representa a tendência (por exemplo, altitudes maiores chovem mais; o verão é mais úmido) e \(\varepsilon(\mathbf{s}, t)\) é o desvio que muda de ponto para ponto e de momento para momento.
+em que $m(\mathbf{s}, t)$ representa a tendência (por exemplo, altitudes maiores chovem mais; o verão é mais úmido) e $\varepsilon(\mathbf{s}, t)$ é o desvio que muda de ponto para ponto e de momento para momento.
 
-O passo decisivo é descrever a semelhança entre desvios. Para isso usamos a função de covariância \(C(\mathbf{h}, u)\), que mede o quanto dois pontos se parecem quando estão separados por uma distância espacial \(\mathbf{h}\) e uma separação temporal \(u\). Em termos práticos: quanto menores \(\mathbf{h}\) e \(u\), maior a semelhança esperada.
+
+O passo decisivo é descrever a semelhança entre desvios. Para isso usamos a função de covariância $C(\mathbf{h}, u)$, que mede o quanto dois pontos se parecem quando estão separados por uma distância espacial $\mathbf{h}$ e uma separação temporal $u$. Em termos práticos: quanto menores $\mathbf{h}$ e $u$, maior a semelhança esperada.
+
 
 Com essa “régua de semelhança” em mãos, a krigagem calcula, para um local/instante sem dado, uma combinação ponderada das observações disponíveis, atribuindo pesos maiores aos vizinhos mais próximos no espaço e no tempo e menores aos mais distantes. O método entrega duas saídas acopladas: o valor estimado e a sua incerteza (a variância de krigagem), que indica o quão confiável é a estimativa naquele ponto do mapa e naquele momento.
 
 Uma intuição útil: imagine “pintar” o mapa-linha-do-tempo usando as cores conhecidas nos pontos medidos e espalhando essas cores ao redor; elas se difundem com força decrescente à medida que nos afastamos no espaço e no tempo. Ao final, cada pixel/instante recebe uma cor (o valor estimado) e um sombreamento de confiança (a incerteza), deixando claro o que sabemos melhor e onde sabemos menos.
 
 **b) Essência matemática**  
-Em krigagem, o alvo é um campo espaço-temporal: um processo aleatório contínuo \(Z(\mathbf{s}, t)\) que atribui um valor (chuva, temperatura, PM\(_{2.5}\), umidade do solo) a cada ponto do espaço \(\mathbf{s}\) e a cada instante \(t\). As medições de estações ou sensores são amostras pontuais desse campo; ele existe também onde/quando não medimos. Supomos uma suavidade prática: vizinhos no espaço e no tempo tendem a se parecer. É essa semelhança local que a krigagem explora para preencher lacunas e quantificar incerteza.
+Em krigagem, o alvo é um campo espaço-temporal: um processo aleatório contínuo $Z(\mathbf{s}, t)$ que atribui um valor (chuva, temperatura, PM$_{2.5}$, umidade do solo) a cada ponto do espaço $\mathbf{s}$ e a cada instante $t$. As medições de estações ou sensores são amostras pontuais desse campo; ele existe também onde/quando não medimos. Supomos uma suavidade prática: vizinhos no espaço e no tempo tendem a se parecer. É essa semelhança local que a krigagem explora para preencher lacunas e quantificar incerteza.
+
 
 Com o objeto definido, descrevemos o campo por:
 $$
 Z(\mathbf{s}, t) = m(\mathbf{s}, t) + \varepsilon(\mathbf{s}, t),
 $$
 onde:
-- \(Z(\mathbf{s}, t)\): valor do campo no local \(\mathbf{s}\) e no tempo \(t\);
-- \(m(\mathbf{s}, t)\): tendência média (nível), possivelmente função de covariáveis, por exemplo \(m(\mathbf{s}, t)=\mathbf{x}(\mathbf{s}, t)^\top \beta\);
-- \(\varepsilon(\mathbf{s}, t)\): variação aleatória correlacionada, com média zero.
+- $Z(\mathbf{s}, t)$: valor do campo no local $\mathbf{s}$ e no tempo $t$;
+- $m(\mathbf{s}, t)$: tendência média (nível), possivelmente função de covariáveis, por exemplo $m(\mathbf{s}, t)=\mathbf{x}(\mathbf{s}, t)^\top \beta$;
+- $\varepsilon(\mathbf{s}, t)$: variação aleatória correlacionada, com média zero.
+
 
 A proximidade no espaço e no tempo é codificada por uma função de covariância:
 $$
 C(\mathbf{h}, u) = \mathrm{Cov}\!\big[ Z(\mathbf{s}+\mathbf{h}, t+u),\, Z(\mathbf{s}, t) \big],
 $$
-em que \(\mathbf{h}\) é o deslocamento espacial e \(u\) o deslocamento temporal. Quanto menores \(\mathbf{h}\) e \(u\), maior a semelhança esperada; conforme aumentam, a semelhança decai.
+em que $\mathbf{h}$ é o deslocamento espacial e $u$ o deslocamento temporal. Quanto menores $\mathbf{h}$ e $u$, maior a semelhança esperada; conforme aumentam, a semelhança decai.
+
 
 Um equivalente diagnóstico é o semivariograma:
 $$
 \gamma(\mathbf{h}, u) = \tfrac12\,\mathrm{Var}\!\big[ Z(\mathbf{s}+\mathbf{h}, t+u) - Z(\mathbf{s}, t) \big],
 $$
-que tende a ser baixo para pares próximos e alto para pares distantes. Na prática, ajustamos um modelo válido para \(C(\mathbf{h}, u)\) (ou \(\gamma\)) — separável ou não separável — que servirá de régua para ponderar vizinhos.
+que tende a ser baixo para pares próximos e alto para pares distantes. Na prática, ajustamos um modelo válido para $C(\mathbf{h}, u)$ (ou $\gamma$) — separável ou não separável — que servirá de régua para ponderar vizinhos.
+
 
 **Como a predição é calculada**  
 Para um alvo \((\mathbf{s}_0, t_0)\) sem medição, a krigagem combina, com pesos, as observações disponíveis:
@@ -102,59 +108,69 @@ $$
 \widehat{Z}(\mathbf{s}_0, t_0)
 = m(\mathbf{s}_0, t_0) + \sum_{i=1}^{n} w_i \,\big[ Z(\mathbf{s}_i, t_i) - m(\mathbf{s}_i, t_i) \big].
 $$
-Os pesos \(w_i\) são escolhidos para que a estimativa seja não viesada e tenha mínima variância, conforme a régua \(C(\mathbf{h}, u)\). Intuição direta: pontos próximos de \((\mathbf{s}_0, t_0)\) (no mapa e no relógio) recebem peso maior; pontos distantes, peso menor.
+Os pesos $w_i$ são escolhidos para que a estimativa seja não viesada e tenha mínima variância, conforme a régua $C(\mathbf{h}, u)$. Intuição direta: pontos próximos de $(\mathbf{s}_0, t_0)$ (no mapa e no relógio) recebem peso maior; pontos distantes, peso menor.
 
-A predição vem acompanhada da variância de krigagem \(\sigma_K^2(\mathbf{s}_0, t_0)\), que expressa a incerteza local — maior quando faltam vizinhos próximos, quando a correlação decai muito rápido ou quando a tendência \(m(\mathbf{s}, t)\) explica pouco.
+
+A predição vem acompanhada da variância de krigagem $\sigma_K^2(\mathbf{s}_0, t_0)$, que expressa a incerteza local — maior quando faltam vizinhos próximos, quando a correlação decai muito rápido ou quando a tendência $m(\mathbf{s}, t)$ explica pouco.
+
 
 **Passo a passo mínimo**  
-- Especificar a tendência \(m(\mathbf{s}, t)\) (constante ou com covariáveis) e diagnosticar a dependência com variogramas/correlogramas E–T.  
-- Ajustar um modelo válido para \(C(\mathbf{h}, u)\) (a régua de semelhança espacial e temporal).  
-- Predizer \(\widehat{Z}\) em locais/tempos sem medição e reportar \(\sigma_K^2\) (bandas/intervalos), deixando claro onde sabemos mais e onde sabemos menos.
+- Especificar a tendência $m(\mathbf{s}, t)$ (constante ou com covariáveis) e diagnosticar a dependência com variogramas/correlogramas E–T.  
+- Ajustar um modelo válido para $C(\mathbf{h}, u)$ (a régua de semelhança espacial e temporal).  
+- Predizer $\widehat{Z}$ em locais/tempos sem medição e reportar $\sigma_K^2$ (bandas/intervalos), deixando claro onde sabemos mais e onde sabemos menos.
+
 
 **c) Aplicações comuns**  
 A krigagem espaço-temporal mostra seu valor quando o fenômeno é contínuo, o monitoramento é esparso e precisamos preencher onde e quando faltam medições — sempre com uma noção clara da incerteza. Exemplos:
 - Meteorologia e clima: preencher chuva/temperatura entre estações, montar mapas diários/horários.  
-- Qualidade do ar: estimar PM\(_{2.5}\) onde não há sensor, indicar probabilidade de ultrapassar limites.  
+- Qualidade do ar: estimar PM$_{2.5}$ onde não há sensor, indicar probabilidade de ultrapassar limites.  
 - Agricultura e solos: umidade do solo, índice de vegetação, salinidade ao longo de safras.  
 - Recursos hídricos: níveis ou qualidade de água em bacias com poucos pontos de medição.  
 - Saúde ambiental: concentração de alérgenos ou poluentes ao longo do dia na malha urbana.
 
+
 **d) O que você obtém**  
 - Mapas por tempo (ex.: mapa do dia 10/01 às 12h) e séries por local (ex.: valores diários no bairro X), ambos com bandas de incerteza.  
-- Mapas de excedência: onde e quando é provável que um valor tenha passado do limite (por exemplo, 50 \(\mu\)g/m\(^3\)).  
+- Mapas de excedência: onde e quando é provável que um valor tenha passado do limite (por exemplo, 50 $\mu$g/m$^3$).  
 - Resumo da incerteza: locais/horários com pouca confiança ficam sinalizados; decisões podem priorizar áreas de maior certeza.
+
 
 **e) Limitações e cuidados**  
 - Escala do fenômeno: a krigagem funciona melhor quando o processo é suave no espaço e no tempo; quebras bruscas (relevo muito complexo, frentes rápidas) pedem modelos mais sofisticados.  
 - Dados e relógio organizados: unidades consistentes, calendário alinhado (fuso/horário de verão) e coordenadas corretas são essenciais para que distâncias e defasagens façam sentido.  
-- Tendência versus vizinhança: gradientes (altitude, sazonalidade) entram em \(m(\mathbf{s}, t)\); a covariância fica para a semelhança entre vizinhos. Misturar os dois distorce a dependência.  
+- Tendência versus vizinhança: gradientes (altitude, sazonalidade) entram em $m(\mathbf{s}, t)$; a covariância fica para a semelhança entre vizinhos. Misturar os dois distorce a dependência.  
 - Evitar confiança exagerada: validações “aleatórias” que misturam pontos muito próximos entre treino e teste inflacionam o desempenho. Preferir bloqueios separados no espaço e no tempo.  
 - Custo computacional: em bases grandes, estimar a semelhança entre todos os pares é pesado; usar aproximações (matrizes esparsas, vizinhos mais próximos, janelas móveis) quando necessário.
 
+
 **f) Abordagens de referência**  
 - Krigagem E–T clássica (covariância separável / não separável): ajusta um processo gaussiano com estrutura de correlação no espaço e no tempo; a versão não separável (por exemplo, família de Gneiting) captura propagação. Entrega mapas/séries preditos e variâncias de krigagem, além de mapas de probabilidade de excedência.  
-- Krigagem com tendência/regressão (Universal/Regression Kriging E–T): inclui covariáveis \(X(\mathbf{s}, t)\) na tendência \(m(\mathbf{s}, t)\) + krigagem do resíduo correlacionado. Entrega predições com efeitos de covariáveis e incerteza.  
+- Krigagem com tendência/regressão (Universal/Regression Kriging E–T): inclui covariáveis $X(\mathbf{s}, t)$ na tendência $m(\mathbf{s}, t)$ + krigagem do resíduo correlacionado. Entrega predições com efeitos de covariáveis e incerteza.  
 - Co-krigagem / krigagem colocalizada E–T: usa variáveis correlatas (por exemplo, satélite) para reforçar a predição de uma variável-alvo esparsa. Entrega ganho de precisão em áreas pouco medidas.  
 - SPDE/GMRF via INLA (campos gaussianos esparsos): aproxima o processo contínuo por malhas triangulares (GMRF), escalando para grades grandes. Entrega predições rápidas com intervalos de credibilidade.  
-- Filtro/“krigagem” de Kalman em grade (estado-espaço): para campos em grade (raster) com dinâmica temporal explícita (advecção/difusão). Entrega nowcasting/forecasting com bandas preditivas.
+- Filtro/“krigagem” de Kalman em grade (estado-espaço): para campos em grade (raster) com dinâmica temporal explícita (advecção/difusão). Entrega *nowcasting/forecasting* com bandas preditivas.
+
 
 
 
 ### 5.1.2 Processos Pontuais Espaço-Temporais (STEP) 
 
 Processos Pontuais Espaço-Temporais (STEP) lidam com dados em que cada registro é um evento com lugar e tempo — um ponto no mapa e um instante no relógio. O interesse não é medir “quanto há” em toda a área (como numa variável contínua), e sim compreender o desenho dos pontos: onde e quando eles se acumulam, como se espalham, se atraem (um evento eleva a chance de outro nas proximidades pouco depois) ou se inibem (a ocorrência reduz a probabilidade de novos eventos ao redor por algum tempo). Em termos práticos, STEP transforma uma nuvem de ocorrências — crimes, casos de dengue, raios, panes — em um mapa-calendário de risco que varia no espaço e no tempo, permitindo localizar hotspots com início e duração, comparar a intensidade entre bairros e períodos e detectar sinais de propagação ou saturação.  
-O produto típico inclui superfícies de risco \(\hat{\lambda}(\mathbf{x},t)\) que indicam onde/quando a probabilidade de evento é maior, cronogramas que registram o aparecimento e o declínio de aglomerações e parâmetros interpretáveis (alcance espacial, meia-vida temporal, força de excitação/inibição). Esses resultados são reportados com incerteza explícita, de modo que gestores possam priorizar ações, posicionar recursos e ajustar estratégias à medida que novas ocorrências chegam — sem exigir, de início, uma teoria causal completa, mas oferecendo pistas sólidas para investigações posteriores.
+O produto típico inclui superfícies de risco $\hat{\lambda}(\mathbf{x},t)$ que indicam onde/quando a probabilidade de evento é maior, cronogramas que registram o aparecimento e o declínio de aglomerações e parâmetros interpretáveis (alcance espacial, meia-vida temporal, força de excitação/inibição). Esses resultados são reportados com incerteza explícita, de modo que gestores possam priorizar ações, posicionar recursos e ajustar estratégias à medida que novas ocorrências chegam — sem exigir, de início, uma teoria causal completa, mas oferecendo pistas sólidas para investigações posteriores.
+
 
 **a) Como funciona**  
-Em processos pontuais espaço-temporais, pensamos o fenômeno por meio de uma intensidade que varia no mapa e no relógio — uma espécie de “temperatura de risco”. No nível mais básico, modelamos a intensidade média \(\lambda(x,t)\): onde \(\lambda(x,t)\) é alta, esperamos mais eventos por unidade de área e de tempo. Essa intensidade pode depender de covariáveis (iluminação, renda, fluxo de pessoas, clima), como em um Poisson inomogêneo: as covariáveis explicam por que certos lugares/instantes têm, em média, mais ou menos ocorrências, gerando mapas e cronogramas de risco. A intuição é direta: condições que dificultam o evento reduzem \(\lambda\); condições que o favorecem elevam \(\lambda\).  
-Há, porém, situações em que o próprio histórico de eventos altera o risco atual. Nesses casos, usamos uma intensidade condicional \(\lambda_c(x,t \mid \mathcal{H}_t)\) que incorpora propagação (excitação) ou inibição: a chance de um novo evento aumenta (ou diminui) perto de eventos recentes, dentro de um alcance espacial e de uma meia-vida temporal. Modelos do tipo Hawkes/epidêmicos formalizam essa ideia somando ao nível de base \(\mu(x,t)\) o impacto dos eventos passados via uma função de decaimento \(g\):
+Em processos pontuais espaço-temporais, pensamos o fenômeno por meio de uma intensidade que varia no mapa e no relógio — uma espécie de “temperatura de risco”. No nível mais básico, modelamos a intensidade média $\lambda(x,t)$: onde $\lambda(x,t)$ é alta, esperamos mais eventos por unidade de área e de tempo. Essa intensidade pode depender de covariáveis (iluminação, renda, fluxo de pessoas, clima), como em um Poisson inomogêneo: as covariáveis explicam por que certos lugares/instantes têm, em média, mais ou menos ocorrências, gerando mapas e cronogramas de risco. A intuição é direta: condições que dificultam o evento reduzem $\lambda$; condições que o favorecem elevam $\lambda$.  
+Há, porém, situações em que o próprio histórico de eventos altera o risco atual. Nesses casos, usamos uma intensidade condicional $\lambda_c(x,t \mid \mathcal{H}_t)$ que incorpora propagação (excitação) ou inibição: a chance de um novo evento aumenta (ou diminui) perto de eventos recentes, dentro de um alcance espacial e de uma meia-vida temporal. Modelos do tipo Hawkes/epidêmicos formalizam essa ideia somando ao nível de base $\mu(x,t)$ o impacto dos eventos passados via uma função de decaimento $g$:
+
 $$
 \lambda_c(x,t \mid \mathcal{H}_t)
 =\underbrace{\mu(x,t)}_{\text{nível de base (covariáveis)}}
 +\underbrace{\sum_{(x_j,t_j)<t} g\!\big(\lVert x-x_j\rVert,\, t-t_j\big)}_{\text{efeito dos eventos recentes}}.
 $$
-Se \(g\) é positivo e decai com a distância e o tempo, um evento eleva temporariamente o risco em seu entorno e esse efeito se dissipa depois; se \(g\) for negativo (ou se impusermos janelas de saturação), o último evento desencoraja novos eventos próximos por algum período.  
-Resumindo: a primeira ideia explica por que certos lugares e momentos, em média, são mais propensos a eventos (\(\lambda(x,t)\) guiada por covariáveis); a segunda explica como os próprios eventos reorganizam o risco no curto prazo (\(\lambda_c\) guiada pelo histórico). Juntas, elas permitem mapear risco, identificar hotspots com janela (início, duração, intensidade) e descrever dinâmicas de propagação ou inibição com parâmetros de leitura prática (alcance, meia-vida, força do efeito).
+Se $g$ é positivo e decai com a distância e o tempo, um evento eleva temporariamente o risco em seu entorno e esse efeito se dissipa depois; se $g$ for negativo (ou se impusermos janelas de saturação), o último evento desencoraja novos eventos próximos por algum período.  
+Resumindo: a primeira ideia explica por que certos lugares e momentos, em média, são mais propensos a eventos ($\lambda(x,t)$ guiada por covariáveis); a segunda explica como os próprios eventos reorganizam o risco no curto prazo ($\lambda_c$ guiada pelo histórico). Juntas, elas permitem mapear risco, identificar hotspots com janela (início, duração, intensidade) e descrever dinâmicas de propagação ou inibição com parâmetros de leitura prática (alcance, meia-vida, força do efeito).
+
 
 **b) Essência matemática**  
 Antes de qualquer detalhe técnico, deixemos claro o que governa o processo: a intensidade espaço-temporal. Ela é a função que dita o “ritmo esperado” de eventos em cada lugar e instante. A formulação que usaremos é:
@@ -163,41 +179,45 @@ $$
 $$
 
 Como ler a equação  
-\(\lambda(x,t)\) — **intensidade (ritmo de eventos).** É a taxa esperada de eventos por unidade de área e de tempo no ponto \((x,t)\). Se observarmos uma área \(A\) durante um intervalo \(\Delta t\), o número esperado de eventos é, aproximadamente,
+$\lambda(x,t)$ — **intensidade (ritmo de eventos).** É a taxa esperada de eventos por unidade de área e de tempo no ponto $(x,t)$. Se observarmos uma área $A$ durante um intervalo $\Delta t$, o número esperado de eventos é, aproximadamente,
+
 $$
 \mathbb{E}[N(A,\Delta t)] \approx \int_{\Delta t}\!\!\int_A \lambda(x,t)\,dx\,dt.
 $$
 Valores altos de \(\lambda\) significam maior propensão a observar eventos ali, naquele período.
 
-\(\mu(x,t)\) — **nível de base (estrutura e exposição).** É o risco “de partida”, antes de considerar o histórico recente. Pode depender de covariáveis (chuva, renda, iluminação, fluxo) e de exposição (offset de população/mobilidade). Uma forma comum é
+$\mu(x,t)$ — **nível de base (estrutura e exposição).** É o risco “de partida”, antes de considerar o histórico recente. Pode depender de covariáveis (chuva, renda, iluminação, fluxo) e de exposição (offset de população/mobilidade). Uma forma comum é
 $$
 \mu(x,t)=\exp\!\big(\mathbf{z}(x,t)^\top\gamma\big)\times \mathrm{offset}(x,t),
 $$
-o que expressa que lugares/tempos com fatores estruturais mais favoráveis ao evento começam com \(\mu\) maior.
+o que expressa que lugares/tempos com fatores estruturais mais favoráveis ao evento começam com $\mu$ maior.
 
-\(\sum g(\cdot,\cdot)\) — **impacto do histórico (propagação ou inibição).** A soma percorre todos os eventos passados \((x_j,t_j)<t\) e adiciona, para cada um, uma contribuição dada por \(g\). A função \(g(\Delta x,\Delta t)\) descreve quanto um evento anterior altera o risco ao redor (\(\Delta x\)) e logo depois (\(\Delta t\)):
+$\sum g(\cdot,\cdot)$ — **impacto do histórico (propagação ou inibição).** A soma percorre todos os eventos passados $(x_j,t_j)<t$ e adiciona, para cada um, uma contribuição dada por $g$. A função $g(\Delta x,\Delta t)$ descreve quanto um evento anterior altera o risco ao redor ($\Delta x$) e logo depois ($\Delta t$):
 
-- Em processos excitantes (Hawkes/epidêmicos), \(g\ge 0\): um evento eleva temporariamente \(\lambda\) nas vizinhanças; o efeito decai com o tempo e a distância.  
-- Pode haver inibição (partes negativas de \(g\)): logo após um evento, a chance de outro cai por algum período (saturação, resposta policial, capacidade limitada).
+- Em processos excitantes (Hawkes/epidêmicos), $g\ge 0$: um evento eleva temporariamente $\lambda$ nas vizinhanças; o efeito decai com o tempo e a distância.  
+- Pode haver inibição (partes negativas de $g$): logo após um evento, a chance de outro cai por algum período (saturação, resposta policial, capacidade limitada).
 
-**Parâmetros de \(g\) com leitura prática**  
+
+**Parâmetros de $g$ com leitura prática**  
 Alcance espacial: até que distância o efeito é relevante (p.ex., 200–300 m).  
 Meia-vida temporal: em quanto tempo o efeito cai pela metade (p.ex., 2–3 dias).  
-Força inicial: tamanho do salto em \(\lambda\) logo após o evento.  
-(Opcional) **Índice de ramificação** \(\displaystyle \eta=\iint g\,dx\,dt\): fração média de eventos “gerados” por um evento. \(\eta<1\) indica processo estável (sem cascatas explosivas).
+Força inicial: tamanho do salto em $\lambda$ logo após o evento.  
+(Opcional) **Índice de ramificação** $\displaystyle \eta=\iint g\,dx\,dt$: fração média de eventos “gerados” por um evento. $\eta<1$ indica processo estável (sem cascatas explosivas).
 
-Exemplo em uma linha (para fixar a ideia): “Após um caso, a intensidade dobra num raio de 150 m por 3 dias e depois cai pela metade a cada 2 dias.” Isso corresponde a um \(g\) com alcance curto e decadência rápida.
+Exemplo em uma linha (para fixar a ideia): “Após um caso, a intensidade dobra num raio de 150 m por 3 dias e depois cai pela metade a cada 2 dias.” Isso corresponde a um $g$ com alcance curto e decadência rápida.
 
-**Como usar \(\hat{\lambda}\) na prática**  
-- **Mapas e cronogramas de risco:** avaliar \(\hat{\lambda}(x,t)\) em uma grade espacial e horários de interesse para visualizar onde/quando o risco é maior.  
-- **Contagem esperada em janelas:** para um bairro \(A\) na próxima semana \(\Delta t\),
+
+**Como usar $\hat{\lambda}$ na prática**  
+- **Mapas e cronogramas de risco:** avaliar $\hat{\lambda}(x,t)$ em uma grade espacial e horários de interesse para visualizar onde/quando o risco é maior.  
+- **Contagem esperada em janelas:** para um bairro $A$ na próxima semana $\Delta t$,
   $$
   \widehat{\mathbb{E}}[N(A,\Delta t)] = \int_{\Delta t}\!\!\int_A \hat{\lambda}(x,t)\,dx\,dt,
   $$
   obtendo uma previsão quantitativa do volume esperado de eventos.  
-- **Risco relativo claro:** comparar \(\hat{\lambda}(x,t)\) com uma referência (mediana, meta ou período base) para comunicar “\(\approx 2\times\) o esperado” de forma direta.
+- **Risco relativo claro:** comparar $\hat{\lambda}(x,t)$ com uma referência (mediana, meta ou período base) para comunicar “$\approx 2\times$ o esperado” de forma direta.
 
-Em resumo, a intensidade \(\lambda(x,t)\) separa o que é estrutural (\(\mu\)) do que é dinâmico (efeito de eventos recentes via \(g\)). Essa decomposição permite mapear risco, detectar propagação ou inibição e prever contagens em janelas específicas — sempre com parâmetros de interpretação simples que conectam o modelo ao fenômeno observado.
+Em resumo, a intensidade $\lambda(x,t)$ separa o que é estrutural ($\mu$) do que é dinâmico (efeito de eventos recentes via $g$). Essa decomposição permite mapear risco, detectar propagação ou inibição e prever contagens em janelas específicas — sempre com parâmetros de interpretação simples que conectam o modelo ao fenômeno observado.
+
 
 **c) Aplicações comuns**  
 Em dados de eventos com carimbo de lugar e momento, os modelos STEP ajudam a mapear onde/quando o risco se concentra, detectar aglomerados e capturar propagação entre ocorrências. Exemplos:
@@ -209,10 +229,11 @@ Em dados de eventos com carimbo de lugar e momento, os modelos STEP ajudam a map
 
 **d) O que você obtém**  
 Nos modelos de Processos Pontuais Espaço-Temporais (STEP), as saídas típicas incluem:
-- Mapas e cronogramas de risco (\(\hat{\lambda}(x,t)\)): onde/quando o risco é alto.  
-- Hotspots com janela: lugar, início–fim, duração, intensidade relativa (por exemplo, “\(2\times\) acima do esperado”).  
+- Mapas e cronogramas de risco ($\hat{\lambda}(x,t)$): onde/quando o risco é alto.  
+- Hotspots com janela: lugar, início–fim, duração, intensidade relativa (por exemplo, “$2\times$ acima do esperado”).  
 - Parâmetros com leitura prática (nos modelos com história): alcance espacial, meia-vida temporal, força de excitação/inibição.  
 - Cenários “e se…”: simulações simples para avaliar impactos de ações (mais vigilância, bloqueio de criadouros etc.).
+
 
 **e) Limitações e cuidados**  
 Nos processos pontuais espaço-temporais (STEP), a interpretação depende de correções de exposição, escolhas de escala e tratamento de bordas; além disso, são modelos voltados a padrões e dinâmica, não a causalidade direta. Observe:
@@ -224,11 +245,12 @@ Nos processos pontuais espaço-temporais (STEP), a interpretação depende de co
 
 **f) Abordagens de referência**  
 Os modelos a seguir descrevem a intensidade de eventos no espaço-tempo e sua dinâmica (propagação ou inibição), com ou sem heterogeneidade latente.
-- **Poisson inhomogêneo E–T (com offset):** modela a intensidade média \(\lambda(x,t)\) em função de covariáveis e exposição (população/fluxo). Entrega: mapas/cronogramas de risco esperado.  
-- **Log-Gaussian Cox Process (LGCP) E–T:** a intensidade é estocástica (log-gaussiana), capturando heterogeneidade latente e incerteza. Entrega: \(\hat{\lambda}(x,t)\) com intervalos; melhores mapas de risco quando há superdispersão.  
+- **Poisson inhomogêneo E–T (com offset):** modela a intensidade média $\lambda(x,t)$ em função de covariáveis e exposição (população/fluxo). Entrega: mapas/cronogramas de risco esperado.  
+- **Log-Gaussian Cox Process (LGCP) E–T:** a intensidade é estocástica (log-gaussiana), capturando heterogeneidade latente e incerteza. Entrega: $\hat{\lambda}(x,t)$ com intervalos; melhores mapas de risco quando há superdispersão.  
 - **Processos Hawkes / epidêmicos E–T (intensidade condicional):** capturam propagação; eventos recentes elevam (ou inibem) o risco ao redor por certo tempo. Entrega: parâmetros com leitura prática (alcance, meia-vida, força de excitação) e simulações “e se…”.  
 - **Famílias de clusterização de Neyman–Scott/Matérn:** geram aglomerados por “sementes” latentes; úteis para diagnóstico de estrutura de clusters. Entrega: tamanho/compacidade de clusters, ajuste de segunda ordem.  
 - **Estatísticas de segunda ordem E–T (K, Knox, Mantel):** testes/diagnósticos de clustering espaço-temporal acima do acaso. Entrega: evidência (ou não) de aglomeração nas escalas analisadas.
+
 
 
 
@@ -240,8 +262,8 @@ Na prática, o modelo estima quanto uma intervenção ou fator local altera o in
 
 **a) Como funciona**  
 Em painéis com dependência espacial, combinamos três peças — tempo, espaço e condições locais — numa mesma equação.  
-Primeiro, há o eixo do tempo: observamos o indicador \(y_{it}\) repetidamente para a mesma área \(i\). Isso permite comparar cada área consigo mesma em momentos diferentes, capturando persistência e reduzindo vieses de fatores fixos (características que não mudam rápido).  
-Depois vem o espaço: definimos quem influencia quem por meio de uma matriz de vizinhança \(W=[w_{ij}]\). Essa matriz codifica a intensidade da ligação entre áreas (contiguidade, distância, \(k\)-vizinhos, fluxos, rede) e produz, para cada \(i\), a “média ponderada dos vizinhos” \((Wy)_{it}=\sum_j w_{ij}y_{jt}\).  
+Primeiro, há o eixo do tempo: observamos o indicador $y_{it}$ repetidamente para a mesma área $i$. Isso permite comparar cada área consigo mesma em momentos diferentes, capturando persistência e reduzindo vieses de fatores fixos (características que não mudam rápido).  
+Depois vem o espaço: definimos quem influencia quem por meio de uma matriz de vizinhança $W=[w_{ij}]$. Essa matriz codifica a intensidade da ligação entre áreas (contiguidade, distância, $k$-vizinhos, fluxos, rede) e produz, para cada $i$, a “média ponderada dos vizinhos” $(Wy)_{it}=\sum_j w_{ij}y_{jt}$.  
 Por fim, juntamos tudo no modelo espaço–tempo. Um formato simples e bastante usado é:
 $$
 y_{it}
@@ -251,24 +273,25 @@ y_{it}
 +\underbrace{\alpha_i+\tau_t}_{\text{efeitos fixos}}
 +\varepsilon_{it}.
 $$
-\(\phi\) mede persistência temporal (efeitos que demoram a se completar).  
-\(\rho\) mede spillovers espaciais: quanto os vizinhos “puxam/empurram” \(y_{it}\).  
-\(\mathbf{x}_{it}\) reúne fatores locais (renda, políticas, infraestrutura).  
-\(\alpha_i\) e \(\tau_t\) controlam níveis próprios da área e choques comuns do período.
+$\phi$ mede persistência temporal (efeitos que demoram a se completar).  
+$\rho$ mede spillovers espaciais: quanto os vizinhos “puxam/empurram” $y_{it}$.  
+$\mathbf{x}_{it}$ reúne fatores locais (renda, políticas, infraestrutura).  
+$\alpha_i$ e $\tau_t$ controlam níveis próprios da área e choques comuns do período.
 
-A intuição é direta: políticas, choques econômicos ou surtos não param na fronteira. O termo espacial \(\rho (Wy)_{it}\) captura esse transbordamento; o termo temporal \(\phi y_{i,t-1}\) captura a memória do próprio indicador. Com a matriz \(W\) bem definida e os efeitos fixos explicitados, o modelo consegue separar impacto local (na própria área) de impacto indireto (nos vizinhos) e distinguir efeitos imediatos dos que se acumulam ao longo do tempo.
+A intuição é direta: políticas, choques econômicos ou surtos não param na fronteira. O termo espacial $\rho (Wy)_{it}$ captura esse transbordamento; o termo temporal $\phi y_{i,t-1}$ captura a memória do próprio indicador. Com a matriz $W$ bem definida e os efeitos fixos explicitados, o modelo consegue separar impacto local (na própria área) de impacto indireto (nos vizinhos) e distinguir efeitos imediatos dos que se acumulam ao longo do tempo.
+
 
 **b) Essência matemática**  
 
-**Quem influencia quem (matriz de vizinhança \(W\)).**  
-A vizinhança é codificada por uma matriz \(W=[w_{ij}]\). Colocamos \(w_{ij}>0\) quando a área \(j\) é “vizinha” da área \(i\) — por contiguidade, distância, \(k\)-vizinhos, fluxos ou uma rede conhecida —, e \(w_{ij}=0\) quando não há ligação. É comum padronizar por linha (cada linha soma 1), de modo que
+**Quem influencia quem (matriz de vizinhança $W$).**  
+A vizinhança é codificada por uma matriz $W=[w_{ij}]$. Colocamos $w_{ij}>0$ quando a área $j$ é “vizinha” da área $i$ — por contiguidade, distância, $k$-vizinhos, fluxos ou uma rede conhecida —, e $w_{ij}=0$ quando não há ligação. É comum padronizar por linha (cada linha soma 1), de modo que
 $$
 (Wy)_{it}=\sum_j w_{ij}\,y_{jt}
 $$
-vire, literalmente, a média ponderada do que os vizinhos de \(i\) estão fazendo no tempo \(t\).
+vire, literalmente, a média ponderada do que os vizinhos de $i$ estão fazendo no tempo $t$.
 
 **Como isso entra no modelo (transbordamento espacial).**  
-Com \(W\) definido, conectamos vizinhos, condições locais e níveis fixos em uma equação simples:
+Com $W$ definido, conectamos vizinhos, condições locais e níveis fixos em uma equação simples:
 $$
 y_{it}
 =\rho\,(Wy)_{it}
@@ -276,21 +299,21 @@ y_{it}
 +\alpha_i+\tau_t
 +\varepsilon_{it}.
 $$
-Aqui, \(\rho\) mede quanto os vizinhos “puxam” \(y_{it}\): se \(\rho>0\), valores altos nos vizinhos tendem a elevar \(y_{it}\); se \(\rho<0\), há compensação/substituição. O termo \(\mathbf{x}_{it}^\top\beta\) capta características locais; \(\alpha_i\) e \(\tau_t\) representam, respectivamente, níveis próprios da área e choques comuns do período.
+Aqui, $\rho$ mede quanto os vizinhos “puxam” $y_{it}$: se $\rho>0$, valores altos nos vizinhos tendem a elevar $y_{it}$; se $\rho<0$, há compensação/substituição. O termo $\mathbf{x}_{it}^\top\beta$ capta características locais; $\alpha_i$ e $\tau_t$ representam, respectivamente, níveis próprios da área e choques comuns do período.
 
-**Por que não basta olhar \(\beta\) (impactos \(\ne\) coeficientes).**  
-Quando há transbordamento, um choque em \(\mathbf{x}_{it}\) não para em \(i\): ele se espalha para os vizinhos (\(\rho W\)), volta pelos vizinhos dos vizinhos (\(\rho^2 W^2\)), e assim sucessivamente. Esse “eco” é sintetizado pela **matriz multiplicadora espacial**:
+**Por que não basta olhar $\beta$ (impactos $\ne$ coeficientes).**  
+Quando há transbordamento, um choque em $\mathbf{x}_{it}$ não para em $i$: ele se espalha para os vizinhos ($\rho W$), volta pelos vizinhos dos vizinhos ($\rho^2 W^2$), e assim sucessivamente. Esse “eco” é sintetizado pela **matriz multiplicadora espacial**:
 $$
 (I-\rho W)^{-1}=I+\rho W+\rho^2 W^2+\cdots
 $$
-Assim, o impacto de uma pequena mudança em \(\mathbf{x}\) é
+Assim, o impacto de uma pequena mudança em $\mathbf{x}$ é
 $$
 \underbrace{(I-\rho W)^{-1}}_{\text{propagação na rede}}\ \times\ \beta,
 $$
 do qual extraímos três números para relatar com clareza:
-- **Direto:** média dos elementos diagonais (efeito do \(x\) de \(i\) sobre o próprio \(y_i\));  
-- **Indireto (spillover):** média dos elementos fora da diagonal (efeito do \(x\) de \(i\) sobre os vizinhos);  
-- **Total:** direto \(+\) indireto (o que importa para a decisão).
+- **Direto:** média dos elementos diagonais (efeito do $x$ de $i$ sobre o próprio $y_i$);  
+- **Indireto (spillover):** média dos elementos fora da diagonal (efeito do $x$ de $i$ sobre os vizinhos);  
+- **Total:** direto $+$ indireto (o que importa para a decisão).
 
 **Quando existe memória temporal (curto vs. longo prazo).**  
 Muitos indicadores lembram do passado. Para isso, incluímos uma defasagem temporal:
@@ -302,14 +325,16 @@ y_{it}
 +\alpha_i+\tau_t
 +\varepsilon_{it}.
 $$
-Agora há dois mecanismos: o espacial \((I-\rho W)^{-1}\) (espalha na rede) e o temporal (com acúmulo ao longo do tempo). Se a mudança em \(\mathbf{x}\) persiste nos períodos seguintes (como uma política mantida), o **impacto de longo prazo** (estado estacionário) aproxima-se de
+Agora há dois mecanismos: o espacial $(I-\rho W)^{-1}$ (espalha na rede) e o temporal (com acúmulo ao longo do tempo). Se a mudança em $\mathbf{x}$ persiste nos períodos seguintes (como uma política mantida), o **impacto de longo prazo** (estado estacionário) aproxima-se de
 $$
 \text{Impacto de longo prazo} \;\approx\; (I-\rho W)^{-1}\times \frac{1}{1-\phi}\times \beta,
 $$
-enquanto o **curto prazo** é o efeito no período corrente (sem o fator \(1/(1-\phi)\)).
+enquanto o **curto prazo** é o efeito no período corrente (sem o fator $1/(1-\phi)$).
+
 
 **Resumo em português claro.**  
-\((Wy)_{it}\) é “o que os vizinhos estão fazendo” ao redor de \(i\); \(\rho\) diz quanto isso respinga em \(i\) (transbordamento). Não reporte só \(\beta\): comunique impactos direto, indireto e total, que já incorporam o eco na rede. Se houver memória temporal (\(\phi\)), separe efeito imediato do efeito acumulado — o longo prazo tende a ser maior porque se espalha e se acumula.
+$(Wy)_{it}$ é “o que os vizinhos estão fazendo” ao redor de $i$; $\rho$ diz quanto isso respinga em $i$ (transbordamento). Não reporte só $\beta$: comunique impactos direto, indireto e total, que já incorporam o eco na rede. Se houver memória temporal ($\phi$), separe efeito imediato do efeito acumulado — o longo prazo tende a ser maior porque se espalha e se acumula.
+
 
 **c) Aplicações comuns**  
 Em painéis areais com interação entre vizinhos, a regressão em painel espacial quantifica efeitos locais, spillovers e sua dinâmica no tempo, informando políticas que atravessam fronteiras administrativas. Exemplos:
@@ -328,11 +353,12 @@ Na regressão em painel com dependência espacial, você obtém:
 
 **e) Limitações e cuidados**  
 Na regressão em painel com dependência espacial, a credibilidade dos resultados depende de uma vizinhança bem definida, de impactos corretamente interpretados (em vez de coeficientes brutos) e de um tratamento explícito para choques de período e persistência temporal. Atenção aos seguintes pontos:
-- **Matriz de vizinhança \(W\) bem fundamentada.** Defina quem é vizinho de quem e por quê (contiguidade, distância, \(k\)-vizinhos, fluxos, rede). Uma \(W\) ad hoc compromete a interpretação dos spillovers.  
-- **Coeficiente ≠ impacto.** Com termo espacial, não leia \(\beta\) como efeito. Relate impactos direto, indireto (spillover) e total, via multiplicador \((I-\rho W)^{-1}\).  
-- **Choques comuns no tempo.** Anos “atípicos” (crise, pandemia) pedem efeitos de período; ignorá-los pode inflar artificialmente \(\rho\).  
-- **Persistência temporal importa.** Se \(y\) tem memória, modele-a (defasagem temporal, termos dinâmicos) para não confundir inércia com efeito espacial.  
-- **Custo computacional.** Em muitos locais/conexões, a estimação pesa. Considere tornar \(W\) mais esparsa, usar aproximações e métodos eficientes (p.ex., GMM/IV, rotinas para matrizes esparsas).
+- **Matriz de vizinhança $W$ bem fundamentada.** Defina quem é vizinho de quem e por quê (contiguidade, distância, $k$-vizinhos, fluxos, rede). Uma $W$ ad hoc compromete a interpretação dos spillovers.  
+- **Coeficiente ≠ impacto.** Com termo espacial, não leia $\beta$ como efeito. Relate impactos direto, indireto (spillover) e total, via multiplicador $(I-\rho W)^{-1}$.  
+- **Choques comuns no tempo.** Anos “atípicos” (crise, pandemia) pedem efeitos de período; ignorá-los pode inflar artificialmente $\rho$.  
+- **Persistência temporal importa.** Se $y$ tem memória, modele-a (defasagem temporal, termos dinâmicos) para não confundir inércia com efeito espacial.  
+- **Custo computacional.** Em muitos locais/conexões, a estimação pesa. Considere tornar $W$ mais esparsa, usar aproximações e métodos eficientes (p.ex., GMM/IV, rotinas para matrizes esparsas).
+
 
 **f) Abordagens de referência**  
 Os modelos listados quantificam efeitos locais e spillovers entre áreas ao longo do tempo, distinguindo impactos de curto e de longo prazo.
@@ -343,11 +369,12 @@ Os modelos listados quantificam efeitos locais e spillovers entre áreas ao long
   Combina lag na dependente e erro espacial nos resíduos; robusto a fontes múltiplas de dependência.  
   **Entrega:** impactos + diagnóstico de ruído espacial remanescente.
 - **Painéis dinâmicos espaciais (SDPD/SDM dinâmico)**  
-  Incluem memória temporal (\(y_{i,t-1}\)) e termos espaciais (lag de \(y\) e/ou \(x\)); estimados via MLE, QMLE, IV/GMM.  
+  Incluem memória temporal ($y_{i,t-1}$) e termos espaciais (lag de $y$ e/ou $x$); estimados via MLE, QMLE, IV/GMM.  
   **Entrega:** curto vs. longo prazo e spillovers na rede.
-- **Modelos com efeitos fixos/aleatórios e matriz \(W\) flexível**  
-  Incorporam heterogeneidade de área e escolhem \(W\) por contiguidade, distância, \(k\)-vizinhos ou redes/fluxos.  
-  **Entrega:** inferência de políticas com robustez a \(W\).
+- **Modelos com efeitos fixos/aleatórios e matriz $W$ flexível**  
+  Incorporam heterogeneidade de área e escolhem $W$ por contiguidade, distância, $k$-vizinhos ou redes/fluxos.  
+  **Entrega:** inferência de políticas com robustez a $W$.
+
 
 
 
@@ -357,12 +384,13 @@ O objetivo não é explicar a causa (isso vem depois), e sim mostrar onde e quan
 
 **a) Como funciona**  
 Há duas maneiras clássicas de enxergar o agrupamento espaço-temporal.  
-A primeira compara o padrão observado com o “azar”. A pergunta é direta: dadas as posições e os horários dos eventos, o arranjo parece mais concentrado do que seria por simples acaso? Para responder, define-se um cenário nulo (eventos aleatórios no espaço e no tempo, ou proporcionais à população/fluxo) e mede-se quanta vizinhança evento–evento existe. Uma forma simples é contar pares \((i,j)\) que estão perto no mapa (distância \(\le r_s\)) e perto no relógio (defasagem \(\le r_t\)); compara-se esse total com o esperado sob o nulo. Se o observado excede sistematicamente o esperado, há indício de cluster nas escalas \((r_s,r_t)\). Essa linha produz um sinal com confiança estatística (p-valores, significância ajustada).  
-A segunda foca em proximidade/densidade, sem formular um teste formal. Aqui, pontos suficientemente próximos se agregam e formam um cluster; pontos isolados viram ruído. Em termos contínuos, estimamos uma intensidade \(\hat{\lambda}(x,y,t)\) — pense em um “mapa-calendário de calor” — e identificamos os picos dessa intensidade como hotspots. O resultado é intuitivo e útil para operação: indica onde/quando a concentração é maior, com controle explícito da escala via larguras de banda (no espaço e no tempo) ou parâmetros de vizinhança.  
+A primeira compara o padrão observado com o “azar”. A pergunta é direta: dadas as posições e os horários dos eventos, o arranjo parece mais concentrado do que seria por simples acaso? Para responder, define-se um cenário nulo (eventos aleatórios no espaço e no tempo, ou proporcionais à população/fluxo) e mede-se quanta vizinhança evento–evento existe. Uma forma simples é contar pares $(i,j)$ que estão perto no mapa (distância $\le r_s$) e perto no relógio (defasagem $\le r_t$); compara-se esse total com o esperado sob o nulo. Se o observado excede sistematicamente o esperado, há indício de cluster nas escalas $(r_s,r_t)$. Essa linha produz um sinal com confiança estatística (p-valores, significância ajustada).  
+A segunda foca em proximidade/densidade, sem formular um teste formal. Aqui, pontos suficientemente próximos se agregam e formam um cluster; pontos isolados viram ruído. Em termos contínuos, estimamos uma intensidade $\hat{\lambda}(x,y,t)$ — pense em um “mapa-calendário de calor” — e identificamos os picos dessa intensidade como hotspots. O resultado é intuitivo e útil para operação: indica onde/quando a concentração é maior, com controle explícito da escala via larguras de banda (no espaço e no tempo) ou parâmetros de vizinhança.  
 Em resumo: a abordagem por teste responde “há mais concentração do que o acaso permitiria?” e oferece significância; a abordagem por densidade responde “onde/quando estão os picos?” e oferece localização e escala dos agrupamentos. Idealmente, usa-se ambas de modo complementar: testar para confirmar o sinal e estimar intensidade para descrever o hotspot em detalhe.
 
+
 **b) Essência matemática**  
-Antes de qualquer algoritmo, fixamos o objeto: a intensidade espaço-temporal \(\lambda(x,y,t)\), que representa o ritmo esperado de eventos por unidade de área e de tempo em cada ponto \((x,y,t)\). Pense nela como um mapa–calendário de propensão: valores altos indicam maior chance de observar eventos naquela região e período. Em termos operacionais, se olhamos uma área \(A\) durante um intervalo \(\Delta t\), o número esperado de eventos é, aproximadamente,
+Antes de qualquer algoritmo, fixamos o objeto: a intensidade espaço-temporal $\lambda(x,y,t)$, que representa o ritmo esperado de eventos por unidade de área e de tempo em cada ponto $(x,y,t)$. Pense nela como um mapa–calendário de propensão: valores altos indicam maior chance de observar eventos naquela região e período. Em termos operacionais, se olhamos uma área $A$ durante um intervalo $\Delta t$, o número esperado de eventos é, aproximadamente,
 $$
 \mathbb{E}[N(A,\Delta t)] \approx \int_{\Delta t}\!\!\int_A \lambda(x,y,t)\,dx\,dy\,dt.
 $$
@@ -376,28 +404,28 @@ A partir desse objeto, há dois caminhos complementares para detectar agrupament
 **“Há mais pares próximos do que o acaso permitiria?” (teste por pares)**  
 Aqui, a pergunta é: o padrão observado está mais concentrado (no espaço e no tempo) do que esperaríamos sob um cenário nulo? Para responder com clareza:
 
-- **Defina a vizinhança.** Escolha um raio espacial \(r_s\) (ex.: 300 m) e uma janela temporal \(r_t\) (ex.: 7 dias). Para cada par \((i,j)\), calcule a distância espacial \(d_s(i,j)\) e a defasagem temporal \(d_t(i,j)\).
+- **Defina a vizinhança.** Escolha um raio espacial $r_s$ (ex.: 300 m) e uma janela temporal $r_t$ (ex.: 7 dias). Para cada par $(i,j)$, calcule a distância espacial $d_s(i,j)$ e a defasagem temporal $d_t(i,j)$.
 
 - **Conte os pares próximos.**
   $$
   C_{\text{obs}}=\#\{(i,j):\ d_s(i,j)\le r_s\ \text{e}\ d_t(i,j)\le r_t\}.
   $$
 
-- **Construa o “mundo ao acaso”.** Gere \(B\) reamostragens que quebram o padrão mas preservam o essencial.  
+- **Construa o “mundo ao acaso”.** Gere $B$ reamostragens que quebram o padrão mas preservam o essencial.  
   – Nulo simples: embaralhe tempos ou posições.  
   – Nulo com exposição: embaralhe respeitando população/fluxo, para não confundir movimento com risco.  
-  Em cada reamostragem \(b\), recalcule \(C_b\).
+  Em cada reamostragem $b$, recalcule $C_b$.
 
 - **Compare observado vs. esperado.**
   $$
   p=\frac{\#\{\,C_b \ge C_{\text{obs}}\,\}+1}{B+1}.
   $$
-  \(p\) pequeno indica excesso de pares próximos \(\Rightarrow\) evidência de cluster nas escalas \((r_s,r_t)\).
+  $p$ pequeno indica excesso de pares próximos $\Rightarrow$ evidência de cluster nas escalas $(r_s,r_t)$.
 
-**Boas práticas.** Se você testa muitas escalas \((r_s,r_t)\) ou muitos locais/tempos, ajuste para múltiplas comparações (p.ex., FDR). E lembre que bordas espacial/temporal reduzem pares possíveis perto do limite — aplique correção de borda ou interprete com cautela.
+**Boas práticas.** Se você testa muitas escalas $(r_s,r_t)$ ou muitos locais/tempos, ajuste para múltiplas comparações (p.ex., FDR). E lembre que bordas espacial/temporal reduzem pares possíveis perto do limite — aplique correção de borda ou interprete com cautela.
 
 **“Onde estão os picos de intensidade?” (densidade/“calor”)**  
-Em vez de testar pares, você pode estimar \(\lambda\) diretamente por suavização e procurar picos — os hotspots. Uma versão comum é o estimador kernel espaço-temporal:
+Em vez de testar pares, você pode estimar $\lambda$ diretamente por suavização e procurar picos — os hotspots. Uma versão comum é o estimador kernel espaço-temporal:
 $$
 \hat{\lambda}(x,y,t)
 =\frac{1}{h_s^{2}\,h_t}
@@ -405,9 +433,10 @@ $$
 K_s\!\Big(\frac{\lVert (x,y)-(x_i,y_i)\rVert}{h_s}\Big)\,
 K_t\!\Big(\frac{|t-t_i|}{h_t}\Big)\Big/\mathrm{offset}(x,y,t),
 $$
-onde \(h_s\) e \(h_t\) são larguras de banda (quanto suavizar no espaço e no tempo), \(K_s\) e \(K_t\) são núcleos que decaem com a distância/defasagem, e o offset corrige por exposição (população, mobilidade, fluxo).  
-A leitura é direta: picos de \(\hat{\lambda}\) correspondem a hotspots. Você pode padronizar (z-scores ou \(\hat{\lambda}/\text{mediana}\)) e, se desejar confiança estatística, usar permutações para comparar o pico observado com o que ocorreria sob um nulo equivalente.  
-**Escolhas que importam.** \(h_s\) e \(h_t\) definem a escala do que será chamado de “cluster”: menores \(\Rightarrow\) surtos curtos e locais; maiores \(\Rightarrow\) padrões persistentes e amplos.
+onde $h_s$ e $h_t$ são larguras de banda (quanto suavizar no espaço e no tempo), $K_s$ e $K_t$ são núcleos que decaem com a distância/defasagem, e o offset corrige por exposição (população, mobilidade, fluxo).  
+A leitura é direta: picos de $\hat{\lambda}$ correspondem a hotspots. Você pode padronizar (z-scores ou $\hat{\lambda}/\text{mediana}$) e, se desejar confiança estatística, usar permutações para comparar o pico observado com o que ocorreria sob um nulo equivalente.  
+**Escolhas que importam.** $h_s$ e $h_t$ definem a escala do que será chamado de “cluster”: menores $\Rightarrow$ surtos curtos e locais; maiores $\Rightarrow$ padrões persistentes e amplos.
+
 
 **Síntese prática**  
 A abordagem por teste responde “há cluster?” e fornece significância na escala analisada.  
@@ -424,7 +453,7 @@ Quando o objetivo é detectar hotspots e surtos — isto é, identificar onde e 
 
 **d) O que você obtém**  
 No agrupamento espaço-temporal, você obtém:
-- Mapa de hotspots com rótulos claros: lugar, período (início–fim), duração e intensidade relativa (“este hotspot tem \(\sim 2\times\) mais eventos do que áreas similares”).  
+- Mapa de hotspots com rótulos claros: lugar, período (início–fim), duração e intensidade relativa (“este hotspot tem $\sim 2\times$ mais eventos do que áreas similares”).  
 - Cronograma mostrando quando cada hotspot começou e terminou.  
 - Sinal de confiança, quando houver teste: “baixo/médio/alto” (ou p-valor simples de entender).  
 - Texto curto de interpretação: “Concentração de casos no bairro X entre 12/05 e 03/06; pico em 24/05; recomenda-se ação Y.”
@@ -446,14 +475,15 @@ Os métodos seguintes detectam concentrações espaço-temporais por testes cont
   Agrupa eventos por proximidade espaço-temporal; não exige forma pré-definida.  
   **Entrega:** clusters + ruído; útil para monitoramento operacional e triagem.
 - **KDE espaço-temporal (núcleo) com picos/hotspots**  
-  Estima \(\hat{\lambda}(x,t)\) suavizada; picos são áreas/tempos quentes; significância via permutações.  
+  Estima $\hat{\lambda}(x,t)$ suavizada; picos são áreas/tempos quentes; significância via permutações.  
   **Entrega:** mapas de calor E-T e cronogramas de hotspots.
 - **LISA/Getis-Ord com janelas temporais**  
   Indicadores locais de associação (hot/cold spots) aplicados por janelas de tempo.  
   **Entrega:** hot/cold spots locais e sua evolução.
-- **Testes por pares (Knox/Mantel) com múltiplas escalas \((r_s,r_t)\)**  
+- **Testes por pares (Knox/Mantel) com múltiplas escalas $(r_s,r_t)$**  
   Quantificam excesso de pares próximos no espaço e no tempo.  
   **Entrega:** evidência de cluster nas escalas testadas (com FDR/correções).
+
 
 
 
@@ -461,7 +491,7 @@ Os métodos seguintes detectam concentrações espaço-temporais por testes cont
 
 Nesta subseção reunimos, de forma organizada, os principais modelos espaço-temporais apresentados no capítulo. Para orientar a leitura e apoiar escolhas metodológicas, apresentamos dois quadros complementares: primeiro, um quadro comparativo detalhado (Quadro 1), agora em formato retrato — com os modelos nas colunas e os critérios nas linhas —, que explicita a pergunta que cada modelo responde, o tipo de dado esperado, a ideia central, as entradas mínimas, as saídas, quando usar e as armadilhas; em seguida, um guia rápido (Quadro 2), pensado como um “resumo de bolso” para decidir qual modelo usar conforme o objetivo da análise.
 
-Quadro 1 — Comparação detalhada
+**Quadro 1 — Comparação detalhada**
 
 | Critério \ Modelo | Krigagem E-T (Geoestatística) | Processos Pontuais E-T | Econometria Espacial em Painel | Clustering E-T |
 |---|---|---|---|---|
@@ -473,7 +503,7 @@ Quadro 1 — Comparação detalhada
 | **Quando usar** | Há lacunas no espaço/tempo; precisa de superfícies contínuas e incerteza explícita. | Dados discretos (eventos) e interesse em onde/quando o risco aumenta. | Avaliação causal/comportamental; políticas públicas por área ao longo do tempo. | Exploração/monitoramento de anomalias; priorização de ação e vigilância. |
 | **Armadilhas comuns** | Assumir separabilidade sem diagnóstico; ignorar não-estacionariedade. | Ignorar exposição (população em risco); confundir artefatos de amostragem com “hotspots”. | Definir $W$ sem justificativa; ignorar dependência residual e diagnósticos. | Escolhas ad hoc de janelas → falsos positivos; não corrigir múltiplas comparações. |
 
-Quadro 2 — Guia rápido
+**Quadro 2 — Guia rápido**
 
 | Tipo de modelo | Objetivo principal | Tipo de dado | Exemplo típico |
 |---|---|---|---|
@@ -481,6 +511,7 @@ Quadro 2 — Guia rápido
 | Krigagem espaço-temporal (geoestatística) | Predizer em locais/tempos não observados com incerteza | Variáveis contínuas em pontos + covariáveis | Interpolação/nowcasting de chuva |
 | Clusters e anomalias (scan/hotspots) | Detectar concentrações e períodos atípicos | Contagens/taxas ou eventos | Surtos de doenças; janelas críticas |
 | Processos pontuais E-T | Modelar ocorrência de eventos e risco | Pontos $(x,y,t)$ | Ocorrência de raios, crimes, incêndios |
+
 
 
 
@@ -509,22 +540,22 @@ Uma boa análise espaço-temporal não começa “escolhendo o método”. Come�
 
 **a) Coleta e estruturação dos dados**  
 Antes de modelar, é preciso saber o que se está medindo, onde e quando. Esta etapa garante que espaço e tempo estejam bem definidos e que as bases “conversem” entre si.
-- Defina o domínio: área de estudo \(A\) com sistema de referência/projeção coerente (CRS) e janela temporal \(T\) com a resolução adequada (hora, dia, mês).
+- Defina o domínio: área de estudo $A$ com sistema de referência/projeção coerente (CRS) e janela temporal $T$ com a resolução adequada (hora, dia, mês).
 - Classifique o tipo de dado:
   - Geoestatístico (variável contínua: chuva, temperatura, PM₂.₅).
-  - Eventos \((x,y,t)\) (crimes, casos, raios).
+  - Eventos $(x,y,t)$ (crimes, casos, raios).
   - Painel por área (unidade areal × tempo: bairros×meses, municípios×anos).
-- Integre e padronize no esquema mínimo \((x,y,t)\) + valores/atributos; trate faltantes/outliers; alinhe calendários e fusos; documente metadados (unidades, fonte, mudanças de instrumento).
+- Integre e padronize no esquema mínimo $(x,y,t)$ + valores/atributos; trate faltantes/outliers; alinhe calendários e fusos; documente metadados (unidades, fonte, mudanças de instrumento).
 - Considere exposição (população em risco): inclua offsets ou covariáveis (população, fluxo viário, intensidade de uso) para não confundir “muitos eventos” com “alto risco”.
 
 **b) Exploração visual e descritiva**  
 Agora, olhamos para os dados. O objetivo é identificar padrões e problemas óbvios antes de escolher um modelo.
 - Mapas e séries: mapas temáticos (padrões espaciais), séries temporais (tendências/sazonalidade) e, quando possível, animações ou “cubos” E–T para ver movimento.
 - Primeira ordem (nível médio):
-  - Para eventos, estime intensidade média \(\lambda(\mathbf{x},t)\) (p.ex., KDE espaço-temporal).
+  - Para eventos, estime intensidade média $\lambda(\mathbf{x},t)$ (p.ex., KDE espaço-temporal).
   - Para variáveis contínuas, use médias móveis/sazonais.
 - Pistas de dependência: autocorrelação temporal, semelhança espacial entre vizinhos, períodos/áreas atípicos.
-- Checagens úteis: separabilidade de primeira ordem \(\lambda(\mathbf{x},t)=\rho(\mathbf{x})\mu(t)?\); efeitos de borda; MAUP (sensibilidade à agregação).
+- Checagens úteis: separabilidade de primeira ordem $\lambda(\mathbf{x},t)=\rho(\mathbf{x})\mu(t)?$; efeitos de borda; MAUP (sensibilidade à agregação).
 
 **c) Escolha do tipo de modelo (guiada pela pergunta)**  
 Com os padrões em mente, a pergunta manda no método. O modelo deve combinar o tipo de dado com o objetivo.
@@ -540,13 +571,13 @@ Regra prática: comece simples e coerente com a pergunta; só aumente a complexi
 
 **d) Ajuste, interpretação e validação**  
 Aqui o modelo é estimado, os resultados são lidos e a qualidade é testada de modo honesto para espaço e tempo.
-- **Geoestatística E–T:** modele a tendência \(m(\mathbf{s},t)\); estime semivariograma/covariância E–T; ajuste modelo (separável vs. não separável); krigue valores e variâncias.  
+- **Geoestatística E–T:** modele a tendência $m(\mathbf{s},t)$; estime semivariograma/covariância E–T; ajuste modelo (separável vs. não separável); krigue valores e variâncias.  
   **Validação:** cross-validation bloqueada no espaço e no tempo; métricas (RMSE/MAE, CRPS); resíduos sem autocorrelação.
-- **Processos pontuais:** estime \(\lambda(\mathbf{x},t)\); avalie segunda ordem (funções \(K\)/par-correlação inhomogêneas); escolha Poisson inhom./LGCP (heterogeneidade) ou intensidade condicional (dinâmica).  
+- **Processos pontuais:** estime $\lambda(\mathbf{x},t)$; avalie segunda ordem (funções $K$/par-correlação inhomogêneas); escolha Poisson inhom./LGCP (heterogeneidade) ou intensidade condicional (dinâmica).  
   **Validação:** envelopes de simulação, resíduos de intensidade, divisão temporal treino→teste.
-- **Painel espacial:** defina \(W\) (contiguidade, distância, rede); escolha SAR/SEM/SDM (dinâmico se houver persistência); estime (MLE/QMLE, IV/GMM); relate impactos direto/indireto/total.  
-  **Validação:** testes LM, Hausman/Mundlak, sensibilidade a \(W\), separação temporal em previsão.
-- **Clustering E–T:** calibre escalas e parâmetros (raios \(r_s,r_t\), minPts, bandwidth \(h_s,h_t\)); rode scan/DBSCAN/KDE.  
+- **Painel espacial:** defina $W$ (contiguidade, distância, rede); escolha SAR/SEM/SDM (dinâmico se houver persistência); estime (MLE/QMLE, IV/GMM); relate impactos direto/indireto/total.  
+  **Validação:** testes LM, Hausman/Mundlak, sensibilidade a $W$, separação temporal em previsão.
+- **Clustering E–T:** calibre escalas e parâmetros (raios $r_s,r_t$, minPts, bandwidth $h_s,h_t$); rode scan/DBSCAN/KDE.  
   **Validação:** significância (scan), sensibilidade a escalas, correção de múltiplas comparações e bordas.
 
 Em todos os casos, comunique incerteza (intervalos/bandas, probabilidades, envelopes) e justifique escolhas de parâmetros/escala com análise de sensibilidade.
@@ -559,6 +590,7 @@ Por fim, conte a história de forma que quem decide consiga usar.
 - Narrativa final: explicite pergunta, dados, método, achados, incerteza, limitações e implicações para decisão.
 
 Dica: decisões sólidas pedem reprodutibilidade. Versões de dados, scripts e parâmetros devem ficar registrados; assim, resultados podem ser explicados e auditados depois.
+
 
 
 
@@ -651,14 +683,15 @@ Uma análise E–T sólida se apoia em poucos princípios — simples de enuncia
 
 **2) Incerteza visível.** Mapa, série ou tabela sem variância/intervalo conta só metade da história. Em geoestatística, reporte variância de krigagem e probabilidades de excedência; em painéis espaciais, traga impactos direto/indireto/total com intervalos, distinguindo curto vs. longo prazo quando houver dinâmica; em processos pontuais, use envelopes de simulação e diagnósticos de intensidade; em clustering, indique significância (ou níveis qualitativos) e trate múltiplas comparações. O leitor precisa ver quanto estimamos e quão confiantes estamos.
 
-**3) Robustez a escolhas razoáveis.** Conclusões não podem depender de um único variograma, de uma única vizinhança ou de um único *bandwidth*. Em geoestatística, compare modelos de covariância e discuta o alcance; em painéis, varie a matriz \(W\) (contiguidade, distância, \(k\)-vizinhos, rede) e examine a sensibilidade dos impactos; em métodos de densidade/varredura, justifique \((h_s,h_t,r_s,r_t)\) com curvas de sensibilidade. Se pequenos ajustes derrubam o achado, o problema é menos científico e mais de parametrização.
+**3) Robustez a escolhas razoáveis.** Conclusões não podem depender de um único variograma, de uma única vizinhança ou de um único *bandwidth*. Em geoestatística, compare modelos de covariância e discuta o alcance; em painéis, varie a matriz $W$ (contiguidade, distância, $k$-vizinhos, rede) e examine a sensibilidade dos impactos; em métodos de densidade/varredura, justifique $(h_s,h_t,r_s,r_t)$ com curvas de sensibilidade. Se pequenos ajustes derrubam o achado, o problema é menos científico e mais de parametrização.
 
-**4) Reprodutibilidade como critério de qualidade.** Registre CRS/unidades, proveniência e transformações; congele versões de pacotes e scripts; fixe sementes aleatórias; salve, em arquivo de configuração, as escolhas que afetam o resultado (janelas, \(W\), *bandwidths*). Outro analista, com o mesmo material, deve reconstruir o estudo e chegar essencialmente às mesmas conclusões.
+**4) Reprodutibilidade como critério de qualidade.** Registre CRS/unidades, proveniência e transformações; congele versões de pacotes e scripts; fixe sementes aleatórias; salve, em arquivo de configuração, as escolhas que afetam o resultado (janelas, $W$, *bandwidths*). Outro analista, com o mesmo material, deve reconstruir o estudo e chegar essencialmente às mesmas conclusões.
 
 **5) Fronteira clara entre exploração e inferência.** A exploração (EDA) serve para conhecer o dado, levantar hipóteses e escolher escalas; a inferência confirma (ou refuta) essas hipóteses em um conjunto não usado na exploração. Misturar etapas inflaciona desempenho e produz *overfitting* “guiado por visualização”. Declare o que foi exploratório e o que foi confirmatório; documente regras de seleção de variáveis e critérios de parada antes de abrir o conjunto de teste.
 
 Cuidados transversais que evitam tropeços comuns: alinhar fusos e horário de verão; considerar exposição/offset em dados de eventos (população, fluxo); discutir efeitos de borda e MAUP quando houver agregação; verificar autocorrelação residual (no espaço, no tempo e no espaço–tempo) após o ajuste.
 
 Em suma, boa prática não é sobre a ferramenta “certa”, e sim sobre disciplina: validar de forma honesta, explicitar a incerteza, testar a solidez das escolhas, tornar o caminho reproduzível e separar curiosidade de confirmação. Isso é o que mantém a análise E–T confiável — e útil para decidir.
+
 
 
