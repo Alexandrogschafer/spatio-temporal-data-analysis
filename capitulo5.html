@@ -1,0 +1,1338 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5. MODELOS ESPAÇO-TEMPORAIS &#8212; Análise de dados espaço-temporais</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'capitulo5';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="6. DINÂMICA DA PAISAGEM E MODELOS DE MUDANÇA" href="capitulo6.html" />
+    <link rel="prev" title="4. GEOVISUALIZAÇÃO E ANÁLISE DE TRAJETÓRIAS" href="capitulo4.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Análise de dados espaço-temporais - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Análise de dados espaço-temporais - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Introdução
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="capitulo1.html">1. INTRODUÇÃO A ANÁLISE ESPAÇO-TEMPORAL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="capitulo2.html">2. SÉRIES TEMPORAIS E AUTOCORRELAÇÃO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="capitulo3.html">3. AUTOCORRELAÇÃO E DEPENDÊNCIA ESPAÇO-TEMPORAL (ANÁLISE ESPAÇO-TEMPORAL GLOBAL E LOCAL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="capitulo4.html">4. GEOVISUALIZAÇÃO E ANÁLISE DE TRAJETÓRIAS</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">5. MODELOS ESPAÇO-TEMPORAIS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="capitulo6.html">6. DINÂMICA DA PAISAGEM E MODELOS DE MUDANÇA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="referencias.html">Bibliografia básica</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Alexandrogschafer/spatio-temporal-data-analysis" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Alexandrogschafer/spatio-temporal-data-analysis/edit/main/./capitulo5.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Alexandrogschafer/spatio-temporal-data-analysis/issues/new?title=Issue%20on%20page%20%2Fcapitulo5.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/capitulo5.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>5. MODELOS ESPAÇO-TEMPORAIS</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tipos-de-modelos-espaco-temporais">5.1 Tipos de Modelos Espaço-Temporais</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#krigagem-espaco-temporal">5.1.1 Krigagem Espaço-Temporal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#processos-pontuais-espaco-temporais-step">5.1.2 Processos Pontuais Espaço-Temporais (STEP)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regressao-em-painel-com-dependencia-espacial">5.1.3 Regressão em Painel com Dependência Espacial</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering-agrupamento-espaco-temporal">5.1.4 Clustering (Agrupamento) Espaço-Temporal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sintese-dos-principais-modelos-espaco-temporais">5.1.5 Síntese dos principais modelos espaço-temporais</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outras-abordagens-emergentes">5.1.6 Outras Abordagens Emergentes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#etapas-basicas-de-uma-analise-espaco-temporal">5.2 Etapas básicas de uma análise espaço-temporal</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ferramentas-e-softwares-para-modelagem-espaco-temporal">5.3 Ferramentas e Softwares para Modelagem Espaço-Temporal</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ambientes-de-sig-e-analise-espacial">5.3.1 Ambientes de SIG e Análise Espacial</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linguagens-estatisticas-e-computacionais">5.3.2 Linguagens Estatísticas e Computacionais</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aplicativos-e-servicos-especializados">5.3.3 Aplicativos e Serviços Especializados</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qual-ferramenta-para-qual-objetivo">5.3.4 Qual ferramenta para qual objetivo?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interoperabilidade-e-fluxo-de-trabalho">5.3.5 Interoperabilidade e Fluxo de Trabalho</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#boas-praticas-na-modelagem-espaco-temporal">5.4 Boas práticas na modelagem espaço-temporal</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="modelos-espaco-temporais">
+<h1>5. MODELOS ESPAÇO-TEMPORAIS<a class="headerlink" href="#modelos-espaco-temporais" title="Link to this heading">#</a></h1>
+<section class="cap-audio">
+  <p><strong>Ouça o resumo do capítulo em áudio:</strong></p>
+  <audio controls preload="none" style="width:100%;max-width:720px">
+    <source src="audio/capitulo5.mp3" type="audio/mpeg">
+    Seu navegador não suporta a reprodução de áudio.
+    <a href="audio/capitulo5.mp3">Baixar MP3</a>
+  </audio>
+</section>
+<section class="cap-video">
+  <p><strong>Assista ao resumo do capítulo em vídeo:</strong></p>
+  <!-- wrapper responsivo 16:9 -->
+  <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;border-radius:8px;background:#000;">
+    <iframe
+      src="https://www.youtube-nocookie.com/embed/dtBbKE8FRXQ"
+      title="Vídeo do capítulo"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+      style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;">
+    </iframe>
+  </div>
+  <p style="margin-top:0.5rem;">
+    Se o vídeo não carregar, <a href="https://www.youtube.com/watch?v=dtBbKE8FRXQ" target="_blank" rel="noopener">assista no YouTube</a>.
+  </p>
+</section>
+<p>Ler mapas e séries separadamente conta só metade da história: mapas dizem onde diferem; séries mostram como evoluem. Como os fenômenos acontecem no espaço e no tempo ao mesmo tempo, modelar no espaço-tempo é transformar essa dupla dependência em evidência mensurável para responder, com clareza e margem de erro, perguntas práticas como: onde e quando o risco aumenta, quanto um fator explica e o que esperar adiante — e com quanta incerteza.</p>
+<p>O ponto de partida costuma ser visual: contrastes no mapa, tendências na série, indícios de aglomeração. A passagem do “parece” para o “é” ocorre quando formulamos a pergunta de modo mensurável (unidade de análise, janela temporal, vizinhança espacial, tipo de entrega) e tornamos explícitas as estruturas que o olho intui. Isso implica escolher o objeto adequado — um campo contínuo <span class="math notranslate nohighlight">\(Y(\mathbf{s}, t)\)</span>, uma intensidade de eventos <span class="math notranslate nohighlight">\(\lambda(\mathbf{x}, t)\)</span> ou um indicador por área e período <span class="math notranslate nohighlight">\(Y_{it}\)</span> — e representar como a semelhança decai com a distância no espaço e no tempo (covariância/semivariograma, matriz de vizinhança <span class="math notranslate nohighlight">\(W\)</span>, intensidade condicional). Em seguida, ligamos explicações a medidas por meio de covariáveis <span class="math notranslate nohighlight">\(X(\mathbf{s}, t)\)</span>, separando o que é nível (tendência, sazonalidade, gradientes) do que é vizinhança (correlação residual). O resultado desse encadeamento são quantidades estimáveis: alcances espaciais, defasagens temporais, forças de propagação, efeitos com sinal e magnitude — sempre acompanhados de barra de incerteza.</p>
+<p>Estimar é só metade do trabalho; a outra metade é quantificar o erro e testar a robustez. Modelos E-T sempre extrapolam um pouco (no espaço e/ou no tempo), por isso intervalos/variâncias preditivas, probabilidades de excedência e, quando há rede de vizinhanças, impactos direto/indireto/total fazem parte do produto, não do apêndice. A validação precisa respeitar espaço e tempo (bloqueios espaciais/temporais que evitam proximidade entre treino e teste) e vir acompanhada de análises de sensibilidade a escolhas substantivas: escala, definição de vizinhança (<span class="math notranslate nohighlight">\(W\)</span>), transformação e seleção de covariáveis. Dizer o que o modelo capta e o que não capta é requisito, não cortesia.</p>
+<p>Evidência só vira prática quando informa escolhas. Métricas do modelo se traduzem em gatilhos operacionais — valores ou probabilidades que separam “atuar” de “monitorar” de acordo com custos de erro e tolerância ao risco. Mapas e séries priorizam onde e quando agir, organizam cenários (timing, intensidade, cobertura) e deixam claro o trade-off entre benefício esperado e recursos. Indicadores precisam caber na rotina (poucos, estáveis, interpretáveis) e estar acoplados a planos de resposta (quem, como, quando, com quais recursos). Depois, compara-se o previsto ao observado, recalibram-se limiares e parâmetros: decisão espaço-temporal é ciclo de aprendizado, não ato único. Transparência fecha o circuito — dados, versões de modelo, parâmetros e validação documentados; vieses e efeitos colaterais inspecionados; proporcionalidade assegurada.</p>
+<p>Nem sempre vale modelar já. Há sinal quando vemos semelhança entre vizinhos e persistência temporal, quando existem lacunas relevantes a preencher, quando precisamos medir efeitos ou antecipar cenários de curto/médio prazo. Falta sinal quando tudo se comporta como ruído branco, quando a cobertura é tão desigual que inviabiliza validação ou quando há não-estacionariedade forte sem estratégia para tratá-la (covariáveis, transformações, modelos locais). A regra de bolso é simples: se o fenômeno “se parece consigo mesmo” em vizinhanças espaciais e temporais, há material para modelar; se não, o melhor investimento costuma estar na escala de análise, na qualidade dos dados e nas explicativas.</p>
+<p>Ao longo do capítulo, “modelagem E-T” funciona como guarda-chuva para três famílias, escolhidas conforme o tipo de dado e a pergunta de interesse: geoestatística para campos contínuos (krigagem E-T, §5.1.1), processos pontuais para eventos no espaço-tempo (STEP, §5.1.2) e econometria E-T em áreas para painéis areais com dependência espacial e dinâmica temporal (§5.1.3), além de técnicas de agrupamento espaço-temporal usadas como diagnóstico estruturado (§5.1.4). A anatomia mínima comum — resposta, explicativas, dependências e ruído — é detalhada nas subseções; aqui, fica a motivação: transformar indícios em evidência quantificada, e evidência em decisão responsável.</p>
+<section id="tipos-de-modelos-espaco-temporais">
+<h2>5.1 Tipos de Modelos Espaço-Temporais<a class="headerlink" href="#tipos-de-modelos-espaco-temporais" title="Link to this heading">#</a></h2>
+<p>Depois de entender por que modelar, seguimos para como escolher a lente adequada para o seu problema. Nesta seção, vamos preparar o terreno para quatro caminhos que você encontrará com frequência na prática. A ideia é simples: cada caminho parte do mesmo fenômeno, mas o observa por um ângulo diferente, de acordo com o tipo de dado disponível e com a pergunta que você quer responder. Vale lembrar que, na organização geral do capítulo, trabalhamos com três famílias de modelos (campos contínuos, eventos e painéis areais); a clusterização não é uma quarta família, e sim um conjunto de técnicas transversais que aparece dentro dessas três. Por ser muito usada na prática, dedicamos a ela uma subseção específica (§ 5.1.4) para orientar quando aplicar e como interpretar seus resultados em cada tipo de dado.</p>
+<p>Quando o interesse é estimar valores contínuos em locais e momentos não observados — como mapear chuva, temperatura ou poluição ao longo do ano — a krigagem espaço-temporal (§ 5.1.1) é a lente apropriada: ela combina informação de vizinhos no espaço e no tempo para produzir superfícies e suas incertezas. Se os dados não são medidas contínuas, mas sim ocorrências em coordenadas e instantes (casos de dengue, crimes, raios), passamos a pensar em processos pontuais espaço-temporais (§ 5.1.2), que descrevem a intensidade dos eventos, verificam aglomerações e ajudam a entender quando e onde o risco aumenta.</p>
+<p>Há situações em que trabalhamos com indicadores agregados por áreas repetidas no tempo — bairros, municípios, setores. Nesses casos, a regressão em painel com dependência espacial (§ 5.1.3) permite explicar variações considerando a interação entre áreas vizinhas e a memória temporal, sendo útil para avaliar efeitos de políticas e medir possíveis transbordamentos. Por fim, quando a pergunta principal é identificar concentrações anômalas no espaço e no tempo — hotspots persistentes ou surtos de curta duração — recorremos ao agrupamento espaço-temporal (§ 5.1.4), que destaca padrões locais de interesse e orienta a priorização de ações.</p>
+<section id="krigagem-espaco-temporal">
+<h3>5.1.1 Krigagem Espaço-Temporal<a class="headerlink" href="#krigagem-espaco-temporal" title="Link to this heading">#</a></h3>
+<p>Krigagem espaço-temporal é a técnica usada para “completar” o mapa e a linha do tempo quando não há medições em todos os lugares e momentos. Pense em uma cidade com poucas estações de chuva e leituras esparsas ao longo do dia: ainda assim, queremos saber quanta chuva caiu em qualquer ponto e a qualquer instante. A ideia é simples e poderosa: aproveitar que lugares próximos tendem a ter valores parecidos e que momentos próximos costumam se assemelhar. A krigagem combina essas duas proximidades para estimar o valor onde não medimos e, tão importante quanto, informar quão incerta é essa estimativa.</p>
+<p>Na prática, isso permite mapear fenômenos contínuos — chuva, temperatura, poluição do ar, umidade do solo — mesmo com monitoramento limitado. Com as estimativas, é possível gerar mapas por data, extrair séries para locais específicos, comparar áreas, calcular a probabilidade de ultrapassar limites regulatórios (como padrões de qualidade do ar) e, assim, tomar decisões fundamentadas mesmo com poucos sensores. Em termos intuitivos, cada medição “empresta” informação para perto, tanto no espaço quanto no tempo; a krigagem organiza esse empréstimo de modo ótimo e transparente, entregando o valor estimado junto com a sua incerteza.</p>
+<p><strong>a) Como funciona</strong><br />
+A krigagem parte de uma decomposição simples: o que observamos em cada lugar e instante é a soma de um comportamento médio e de uma variação local em torno desse médio:</p>
+<div class="math notranslate nohighlight">
+\[
+Z(\mathbf{s}, t) = m(\mathbf{s}, t) + \varepsilon(\mathbf{s}, t),
+\]</div>
+<p>em que <span class="math notranslate nohighlight">\(m(\mathbf{s}, t)\)</span> representa a tendência (por exemplo, altitudes maiores chovem mais; o verão é mais úmido) e <span class="math notranslate nohighlight">\(\varepsilon(\mathbf{s}, t)\)</span> é o desvio que muda de ponto para ponto e de momento para momento.</p>
+<p>O passo decisivo é descrever a semelhança entre desvios. Para isso usamos a função de covariância <span class="math notranslate nohighlight">\(C(\mathbf{h}, u)\)</span>, que mede o quanto dois pontos se parecem quando estão separados por uma distância espacial <span class="math notranslate nohighlight">\(\mathbf{h}\)</span> e uma separação temporal <span class="math notranslate nohighlight">\(u\)</span>. Em termos práticos: quanto menores <span class="math notranslate nohighlight">\(\mathbf{h}\)</span> e <span class="math notranslate nohighlight">\(u\)</span>, maior a semelhança esperada.</p>
+<p>Com essa “régua de semelhança” em mãos, a krigagem calcula, para um local/instante sem dado, uma combinação ponderada das observações disponíveis, atribuindo pesos maiores aos vizinhos mais próximos no espaço e no tempo e menores aos mais distantes. O método entrega duas saídas acopladas: o valor estimado e a sua incerteza (a variância de krigagem), que indica o quão confiável é a estimativa naquele ponto do mapa e naquele momento.</p>
+<p>Uma intuição útil: imagine “pintar” o mapa-linha-do-tempo usando as cores conhecidas nos pontos medidos e espalhando essas cores ao redor; elas se difundem com força decrescente à medida que nos afastamos no espaço e no tempo. Ao final, cada pixel/instante recebe uma cor (o valor estimado) e um sombreamento de confiança (a incerteza), deixando claro o que sabemos melhor e onde sabemos menos.</p>
+<p><strong>b) Essência matemática</strong><br />
+Em krigagem, o alvo é um campo espaço-temporal: um processo aleatório contínuo <span class="math notranslate nohighlight">\(Z(\mathbf{s}, t)\)</span> que atribui um valor (chuva, temperatura, PM<span class="math notranslate nohighlight">\(_{2.5}\)</span>, umidade do solo) a cada ponto do espaço <span class="math notranslate nohighlight">\(\mathbf{s}\)</span> e a cada instante <span class="math notranslate nohighlight">\(t\)</span>. As medições de estações ou sensores são amostras pontuais desse campo; ele existe também onde/quando não medimos. Supomos uma suavidade prática: vizinhos no espaço e no tempo tendem a se parecer. É essa semelhança local que a krigagem explora para preencher lacunas e quantificar incerteza.</p>
+<p>Com o objeto definido, descrevemos o campo por:</p>
+<div class="math notranslate nohighlight">
+\[
+Z(\mathbf{s}, t) = m(\mathbf{s}, t) + \varepsilon(\mathbf{s}, t),
+\]</div>
+<p>onde:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(Z(\mathbf{s}, t)\)</span>: valor do campo no local <span class="math notranslate nohighlight">\(\mathbf{s}\)</span> e no tempo <span class="math notranslate nohighlight">\(t\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(m(\mathbf{s}, t)\)</span>: tendência média (nível), possivelmente função de covariáveis, por exemplo <span class="math notranslate nohighlight">\(m(\mathbf{s}, t)=\mathbf{x}(\mathbf{s}, t)^\top \beta\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\varepsilon(\mathbf{s}, t)\)</span>: variação aleatória correlacionada, com média zero.</p></li>
+</ul>
+<p>A proximidade no espaço e no tempo é codificada por uma função de covariância:</p>
+<div class="math notranslate nohighlight">
+\[
+C(\mathbf{h}, u) = \mathrm{Cov}\!\big[ Z(\mathbf{s}+\mathbf{h}, t+u),\, Z(\mathbf{s}, t) \big],
+\]</div>
+<p>em que <span class="math notranslate nohighlight">\(\mathbf{h}\)</span> é o deslocamento espacial e <span class="math notranslate nohighlight">\(u\)</span> o deslocamento temporal. Quanto menores <span class="math notranslate nohighlight">\(\mathbf{h}\)</span> e <span class="math notranslate nohighlight">\(u\)</span>, maior a semelhança esperada; conforme aumentam, a semelhança decai.</p>
+<p>Um equivalente diagnóstico é o semivariograma:</p>
+<div class="math notranslate nohighlight">
+\[
+\gamma(\mathbf{h}, u) = \tfrac12\,\mathrm{Var}\!\big[ Z(\mathbf{s}+\mathbf{h}, t+u) - Z(\mathbf{s}, t) \big],
+\]</div>
+<p>que tende a ser baixo para pares próximos e alto para pares distantes. Na prática, ajustamos um modelo válido para <span class="math notranslate nohighlight">\(C(\mathbf{h}, u)\)</span> (ou <span class="math notranslate nohighlight">\(\gamma\)</span>) — separável ou não separável — que servirá de régua para ponderar vizinhos.</p>
+<p><strong>Como a predição é calculada</strong><br />
+Para um alvo ((\mathbf{s}_0, t_0)) sem medição, a krigagem combina, com pesos, as observações disponíveis:</p>
+<div class="math notranslate nohighlight">
+\[
+\widehat{Z}(\mathbf{s}_0, t_0)
+= m(\mathbf{s}_0, t_0) + \sum_{i=1}^{n} w_i \,\big[ Z(\mathbf{s}_i, t_i) - m(\mathbf{s}_i, t_i) \big].
+\]</div>
+<p>Os pesos <span class="math notranslate nohighlight">\(w_i\)</span> são escolhidos para que a estimativa seja não viesada e tenha mínima variância, conforme a régua <span class="math notranslate nohighlight">\(C(\mathbf{h}, u)\)</span>. Intuição direta: pontos próximos de <span class="math notranslate nohighlight">\((\mathbf{s}_0, t_0)\)</span> (no mapa e no relógio) recebem peso maior; pontos distantes, peso menor.</p>
+<p>A predição vem acompanhada da variância de krigagem <span class="math notranslate nohighlight">\(\sigma_K^2(\mathbf{s}_0, t_0)\)</span>, que expressa a incerteza local — maior quando faltam vizinhos próximos, quando a correlação decai muito rápido ou quando a tendência <span class="math notranslate nohighlight">\(m(\mathbf{s}, t)\)</span> explica pouco.</p>
+<p><strong>Passo a passo mínimo</strong></p>
+<ul class="simple">
+<li><p>Especificar a tendência <span class="math notranslate nohighlight">\(m(\mathbf{s}, t)\)</span> (constante ou com covariáveis) e diagnosticar a dependência com variogramas/correlogramas E–T.</p></li>
+<li><p>Ajustar um modelo válido para <span class="math notranslate nohighlight">\(C(\mathbf{h}, u)\)</span> (a régua de semelhança espacial e temporal).</p></li>
+<li><p>Predizer <span class="math notranslate nohighlight">\(\widehat{Z}\)</span> em locais/tempos sem medição e reportar <span class="math notranslate nohighlight">\(\sigma_K^2\)</span> (bandas/intervalos), deixando claro onde sabemos mais e onde sabemos menos.</p></li>
+</ul>
+<p><strong>c) Aplicações comuns</strong><br />
+A krigagem espaço-temporal mostra seu valor quando o fenômeno é contínuo, o monitoramento é esparso e precisamos preencher onde e quando faltam medições — sempre com uma noção clara da incerteza. Exemplos:</p>
+<ul class="simple">
+<li><p>Meteorologia e clima: preencher chuva/temperatura entre estações, montar mapas diários/horários.</p></li>
+<li><p>Qualidade do ar: estimar PM<span class="math notranslate nohighlight">\(_{2.5}\)</span> onde não há sensor, indicar probabilidade de ultrapassar limites.</p></li>
+<li><p>Agricultura e solos: umidade do solo, índice de vegetação, salinidade ao longo de safras.</p></li>
+<li><p>Recursos hídricos: níveis ou qualidade de água em bacias com poucos pontos de medição.</p></li>
+<li><p>Saúde ambiental: concentração de alérgenos ou poluentes ao longo do dia na malha urbana.</p></li>
+</ul>
+<p><strong>d) O que você obtém</strong></p>
+<ul class="simple">
+<li><p>Mapas por tempo (ex.: mapa do dia 10/01 às 12h) e séries por local (ex.: valores diários no bairro X), ambos com bandas de incerteza.</p></li>
+<li><p>Mapas de excedência: onde e quando é provável que um valor tenha passado do limite (por exemplo, 50 <span class="math notranslate nohighlight">\(\mu\)</span>g/m<span class="math notranslate nohighlight">\(^3\)</span>).</p></li>
+<li><p>Resumo da incerteza: locais/horários com pouca confiança ficam sinalizados; decisões podem priorizar áreas de maior certeza.</p></li>
+</ul>
+<p><strong>e) Limitações e cuidados</strong></p>
+<ul class="simple">
+<li><p>Escala do fenômeno: a krigagem funciona melhor quando o processo é suave no espaço e no tempo; quebras bruscas (relevo muito complexo, frentes rápidas) pedem modelos mais sofisticados.</p></li>
+<li><p>Dados e relógio organizados: unidades consistentes, calendário alinhado (fuso/horário de verão) e coordenadas corretas são essenciais para que distâncias e defasagens façam sentido.</p></li>
+<li><p>Tendência versus vizinhança: gradientes (altitude, sazonalidade) entram em <span class="math notranslate nohighlight">\(m(\mathbf{s}, t)\)</span>; a covariância fica para a semelhança entre vizinhos. Misturar os dois distorce a dependência.</p></li>
+<li><p>Evitar confiança exagerada: validações “aleatórias” que misturam pontos muito próximos entre treino e teste inflacionam o desempenho. Preferir bloqueios separados no espaço e no tempo.</p></li>
+<li><p>Custo computacional: em bases grandes, estimar a semelhança entre todos os pares é pesado; usar aproximações (matrizes esparsas, vizinhos mais próximos, janelas móveis) quando necessário.</p></li>
+</ul>
+<p><strong>f) Abordagens de referência</strong></p>
+<ul class="simple">
+<li><p>Krigagem E–T clássica (covariância separável / não separável): ajusta um processo gaussiano com estrutura de correlação no espaço e no tempo; a versão não separável (por exemplo, família de Gneiting) captura propagação. Entrega mapas/séries preditos e variâncias de krigagem, além de mapas de probabilidade de excedência.</p></li>
+<li><p>Krigagem com tendência/regressão (Universal/Regression Kriging E–T): inclui covariáveis <span class="math notranslate nohighlight">\(X(\mathbf{s}, t)\)</span> na tendência <span class="math notranslate nohighlight">\(m(\mathbf{s}, t)\)</span> + krigagem do resíduo correlacionado. Entrega predições com efeitos de covariáveis e incerteza.</p></li>
+<li><p>Co-krigagem / krigagem colocalizada E–T: usa variáveis correlatas (por exemplo, satélite) para reforçar a predição de uma variável-alvo esparsa. Entrega ganho de precisão em áreas pouco medidas.</p></li>
+<li><p>SPDE/GMRF via INLA (campos gaussianos esparsos): aproxima o processo contínuo por malhas triangulares (GMRF), escalando para grades grandes. Entrega predições rápidas com intervalos de credibilidade.</p></li>
+<li><p>Filtro/“krigagem” de Kalman em grade (estado-espaço): para campos em grade (raster) com dinâmica temporal explícita (advecção/difusão). Entrega <em>nowcasting/forecasting</em> com bandas preditivas.</p></li>
+</ul>
+</section>
+<section id="processos-pontuais-espaco-temporais-step">
+<h3>5.1.2 Processos Pontuais Espaço-Temporais (STEP)<a class="headerlink" href="#processos-pontuais-espaco-temporais-step" title="Link to this heading">#</a></h3>
+<p>Processos Pontuais Espaço-Temporais (STEP) lidam com dados em que cada registro é um evento com lugar e tempo — um ponto no mapa e um instante no relógio. O interesse não é medir “quanto há” em toda a área (como numa variável contínua), e sim compreender o desenho dos pontos: onde e quando eles se acumulam, como se espalham, se atraem (um evento eleva a chance de outro nas proximidades pouco depois) ou se inibem (a ocorrência reduz a probabilidade de novos eventos ao redor por algum tempo). Em termos práticos, STEP transforma uma nuvem de ocorrências — crimes, casos de dengue, raios, panes — em um mapa-calendário de risco que varia no espaço e no tempo, permitindo localizar hotspots com início e duração, comparar a intensidade entre bairros e períodos e detectar sinais de propagação ou saturação.<br />
+O produto típico inclui superfícies de risco <span class="math notranslate nohighlight">\(\hat{\lambda}(\mathbf{x},t)\)</span> que indicam onde/quando a probabilidade de evento é maior, cronogramas que registram o aparecimento e o declínio de aglomerações e parâmetros interpretáveis (alcance espacial, meia-vida temporal, força de excitação/inibição). Esses resultados são reportados com incerteza explícita, de modo que gestores possam priorizar ações, posicionar recursos e ajustar estratégias à medida que novas ocorrências chegam — sem exigir, de início, uma teoria causal completa, mas oferecendo pistas sólidas para investigações posteriores.</p>
+<p><strong>a) Como funciona</strong><br />
+Em processos pontuais espaço-temporais, pensamos o fenômeno por meio de uma intensidade que varia no mapa e no relógio — uma espécie de “temperatura de risco”. No nível mais básico, modelamos a intensidade média <span class="math notranslate nohighlight">\(\lambda(x,t)\)</span>: onde <span class="math notranslate nohighlight">\(\lambda(x,t)\)</span> é alta, esperamos mais eventos por unidade de área e de tempo. Essa intensidade pode depender de covariáveis (iluminação, renda, fluxo de pessoas, clima), como em um Poisson inomogêneo: as covariáveis explicam por que certos lugares/instantes têm, em média, mais ou menos ocorrências, gerando mapas e cronogramas de risco. A intuição é direta: condições que dificultam o evento reduzem <span class="math notranslate nohighlight">\(\lambda\)</span>; condições que o favorecem elevam <span class="math notranslate nohighlight">\(\lambda\)</span>.<br />
+Há, porém, situações em que o próprio histórico de eventos altera o risco atual. Nesses casos, usamos uma intensidade condicional <span class="math notranslate nohighlight">\(\lambda_c(x,t \mid \mathcal{H}_t)\)</span> que incorpora propagação (excitação) ou inibição: a chance de um novo evento aumenta (ou diminui) perto de eventos recentes, dentro de um alcance espacial e de uma meia-vida temporal. Modelos do tipo Hawkes/epidêmicos formalizam essa ideia somando ao nível de base <span class="math notranslate nohighlight">\(\mu(x,t)\)</span> o impacto dos eventos passados via uma função de decaimento <span class="math notranslate nohighlight">\(g\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\lambda_c(x,t \mid \mathcal{H}_t)
+=\underbrace{\mu(x,t)}_{\text{nível de base (covariáveis)}}
++\underbrace{\sum_{(x_j,t_j)&lt;t} g\!\big(\lVert x-x_j\rVert,\, t-t_j\big)}_{\text{efeito dos eventos recentes}}.
+\]</div>
+<p>Se <span class="math notranslate nohighlight">\(g\)</span> é positivo e decai com a distância e o tempo, um evento eleva temporariamente o risco em seu entorno e esse efeito se dissipa depois; se <span class="math notranslate nohighlight">\(g\)</span> for negativo (ou se impusermos janelas de saturação), o último evento desencoraja novos eventos próximos por algum período.<br />
+Resumindo: a primeira ideia explica por que certos lugares e momentos, em média, são mais propensos a eventos (<span class="math notranslate nohighlight">\(\lambda(x,t)\)</span> guiada por covariáveis); a segunda explica como os próprios eventos reorganizam o risco no curto prazo (<span class="math notranslate nohighlight">\(\lambda_c\)</span> guiada pelo histórico). Juntas, elas permitem mapear risco, identificar hotspots com janela (início, duração, intensidade) e descrever dinâmicas de propagação ou inibição com parâmetros de leitura prática (alcance, meia-vida, força do efeito).</p>
+<p><strong>b) Essência matemática</strong><br />
+Antes de qualquer detalhe técnico, deixemos claro o que governa o processo: a intensidade espaço-temporal. Ela é a função que dita o “ritmo esperado” de eventos em cada lugar e instante. A formulação que usaremos é:</p>
+<div class="math notranslate nohighlight">
+\[
+\lambda(x,t)=\mu(x,t)+\sum_{(x_j,t_j)&lt;t} g\!\big(x-x_j,\, t-t_j\big).
+\]</div>
+<p>Como ler a equação<br />
+<span class="math notranslate nohighlight">\(\lambda(x,t)\)</span> — <strong>intensidade (ritmo de eventos).</strong> É a taxa esperada de eventos por unidade de área e de tempo no ponto <span class="math notranslate nohighlight">\((x,t)\)</span>. Se observarmos uma área <span class="math notranslate nohighlight">\(A\)</span> durante um intervalo <span class="math notranslate nohighlight">\(\Delta t\)</span>, o número esperado de eventos é, aproximadamente,</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{E}[N(A,\Delta t)] \approx \int_{\Delta t}\!\!\int_A \lambda(x,t)\,dx\,dt.
+\]</div>
+<p>Valores altos de (\lambda) significam maior propensão a observar eventos ali, naquele período.</p>
+<p><span class="math notranslate nohighlight">\(\mu(x,t)\)</span> — <strong>nível de base (estrutura e exposição).</strong> É o risco “de partida”, antes de considerar o histórico recente. Pode depender de covariáveis (chuva, renda, iluminação, fluxo) e de exposição (offset de população/mobilidade). Uma forma comum é</p>
+<div class="math notranslate nohighlight">
+\[
+\mu(x,t)=\exp\!\big(\mathbf{z}(x,t)^\top\gamma\big)\times \mathrm{offset}(x,t),
+\]</div>
+<p>o que expressa que lugares/tempos com fatores estruturais mais favoráveis ao evento começam com <span class="math notranslate nohighlight">\(\mu\)</span> maior.</p>
+<p><span class="math notranslate nohighlight">\(\sum g(\cdot,\cdot)\)</span> — <strong>impacto do histórico (propagação ou inibição).</strong> A soma percorre todos os eventos passados <span class="math notranslate nohighlight">\((x_j,t_j)&lt;t\)</span> e adiciona, para cada um, uma contribuição dada por <span class="math notranslate nohighlight">\(g\)</span>. A função <span class="math notranslate nohighlight">\(g(\Delta x,\Delta t)\)</span> descreve quanto um evento anterior altera o risco ao redor (<span class="math notranslate nohighlight">\(\Delta x\)</span>) e logo depois (<span class="math notranslate nohighlight">\(\Delta t\)</span>):</p>
+<ul class="simple">
+<li><p>Em processos excitantes (Hawkes/epidêmicos), <span class="math notranslate nohighlight">\(g\ge 0\)</span>: um evento eleva temporariamente <span class="math notranslate nohighlight">\(\lambda\)</span> nas vizinhanças; o efeito decai com o tempo e a distância.</p></li>
+<li><p>Pode haver inibição (partes negativas de <span class="math notranslate nohighlight">\(g\)</span>): logo após um evento, a chance de outro cai por algum período (saturação, resposta policial, capacidade limitada).</p></li>
+</ul>
+<p><strong>Parâmetros de <span class="math notranslate nohighlight">\(g\)</span> com leitura prática</strong><br />
+Alcance espacial: até que distância o efeito é relevante (p.ex., 200–300 m).<br />
+Meia-vida temporal: em quanto tempo o efeito cai pela metade (p.ex., 2–3 dias).<br />
+Força inicial: tamanho do salto em <span class="math notranslate nohighlight">\(\lambda\)</span> logo após o evento.<br />
+(Opcional) <strong>Índice de ramificação</strong> <span class="math notranslate nohighlight">\(\displaystyle \eta=\iint g\,dx\,dt\)</span>: fração média de eventos “gerados” por um evento. <span class="math notranslate nohighlight">\(\eta&lt;1\)</span> indica processo estável (sem cascatas explosivas).</p>
+<p>Exemplo em uma linha (para fixar a ideia): “Após um caso, a intensidade dobra num raio de 150 m por 3 dias e depois cai pela metade a cada 2 dias.” Isso corresponde a um <span class="math notranslate nohighlight">\(g\)</span> com alcance curto e decadência rápida.</p>
+<p><strong>Como usar <span class="math notranslate nohighlight">\(\hat{\lambda}\)</span> na prática</strong></p>
+<ul>
+<li><p><strong>Mapas e cronogramas de risco:</strong> avaliar <span class="math notranslate nohighlight">\(\hat{\lambda}(x,t)\)</span> em uma grade espacial e horários de interesse para visualizar onde/quando o risco é maior.</p></li>
+<li><p><strong>Contagem esperada em janelas:</strong> para um bairro <span class="math notranslate nohighlight">\(A\)</span> na próxima semana <span class="math notranslate nohighlight">\(\Delta t\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[
+  \widehat{\mathbb{E}}[N(A,\Delta t)] = \int_{\Delta t}\!\!\int_A \hat{\lambda}(x,t)\,dx\,dt,
+  \]</div>
+<p>obtendo uma previsão quantitativa do volume esperado de eventos.</p>
+</li>
+<li><p><strong>Risco relativo claro:</strong> comparar <span class="math notranslate nohighlight">\(\hat{\lambda}(x,t)\)</span> com uma referência (mediana, meta ou período base) para comunicar “<span class="math notranslate nohighlight">\(\approx 2\times\)</span> o esperado” de forma direta.</p></li>
+</ul>
+<p>Em resumo, a intensidade <span class="math notranslate nohighlight">\(\lambda(x,t)\)</span> separa o que é estrutural (<span class="math notranslate nohighlight">\(\mu\)</span>) do que é dinâmico (efeito de eventos recentes via <span class="math notranslate nohighlight">\(g\)</span>). Essa decomposição permite mapear risco, detectar propagação ou inibição e prever contagens em janelas específicas — sempre com parâmetros de interpretação simples que conectam o modelo ao fenômeno observado.</p>
+<p><strong>c) Aplicações comuns</strong><br />
+Em dados de eventos com carimbo de lugar e momento, os modelos STEP ajudam a mapear onde/quando o risco se concentra, detectar aglomerados e capturar propagação entre ocorrências. Exemplos:</p>
+<ul class="simple">
+<li><p>Saúde pública: localização/época de surtos (dengue, diarreia, influenza) e janelas críticas de transmissão.</p></li>
+<li><p>Segurança: bairros e horários de maior risco de furtos/roubos; sinais de “efeito dominó” após certos eventos.</p></li>
+<li><p>Meio ambiente: focos de queimadas ou descargas atmosféricas concentrados em áreas/periodicidades específicas.</p></li>
+<li><p>Atendimento de emergência: padrões de chamadas por região e hora, ajudando a posicionar bases e equipes.</p></li>
+<li><p>Operações urbanas: quedas de energia, falhas de água, buracos de asfalto — “onde/quando” aparecem em bloco.</p></li>
+</ul>
+<p><strong>d) O que você obtém</strong><br />
+Nos modelos de Processos Pontuais Espaço-Temporais (STEP), as saídas típicas incluem:</p>
+<ul class="simple">
+<li><p>Mapas e cronogramas de risco (<span class="math notranslate nohighlight">\(\hat{\lambda}(x,t)\)</span>): onde/quando o risco é alto.</p></li>
+<li><p>Hotspots com janela: lugar, início–fim, duração, intensidade relativa (por exemplo, “<span class="math notranslate nohighlight">\(2\times\)</span> acima do esperado”).</p></li>
+<li><p>Parâmetros com leitura prática (nos modelos com história): alcance espacial, meia-vida temporal, força de excitação/inibição.</p></li>
+<li><p>Cenários “e se…”: simulações simples para avaliar impactos de ações (mais vigilância, bloqueio de criadouros etc.).</p></li>
+</ul>
+<p><strong>e) Limitações e cuidados</strong><br />
+Nos processos pontuais espaço-temporais (STEP), a interpretação depende de correções de exposição, escolhas de escala e tratamento de bordas; além disso, são modelos voltados a padrões e dinâmica, não a causalidade direta. Observe:</p>
+<ul class="simple">
+<li><p><strong>Exposição importa.</strong> Áreas com mais gente tendem a ter mais eventos. Sem ajustar por população/fluxo, confunde-se movimento com risco.</p></li>
+<li><p><strong>Escala bem definida.</strong> O que é “perto”: 200 m ou 2 km? 1 hora ou 1 semana? A escala muda os agrupamentos; declare e justifique sua escolha.</p></li>
+<li><p><strong>Bordas do estudo.</strong> Próximo às fronteiras espacial/temporal, a percepção de cluster pode distorcer; aplique correções de borda ou interprete com cautela.</p></li>
+<li><p><strong>Sinal ≠ causa.</strong> STEP revela onde/quando e como os eventos se agregam; não explica por quê. Para causalidade, use modelos com hipóteses substantivas e testes apropriados.</p></li>
+<li><p><strong>Custo e calibração.</strong> Modelos com memória (Hawkes) e mapeamento com incerteza (LGCP) exigem computação e calibração cuidadosa (parâmetros, separação treino–teste).</p></li>
+</ul>
+<p><strong>f) Abordagens de referência</strong><br />
+Os modelos a seguir descrevem a intensidade de eventos no espaço-tempo e sua dinâmica (propagação ou inibição), com ou sem heterogeneidade latente.</p>
+<ul class="simple">
+<li><p><strong>Poisson inhomogêneo E–T (com offset):</strong> modela a intensidade média <span class="math notranslate nohighlight">\(\lambda(x,t)\)</span> em função de covariáveis e exposição (população/fluxo). Entrega: mapas/cronogramas de risco esperado.</p></li>
+<li><p><strong>Log-Gaussian Cox Process (LGCP) E–T:</strong> a intensidade é estocástica (log-gaussiana), capturando heterogeneidade latente e incerteza. Entrega: <span class="math notranslate nohighlight">\(\hat{\lambda}(x,t)\)</span> com intervalos; melhores mapas de risco quando há superdispersão.</p></li>
+<li><p><strong>Processos Hawkes / epidêmicos E–T (intensidade condicional):</strong> capturam propagação; eventos recentes elevam (ou inibem) o risco ao redor por certo tempo. Entrega: parâmetros com leitura prática (alcance, meia-vida, força de excitação) e simulações “e se…”.</p></li>
+<li><p><strong>Famílias de clusterização de Neyman–Scott/Matérn:</strong> geram aglomerados por “sementes” latentes; úteis para diagnóstico de estrutura de clusters. Entrega: tamanho/compacidade de clusters, ajuste de segunda ordem.</p></li>
+<li><p><strong>Estatísticas de segunda ordem E–T (K, Knox, Mantel):</strong> testes/diagnósticos de clustering espaço-temporal acima do acaso. Entrega: evidência (ou não) de aglomeração nas escalas analisadas.</p></li>
+</ul>
+</section>
+<section id="regressao-em-painel-com-dependencia-espacial">
+<h3>5.1.3 Regressão em Painel com Dependência Espacial<a class="headerlink" href="#regressao-em-painel-com-dependencia-espacial" title="Link to this heading">#</a></h3>
+<p>A Regressão em Painel com Dependência Espacial analisa indicadores observados repetidamente nas mesmas áreas (bairros, municípios, escolas, regiões) e, ao mesmo tempo, reconhece que vizinhos se influenciam. Em vez de uma foto estática, acompanhamos um filme: como cada área evolui no tempo e como mudanças em um lugar transbordam para os arredores. Essa abordagem permite distinguir o que é característica permanente de cada unidade (geografia, perfil socioeconômico, cultura institucional) do que de fato mudou no período analisado.<br />
+Na prática, o modelo estima quanto uma intervenção ou fator local altera o indicador na própria área e quanto desse efeito se propaga para as áreas vizinhas (spillover), além de separar impactos imediatos daqueles que se acumulam com o tempo. Com isso, evita-se atribuir a uma área méritos ou culpas que, na verdade, refletem influências externas; e obtém-se uma leitura mais fiel do efeito direto, do efeito indireto e do efeito total sobre a rede de unidades conectadas.</p>
+<p><strong>a) Como funciona</strong><br />
+Em painéis com dependência espacial, combinamos três peças — tempo, espaço e condições locais — numa mesma equação.<br />
+Primeiro, há o eixo do tempo: observamos o indicador <span class="math notranslate nohighlight">\(y_{it}\)</span> repetidamente para a mesma área <span class="math notranslate nohighlight">\(i\)</span>. Isso permite comparar cada área consigo mesma em momentos diferentes, capturando persistência e reduzindo vieses de fatores fixos (características que não mudam rápido).<br />
+Depois vem o espaço: definimos quem influencia quem por meio de uma matriz de vizinhança <span class="math notranslate nohighlight">\(W=[w_{ij}]\)</span>. Essa matriz codifica a intensidade da ligação entre áreas (contiguidade, distância, <span class="math notranslate nohighlight">\(k\)</span>-vizinhos, fluxos, rede) e produz, para cada <span class="math notranslate nohighlight">\(i\)</span>, a “média ponderada dos vizinhos” <span class="math notranslate nohighlight">\((Wy)_{it}=\sum_j w_{ij}y_{jt}\)</span>.<br />
+Por fim, juntamos tudo no modelo espaço–tempo. Um formato simples e bastante usado é:</p>
+<div class="math notranslate nohighlight">
+\[
+y_{it}
+=\underbrace{\phi\,y_{i,t-1}}_{\text{memória no tempo}}
++\underbrace{\rho\,(Wy)_{it}}_{\text{efeito dos vizinhos}}
++\underbrace{\mathbf{x}_{it}^\top\beta}_{\text{condições locais}}
++\underbrace{\alpha_i+\tau_t}_{\text{efeitos fixos}}
++\varepsilon_{it}.
+\]</div>
+<p><span class="math notranslate nohighlight">\(\phi\)</span> mede persistência temporal (efeitos que demoram a se completar).<br />
+<span class="math notranslate nohighlight">\(\rho\)</span> mede spillovers espaciais: quanto os vizinhos “puxam/empurram” <span class="math notranslate nohighlight">\(y_{it}\)</span>.<br />
+<span class="math notranslate nohighlight">\(\mathbf{x}_{it}\)</span> reúne fatores locais (renda, políticas, infraestrutura).<br />
+<span class="math notranslate nohighlight">\(\alpha_i\)</span> e <span class="math notranslate nohighlight">\(\tau_t\)</span> controlam níveis próprios da área e choques comuns do período.</p>
+<p>A intuição é direta: políticas, choques econômicos ou surtos não param na fronteira. O termo espacial <span class="math notranslate nohighlight">\(\rho (Wy)_{it}\)</span> captura esse transbordamento; o termo temporal <span class="math notranslate nohighlight">\(\phi y_{i,t-1}\)</span> captura a memória do próprio indicador. Com a matriz <span class="math notranslate nohighlight">\(W\)</span> bem definida e os efeitos fixos explicitados, o modelo consegue separar impacto local (na própria área) de impacto indireto (nos vizinhos) e distinguir efeitos imediatos dos que se acumulam ao longo do tempo.</p>
+<p><strong>b) Essência matemática</strong></p>
+<p><strong>Quem influencia quem (matriz de vizinhança <span class="math notranslate nohighlight">\(W\)</span>).</strong><br />
+A vizinhança é codificada por uma matriz <span class="math notranslate nohighlight">\(W=[w_{ij}]\)</span>. Colocamos <span class="math notranslate nohighlight">\(w_{ij}&gt;0\)</span> quando a área <span class="math notranslate nohighlight">\(j\)</span> é “vizinha” da área <span class="math notranslate nohighlight">\(i\)</span> — por contiguidade, distância, <span class="math notranslate nohighlight">\(k\)</span>-vizinhos, fluxos ou uma rede conhecida —, e <span class="math notranslate nohighlight">\(w_{ij}=0\)</span> quando não há ligação. É comum padronizar por linha (cada linha soma 1), de modo que</p>
+<div class="math notranslate nohighlight">
+\[
+(Wy)_{it}=\sum_j w_{ij}\,y_{jt}
+\]</div>
+<p>vire, literalmente, a média ponderada do que os vizinhos de <span class="math notranslate nohighlight">\(i\)</span> estão fazendo no tempo <span class="math notranslate nohighlight">\(t\)</span>.</p>
+<p><strong>Como isso entra no modelo (transbordamento espacial).</strong><br />
+Com <span class="math notranslate nohighlight">\(W\)</span> definido, conectamos vizinhos, condições locais e níveis fixos em uma equação simples:</p>
+<div class="math notranslate nohighlight">
+\[
+y_{it}
+=\rho\,(Wy)_{it}
++\mathbf{x}_{it}^\top\beta
++\alpha_i+\tau_t
++\varepsilon_{it}.
+\]</div>
+<p>Aqui, <span class="math notranslate nohighlight">\(\rho\)</span> mede quanto os vizinhos “puxam” <span class="math notranslate nohighlight">\(y_{it}\)</span>: se <span class="math notranslate nohighlight">\(\rho&gt;0\)</span>, valores altos nos vizinhos tendem a elevar <span class="math notranslate nohighlight">\(y_{it}\)</span>; se <span class="math notranslate nohighlight">\(\rho&lt;0\)</span>, há compensação/substituição. O termo <span class="math notranslate nohighlight">\(\mathbf{x}_{it}^\top\beta\)</span> capta características locais; <span class="math notranslate nohighlight">\(\alpha_i\)</span> e <span class="math notranslate nohighlight">\(\tau_t\)</span> representam, respectivamente, níveis próprios da área e choques comuns do período.</p>
+<p><strong>Por que não basta olhar <span class="math notranslate nohighlight">\(\beta\)</span> (impactos <span class="math notranslate nohighlight">\(\ne\)</span> coeficientes).</strong><br />
+Quando há transbordamento, um choque em <span class="math notranslate nohighlight">\(\mathbf{x}_{it}\)</span> não para em <span class="math notranslate nohighlight">\(i\)</span>: ele se espalha para os vizinhos (<span class="math notranslate nohighlight">\(\rho W\)</span>), volta pelos vizinhos dos vizinhos (<span class="math notranslate nohighlight">\(\rho^2 W^2\)</span>), e assim sucessivamente. Esse “eco” é sintetizado pela <strong>matriz multiplicadora espacial</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+(I-\rho W)^{-1}=I+\rho W+\rho^2 W^2+\cdots
+\]</div>
+<p>Assim, o impacto de uma pequena mudança em <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> é</p>
+<div class="math notranslate nohighlight">
+\[
+\underbrace{(I-\rho W)^{-1}}_{\text{propagação na rede}}\ \times\ \beta,
+\]</div>
+<p>do qual extraímos três números para relatar com clareza:</p>
+<ul class="simple">
+<li><p><strong>Direto:</strong> média dos elementos diagonais (efeito do <span class="math notranslate nohighlight">\(x\)</span> de <span class="math notranslate nohighlight">\(i\)</span> sobre o próprio <span class="math notranslate nohighlight">\(y_i\)</span>);</p></li>
+<li><p><strong>Indireto (spillover):</strong> média dos elementos fora da diagonal (efeito do <span class="math notranslate nohighlight">\(x\)</span> de <span class="math notranslate nohighlight">\(i\)</span> sobre os vizinhos);</p></li>
+<li><p><strong>Total:</strong> direto <span class="math notranslate nohighlight">\(+\)</span> indireto (o que importa para a decisão).</p></li>
+</ul>
+<p><strong>Quando existe memória temporal (curto vs. longo prazo).</strong><br />
+Muitos indicadores lembram do passado. Para isso, incluímos uma defasagem temporal:</p>
+<div class="math notranslate nohighlight">
+\[
+y_{it}
+=\phi\,y_{i,t-1}
++\rho\,(Wy)_{it}
++\mathbf{x}_{it}^\top\beta
++\alpha_i+\tau_t
++\varepsilon_{it}.
+\]</div>
+<p>Agora há dois mecanismos: o espacial <span class="math notranslate nohighlight">\((I-\rho W)^{-1}\)</span> (espalha na rede) e o temporal (com acúmulo ao longo do tempo). Se a mudança em <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> persiste nos períodos seguintes (como uma política mantida), o <strong>impacto de longo prazo</strong> (estado estacionário) aproxima-se de</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Impacto de longo prazo} \;\approx\; (I-\rho W)^{-1}\times \frac{1}{1-\phi}\times \beta,
+\]</div>
+<p>enquanto o <strong>curto prazo</strong> é o efeito no período corrente (sem o fator <span class="math notranslate nohighlight">\(1/(1-\phi)\)</span>).</p>
+<p><strong>Resumo em português claro.</strong><br />
+<span class="math notranslate nohighlight">\((Wy)_{it}\)</span> é “o que os vizinhos estão fazendo” ao redor de <span class="math notranslate nohighlight">\(i\)</span>; <span class="math notranslate nohighlight">\(\rho\)</span> diz quanto isso respinga em <span class="math notranslate nohighlight">\(i\)</span> (transbordamento). Não reporte só <span class="math notranslate nohighlight">\(\beta\)</span>: comunique impactos direto, indireto e total, que já incorporam o eco na rede. Se houver memória temporal (<span class="math notranslate nohighlight">\(\phi\)</span>), separe efeito imediato do efeito acumulado — o longo prazo tende a ser maior porque se espalha e se acumula.</p>
+<p><strong>c) Aplicações comuns</strong><br />
+Em painéis areais com interação entre vizinhos, a regressão em painel espacial quantifica efeitos locais, spillovers e sua dinâmica no tempo, informando políticas que atravessam fronteiras administrativas. Exemplos:</p>
+<ul class="simple">
+<li><p>Políticas públicas municipais: impacto de um programa de iluminação sobre a segurança do próprio bairro e dos vizinhos.</p></li>
+<li><p>Saúde coletiva: efeito de vacinação ou atenção básica sobre hospitalizações, medindo efeitos diretos e indiretos.</p></li>
+<li><p>Economia regional: como investimentos ou choques de emprego se propagam por cidades conectadas.</p></li>
+<li><p>Educação: impacto de recursos escolares em redes de municípios próximos.</p></li>
+<li><p>Meio ambiente: qualidade do ar/água em bacias contíguas e efeitos cruzados entre municípios.</p></li>
+</ul>
+<p><strong>d) O que você obtém</strong><br />
+Na regressão em painel com dependência espacial, você obtém:</p>
+<ul class="simple">
+<li><p>Efeitos <strong>direto</strong>, <strong>indireto (spillover)</strong> e <strong>total</strong> das variáveis explicativas: quanto muda na própria área, quanto muda nas vizinhas e a soma dos dois.</p></li>
+<li><p>(Quando há dinâmica) <strong>Impactos de curto e de longo prazo</strong>, mostrando o que aparece já e o que se acumula com o tempo.</p></li>
+<li><p><strong>Mapas/resumos</strong> que ajudam a visualizar onde os efeitos são mais fortes.</p></li>
+<li><p><strong>Texto interpretativo</strong> que traduza os números em mensagens de política: “o programa X reduziu Y em média em 3% na própria cidade e 1% nas vizinhas conectadas”.</p></li>
+</ul>
+<p><strong>e) Limitações e cuidados</strong><br />
+Na regressão em painel com dependência espacial, a credibilidade dos resultados depende de uma vizinhança bem definida, de impactos corretamente interpretados (em vez de coeficientes brutos) e de um tratamento explícito para choques de período e persistência temporal. Atenção aos seguintes pontos:</p>
+<ul class="simple">
+<li><p><strong>Matriz de vizinhança <span class="math notranslate nohighlight">\(W\)</span> bem fundamentada.</strong> Defina quem é vizinho de quem e por quê (contiguidade, distância, <span class="math notranslate nohighlight">\(k\)</span>-vizinhos, fluxos, rede). Uma <span class="math notranslate nohighlight">\(W\)</span> ad hoc compromete a interpretação dos spillovers.</p></li>
+<li><p><strong>Coeficiente ≠ impacto.</strong> Com termo espacial, não leia <span class="math notranslate nohighlight">\(\beta\)</span> como efeito. Relate impactos direto, indireto (spillover) e total, via multiplicador <span class="math notranslate nohighlight">\((I-\rho W)^{-1}\)</span>.</p></li>
+<li><p><strong>Choques comuns no tempo.</strong> Anos “atípicos” (crise, pandemia) pedem efeitos de período; ignorá-los pode inflar artificialmente <span class="math notranslate nohighlight">\(\rho\)</span>.</p></li>
+<li><p><strong>Persistência temporal importa.</strong> Se <span class="math notranslate nohighlight">\(y\)</span> tem memória, modele-a (defasagem temporal, termos dinâmicos) para não confundir inércia com efeito espacial.</p></li>
+<li><p><strong>Custo computacional.</strong> Em muitos locais/conexões, a estimação pesa. Considere tornar <span class="math notranslate nohighlight">\(W\)</span> mais esparsa, usar aproximações e métodos eficientes (p.ex., GMM/IV, rotinas para matrizes esparsas).</p></li>
+</ul>
+<p><strong>f) Abordagens de referência</strong><br />
+Os modelos listados quantificam efeitos locais e spillovers entre áreas ao longo do tempo, distinguindo impactos de curto e de longo prazo.</p>
+<ul class="simple">
+<li><p><strong>SAR (Spatial Autoregressive) / SEM (Spatial Error) / SDM (Spatial Durbin Model)</strong><br />
+SAR: defasagem espacial na dependente; SEM: erro espacialmente correlacionado; SDM: inclui defasagem nas covariáveis (spillovers nas explicativas).<br />
+<strong>Entrega:</strong> impactos direto/indireto/total (não só coeficientes), mapas de efeitos.</p></li>
+<li><p><strong>SAC/SARAR (SAR + SEM)</strong><br />
+Combina lag na dependente e erro espacial nos resíduos; robusto a fontes múltiplas de dependência.<br />
+<strong>Entrega:</strong> impactos + diagnóstico de ruído espacial remanescente.</p></li>
+<li><p><strong>Painéis dinâmicos espaciais (SDPD/SDM dinâmico)</strong><br />
+Incluem memória temporal (<span class="math notranslate nohighlight">\(y_{i,t-1}\)</span>) e termos espaciais (lag de <span class="math notranslate nohighlight">\(y\)</span> e/ou <span class="math notranslate nohighlight">\(x\)</span>); estimados via MLE, QMLE, IV/GMM.<br />
+<strong>Entrega:</strong> curto vs. longo prazo e spillovers na rede.</p></li>
+<li><p><strong>Modelos com efeitos fixos/aleatórios e matriz <span class="math notranslate nohighlight">\(W\)</span> flexível</strong><br />
+Incorporam heterogeneidade de área e escolhem <span class="math notranslate nohighlight">\(W\)</span> por contiguidade, distância, <span class="math notranslate nohighlight">\(k\)</span>-vizinhos ou redes/fluxos.<br />
+<strong>Entrega:</strong> inferência de políticas com robustez a <span class="math notranslate nohighlight">\(W\)</span>.</p></li>
+</ul>
+</section>
+<section id="clustering-agrupamento-espaco-temporal">
+<h3>5.1.4 Clustering (Agrupamento) Espaço-Temporal<a class="headerlink" href="#clustering-agrupamento-espaco-temporal" title="Link to this heading">#</a></h3>
+<p>Clustering espaço-temporal é uma família de métodos que descobre concentrações de eventos no mapa e no tempo. Pense em “bolsões” onde muita coisa acontece no mesmo lugar e num período parecido: um surto de dengue em alguns quarteirões durante maio e junho, uma sequência de furtos perto de estações em horários de pico, ou vários focos de queimadas numa mesma região ao longo de um fim de semana.
+O objetivo não é explicar a causa (isso vem depois), e sim mostrar onde e quando há acúmulo (hotspots) ou regularidade/inibição (lugares que quase nunca concentram eventos).</p>
+<p><strong>a) Como funciona</strong><br />
+Há duas maneiras clássicas de enxergar o agrupamento espaço-temporal.<br />
+A primeira compara o padrão observado com o “azar”. A pergunta é direta: dadas as posições e os horários dos eventos, o arranjo parece mais concentrado do que seria por simples acaso? Para responder, define-se um cenário nulo (eventos aleatórios no espaço e no tempo, ou proporcionais à população/fluxo) e mede-se quanta vizinhança evento–evento existe. Uma forma simples é contar pares <span class="math notranslate nohighlight">\((i,j)\)</span> que estão perto no mapa (distância <span class="math notranslate nohighlight">\(\le r_s\)</span>) e perto no relógio (defasagem <span class="math notranslate nohighlight">\(\le r_t\)</span>); compara-se esse total com o esperado sob o nulo. Se o observado excede sistematicamente o esperado, há indício de cluster nas escalas <span class="math notranslate nohighlight">\((r_s,r_t)\)</span>. Essa linha produz um sinal com confiança estatística (p-valores, significância ajustada).<br />
+A segunda foca em proximidade/densidade, sem formular um teste formal. Aqui, pontos suficientemente próximos se agregam e formam um cluster; pontos isolados viram ruído. Em termos contínuos, estimamos uma intensidade <span class="math notranslate nohighlight">\(\hat{\lambda}(x,y,t)\)</span> — pense em um “mapa-calendário de calor” — e identificamos os picos dessa intensidade como hotspots. O resultado é intuitivo e útil para operação: indica onde/quando a concentração é maior, com controle explícito da escala via larguras de banda (no espaço e no tempo) ou parâmetros de vizinhança.<br />
+Em resumo: a abordagem por teste responde “há mais concentração do que o acaso permitiria?” e oferece significância; a abordagem por densidade responde “onde/quando estão os picos?” e oferece localização e escala dos agrupamentos. Idealmente, usa-se ambas de modo complementar: testar para confirmar o sinal e estimar intensidade para descrever o hotspot em detalhe.</p>
+<p><strong>b) Essência matemática</strong><br />
+Antes de qualquer algoritmo, fixamos o objeto: a intensidade espaço-temporal <span class="math notranslate nohighlight">\(\lambda(x,y,t)\)</span>, que representa o ritmo esperado de eventos por unidade de área e de tempo em cada ponto <span class="math notranslate nohighlight">\((x,y,t)\)</span>. Pense nela como um mapa–calendário de propensão: valores altos indicam maior chance de observar eventos naquela região e período. Em termos operacionais, se olhamos uma área <span class="math notranslate nohighlight">\(A\)</span> durante um intervalo <span class="math notranslate nohighlight">\(\Delta t\)</span>, o número esperado de eventos é, aproximadamente,</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbb{E}[N(A,\Delta t)] \approx \int_{\Delta t}\!\!\int_A \lambda(x,y,t)\,dx\,dy\,dt.
+\]</div>
+<p>Isso também permite um risco relativo imediato:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathrm{RR}(x,y,t)=\frac{\lambda(x,y,t)}{\lambda_{\text{ref}}}
+\quad\text{(por exemplo, usando a mediana como referência).}
+\]</div>
+<p>A partir desse objeto, há dois caminhos complementares para detectar agrupamentos.</p>
+<p><strong>“Há mais pares próximos do que o acaso permitiria?” (teste por pares)</strong><br />
+Aqui, a pergunta é: o padrão observado está mais concentrado (no espaço e no tempo) do que esperaríamos sob um cenário nulo? Para responder com clareza:</p>
+<ul>
+<li><p><strong>Defina a vizinhança.</strong> Escolha um raio espacial <span class="math notranslate nohighlight">\(r_s\)</span> (ex.: 300 m) e uma janela temporal <span class="math notranslate nohighlight">\(r_t\)</span> (ex.: 7 dias). Para cada par <span class="math notranslate nohighlight">\((i,j)\)</span>, calcule a distância espacial <span class="math notranslate nohighlight">\(d_s(i,j)\)</span> e a defasagem temporal <span class="math notranslate nohighlight">\(d_t(i,j)\)</span>.</p></li>
+<li><p><strong>Conte os pares próximos.</strong></p>
+<div class="math notranslate nohighlight">
+\[
+  C_{\text{obs}}=\#\{(i,j):\ d_s(i,j)\le r_s\ \text{e}\ d_t(i,j)\le r_t\}.
+  \]</div>
+</li>
+<li><p><strong>Construa o “mundo ao acaso”.</strong> Gere <span class="math notranslate nohighlight">\(B\)</span> reamostragens que quebram o padrão mas preservam o essencial.<br />
+– Nulo simples: embaralhe tempos ou posições.<br />
+– Nulo com exposição: embaralhe respeitando população/fluxo, para não confundir movimento com risco.<br />
+Em cada reamostragem <span class="math notranslate nohighlight">\(b\)</span>, recalcule <span class="math notranslate nohighlight">\(C_b\)</span>.</p></li>
+<li><p><strong>Compare observado vs. esperado.</strong></p>
+<div class="math notranslate nohighlight">
+\[
+  p=\frac{\#\{\,C_b \ge C_{\text{obs}}\,\}+1}{B+1}.
+  \]</div>
+<p><span class="math notranslate nohighlight">\(p\)</span> pequeno indica excesso de pares próximos <span class="math notranslate nohighlight">\(\Rightarrow\)</span> evidência de cluster nas escalas <span class="math notranslate nohighlight">\((r_s,r_t)\)</span>.</p>
+</li>
+</ul>
+<p><strong>Boas práticas.</strong> Se você testa muitas escalas <span class="math notranslate nohighlight">\((r_s,r_t)\)</span> ou muitos locais/tempos, ajuste para múltiplas comparações (p.ex., FDR). E lembre que bordas espacial/temporal reduzem pares possíveis perto do limite — aplique correção de borda ou interprete com cautela.</p>
+<p><strong>“Onde estão os picos de intensidade?” (densidade/“calor”)</strong><br />
+Em vez de testar pares, você pode estimar <span class="math notranslate nohighlight">\(\lambda\)</span> diretamente por suavização e procurar picos — os hotspots. Uma versão comum é o estimador kernel espaço-temporal:</p>
+<div class="math notranslate nohighlight">
+\[
+\hat{\lambda}(x,y,t)
+=\frac{1}{h_s^{2}\,h_t}
+\sum_{i=1}^{n}
+K_s\!\Big(\frac{\lVert (x,y)-(x_i,y_i)\rVert}{h_s}\Big)\,
+K_t\!\Big(\frac{|t-t_i|}{h_t}\Big)\Big/\mathrm{offset}(x,y,t),
+\]</div>
+<p>onde <span class="math notranslate nohighlight">\(h_s\)</span> e <span class="math notranslate nohighlight">\(h_t\)</span> são larguras de banda (quanto suavizar no espaço e no tempo), <span class="math notranslate nohighlight">\(K_s\)</span> e <span class="math notranslate nohighlight">\(K_t\)</span> são núcleos que decaem com a distância/defasagem, e o offset corrige por exposição (população, mobilidade, fluxo).<br />
+A leitura é direta: picos de <span class="math notranslate nohighlight">\(\hat{\lambda}\)</span> correspondem a hotspots. Você pode padronizar (z-scores ou <span class="math notranslate nohighlight">\(\hat{\lambda}/\text{mediana}\)</span>) e, se desejar confiança estatística, usar permutações para comparar o pico observado com o que ocorreria sob um nulo equivalente.<br />
+<strong>Escolhas que importam.</strong> <span class="math notranslate nohighlight">\(h_s\)</span> e <span class="math notranslate nohighlight">\(h_t\)</span> definem a escala do que será chamado de “cluster”: menores <span class="math notranslate nohighlight">\(\Rightarrow\)</span> surtos curtos e locais; maiores <span class="math notranslate nohighlight">\(\Rightarrow\)</span> padrões persistentes e amplos.</p>
+<p><strong>Síntese prática</strong><br />
+A abordagem por teste responde “há cluster?” e fornece significância na escala analisada.<br />
+A abordagem por densidade responde “onde/quando?” e descreve extensão e intensidade dos agrupamentos.<br />
+Juntas, oferecem um quadro completo: confirmam o sinal e localizam o hotspot com a escala adequada, sempre controlando por exposição e respeitando bordas.</p>
+<p><strong>c) Aplicações comuns</strong><br />
+Quando o objetivo é detectar hotspots e surtos — isto é, identificar onde e quando a concentração de eventos foge do esperado ao acaso — o agrupamento E-T oferece sinais diretos para priorização operacional e vigilância. Exemplos:</p>
+<ul class="simple">
+<li><p>Saúde: surtos localizados de arboviroses, intoxicações, síndromes respiratórias; “quando e onde” focar agentes e insumos.</p></li>
+<li><p>Segurança pública: horários e áreas de maior furto/roubo; apoio a rondas direcionadas e iluminação pública.</p></li>
+<li><p>Meio ambiente: focos de queimadas, deslizamentos após chuvas intensas, mortalidade de fauna.</p></li>
+<li><p>Mobilidade/trânsito: pontos e horários de maior incidência de acidentes; impacto de eventos (shows, jogos).</p></li>
+<li><p>Serviços urbanos: falhas de rede elétrica/água concentradas em bairros e janelas de tempo específicas.</p></li>
+</ul>
+<p><strong>d) O que você obtém</strong><br />
+No agrupamento espaço-temporal, você obtém:</p>
+<ul class="simple">
+<li><p>Mapa de hotspots com rótulos claros: lugar, período (início–fim), duração e intensidade relativa (“este hotspot tem <span class="math notranslate nohighlight">\(\sim 2\times\)</span> mais eventos do que áreas similares”).</p></li>
+<li><p>Cronograma mostrando quando cada hotspot começou e terminou.</p></li>
+<li><p>Sinal de confiança, quando houver teste: “baixo/médio/alto” (ou p-valor simples de entender).</p></li>
+<li><p>Texto curto de interpretação: “Concentração de casos no bairro X entre 12/05 e 03/06; pico em 24/05; recomenda-se ação Y.”</p></li>
+</ul>
+<p><strong>e) Limitações e cuidados</strong><br />
+No agrupamento espaço-temporal, a leitura de hotspots depende fortemente de escolhas de escala, correções de exposição e tratamento de bordas; além disso, o método é descritivo — aponta onde/quando, não por que. Observe:</p>
+<ul class="simple">
+<li><p><strong>Escala manda:</strong> “Perto” é quanto? 300 m ou 3 km? 2 horas ou 2 dias? Escalas mal escolhidas mudam o desenho dos clusters.</p></li>
+<li><p><strong>Exposição:</strong> lugares com mais gente tendem a ter mais eventos. Sem corrigir por população/fluxo, confunde-se movimento com risco.</p></li>
+<li><p><strong>Bordas do mapa:</strong> áreas na fronteira podem parecer menos concentradas porque parte dos eventos “cai fora” da janela observada.</p></li>
+<li><p><strong>Não é causa:</strong> clustering indica onde/quando, mas não o porquê. Para isso, entram modelos explicativos (Poisson/LGCP, intensidade condicional).</p></li>
+<li><p><strong>Varia no tempo:</strong> hotspots mudam; repita a análise periodicamente.</p></li>
+</ul>
+<p><strong>f) Abordagens de referência</strong><br />
+Os métodos seguintes detectam concentrações espaço-temporais por testes contra nulos ou por densidade, destacando janelas críticas e, quando aplicável, a significância dos achados.</p>
+<ul class="simple">
+<li><p><strong>Varredura espaço-temporal (Space-Time Scan; SaTScan)</strong><br />
+Procura janelas cilíndricas (área × duração) com excesso de casos vs. nulo (com/sem ajuste por população).<br />
+<strong>Entrega:</strong> hotspots com início–fim, risco relativo e significância (ajuste para múltiplas janelas).</p></li>
+<li><p><strong>ST-DBSCAN / HDBSCAN E-T (densidade no espaço e no tempo)</strong><br />
+Agrupa eventos por proximidade espaço-temporal; não exige forma pré-definida.<br />
+<strong>Entrega:</strong> clusters + ruído; útil para monitoramento operacional e triagem.</p></li>
+<li><p><strong>KDE espaço-temporal (núcleo) com picos/hotspots</strong><br />
+Estima <span class="math notranslate nohighlight">\(\hat{\lambda}(x,t)\)</span> suavizada; picos são áreas/tempos quentes; significância via permutações.<br />
+<strong>Entrega:</strong> mapas de calor E-T e cronogramas de hotspots.</p></li>
+<li><p><strong>LISA/Getis-Ord com janelas temporais</strong><br />
+Indicadores locais de associação (hot/cold spots) aplicados por janelas de tempo.<br />
+<strong>Entrega:</strong> hot/cold spots locais e sua evolução.</p></li>
+<li><p><strong>Testes por pares (Knox/Mantel) com múltiplas escalas <span class="math notranslate nohighlight">\((r_s,r_t)\)</span></strong><br />
+Quantificam excesso de pares próximos no espaço e no tempo.<br />
+<strong>Entrega:</strong> evidência de cluster nas escalas testadas (com FDR/correções).</p></li>
+</ul>
+</section>
+<section id="sintese-dos-principais-modelos-espaco-temporais">
+<h3>5.1.5 Síntese dos principais modelos espaço-temporais<a class="headerlink" href="#sintese-dos-principais-modelos-espaco-temporais" title="Link to this heading">#</a></h3>
+<p>Nesta subseção reunimos, de forma organizada, os principais modelos espaço-temporais apresentados no capítulo. Para orientar a leitura e apoiar escolhas metodológicas, apresentamos dois quadros complementares: primeiro, um quadro comparativo detalhado (Quadro 1), agora em formato retrato — com os modelos nas colunas e os critérios nas linhas —, que explicita a pergunta que cada modelo responde, o tipo de dado esperado, a ideia central, as entradas mínimas, as saídas, quando usar e as armadilhas; em seguida, um guia rápido (Quadro 2), pensado como um “resumo de bolso” para decidir qual modelo usar conforme o objetivo da análise.</p>
+<p><strong>Quadro 1 — Comparação detalhada</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Critério \ Modelo</p></th>
+<th class="head"><p>Krigagem E-T (Geoestatística)</p></th>
+<th class="head"><p>Processos Pontuais E-T</p></th>
+<th class="head"><p>Econometria Espacial em Painel</p></th>
+<th class="head"><p>Clustering E-T</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Pergunta que responde</strong></p></td>
+<td><p>“Quanto vale <span class="math notranslate nohighlight">\(Y(\mathbf{s},t)\)</span> em locais/tempos não observados?”</p></td>
+<td><p>“Como/onde/quando os eventos ocorrem e com que risco?”</p></td>
+<td><p>“Quais efeitos explicam a variação no espaço-tempo? Há dinâmica e interdependência?”</p></td>
+<td><p>“Existem grupos/estruturas de concentração no espaço-tempo?”</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Dados típicos</strong></p></td>
+<td><p>Variáveis contínuas em pontos (estações) ao longo do tempo; covariáveis (altitude, uso do solo, distância do mar).</p></td>
+<td><p>Eventos <span class="math notranslate nohighlight">\((x,y,t)\)</span> (crimes, dengue, raios), com atributos e covariáveis (densidade, clima, uso do solo).</p></td>
+<td><p>Séries por área (bairros/municípios/zonas) em múltiplos períodos: <span class="math notranslate nohighlight">\(\{Y_{i,t},X_{i,t}\}\)</span> + matriz <span class="math notranslate nohighlight">\(W\)</span>.</p></td>
+<td><p>Contagens/taxas por área e tempo ou eventos <span class="math notranslate nohighlight">\((x,y,t)\)</span>.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Ideia central</strong></p></td>
+<td><p>Tratar <span class="math notranslate nohighlight">\(Y(\mathbf{s},t)\)</span> como campo aleatório com tendência + correlação E-T; ajustar semivariograma E-T e krigar (com/sem covariáveis).</p></td>
+<td><p>Modelar intensidade <span class="math notranslate nohighlight">\(\lambda(\mathbf{x},t)\)</span>: empírico (p.ex. LGCP) ou mecanicista (intensidade condicional ao histórico <span class="math notranslate nohighlight">\(H_t\)</span>); detectar clusters/hotspots.</p></td>
+<td><p>Modelos de painel com termos espaciais (SAR/SEM/Durbin) e defasagens temporais; efeitos fixos/aleatórios; spillovers via <span class="math notranslate nohighlight">\(W\)</span>; tratar endogeneidade (IV/GMM).</p></td>
+<td><p>Detectar aglomerados: varredura E-T (scan), hotspot dinâmica, ST-DBSCAN/KDE para trajetórias ou perfis por local.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Entradas mínimas</strong></p></td>
+<td><p><span class="math notranslate nohighlight">\((x,y)\)</span>, <span class="math notranslate nohighlight">\(t\)</span>, valores de <span class="math notranslate nohighlight">\(Y\)</span>; (opcional) <span class="math notranslate nohighlight">\(X(\mathbf{s},t)\)</span>.</p></td>
+<td><p>Coordenadas, tempo, janela <span class="math notranslate nohighlight">\(\mathcal{W}\times\mathcal{T}\)</span>; (opcional) covariáveis.</p></td>
+<td><p>Séries por unidade areal, <span class="math notranslate nohighlight">\(W\)</span>, covariáveis (tempo-variantes e invariantes).</p></td>
+<td><p>Séries ou eventos; janelas E-T (raio, duração); controle de múltiplos testes.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Saídas</strong></p></td>
+<td><p>Mapas preditos por tempo; séries previstas por local; incerteza (variância, prob. de excedência).</p></td>
+<td><p>Mapas de risco e sua evolução; janelas/locais de surto com significância; recorrência/persistência.</p></td>
+<td><p>Efeitos marginais; spillovers (via <span class="math notranslate nohighlight">\(W\)</span>); impactos dinâmicos (curto vs. longo prazo).</p></td>
+<td><p>Clusters com significância; calendário de surtos (início/fim, duração); tipologias por local.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Quando usar</strong></p></td>
+<td><p>Há lacunas no espaço/tempo; precisa de superfícies contínuas e incerteza explícita.</p></td>
+<td><p>Dados discretos (eventos) e interesse em onde/quando o risco aumenta.</p></td>
+<td><p>Avaliação causal/comportamental; políticas públicas por área ao longo do tempo.</p></td>
+<td><p>Exploração/monitoramento de anomalias; priorização de ação e vigilância.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Armadilhas comuns</strong></p></td>
+<td><p>Assumir separabilidade sem diagnóstico; ignorar não-estacionariedade.</p></td>
+<td><p>Ignorar exposição (população em risco); confundir artefatos de amostragem com “hotspots”.</p></td>
+<td><p>Definir <span class="math notranslate nohighlight">\(W\)</span> sem justificativa; ignorar dependência residual e diagnósticos.</p></td>
+<td><p>Escolhas ad hoc de janelas → falsos positivos; não corrigir múltiplas comparações.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Quadro 2 — Guia rápido</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Tipo de modelo</p></th>
+<th class="head"><p>Objetivo principal</p></th>
+<th class="head"><p>Tipo de dado</p></th>
+<th class="head"><p>Exemplo típico</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Regressão em painel (econometria espacial)</p></td>
+<td><p>Estimar efeitos e dinâmica com interdependência espacial</p></td>
+<td><p>Séries por área (unidades areais + <span class="math notranslate nohighlight">\(W\)</span>)</p></td>
+<td><p>Evolução da renda municipal e impacto de políticas</p></td>
+</tr>
+<tr class="row-odd"><td><p>Krigagem espaço-temporal (geoestatística)</p></td>
+<td><p>Predizer em locais/tempos não observados com incerteza</p></td>
+<td><p>Variáveis contínuas em pontos + covariáveis</p></td>
+<td><p>Interpolação/nowcasting de chuva</p></td>
+</tr>
+<tr class="row-even"><td><p>Clusters e anomalias (scan/hotspots)</p></td>
+<td><p>Detectar concentrações e períodos atípicos</p></td>
+<td><p>Contagens/taxas ou eventos</p></td>
+<td><p>Surtos de doenças; janelas críticas</p></td>
+</tr>
+<tr class="row-odd"><td><p>Processos pontuais E-T</p></td>
+<td><p>Modelar ocorrência de eventos e risco</p></td>
+<td><p>Pontos <span class="math notranslate nohighlight">\((x,y,t)\)</span></p></td>
+<td><p>Ocorrência de raios, crimes, incêndios</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="outras-abordagens-emergentes">
+<h3>5.1.6 Outras Abordagens Emergentes<a class="headerlink" href="#outras-abordagens-emergentes" title="Link to this heading">#</a></h3>
+<p>Além dos quatro grupos principais, há procedimentos recentes que combinam modelagem estatística e aprendizado de máquina para lidar com dependências espaço-temporais complexas. Não são o foco deste material, mas vale conhecê-los em linhas gerais, sobretudo para cenários com grande volume de dados, múltiplas fontes e exigência de operação quase em tempo real.</p>
+<p><strong>Modelos bayesianos espaço-temporais (hierárquicos)</strong><br />
+<strong>Ideia central.</strong> Representar explicitamente três camadas de incerteza — dos dados, do processo (variação no espaço e no tempo) e dos parâmetros — em uma estrutura hierárquica.<br />
+<strong>Como funcionam (em síntese).</strong> Especifica-se um modelo em camadas (dados | processo | parâmetros) e obtêm-se distribuições a posteriori para quantidades de interesse: valores não observados, tendências, efeitos de covariáveis e medidas de risco. Ferramentas como INLA/SPDE e MCMC são usuais para inferência e predição, permitindo incorporar informação prévia (p. ex., conhecimento de especialistas ou resultados de estudos anteriores).<br />
+<strong>Quando são úteis.</strong> Dados esparsos ou ruidosos; necessidade de quantificar incerteza de forma completa; integração de fontes heterogêneas (estações, satélite, modelos numéricos).<br />
+<strong>Entregáveis típicos.</strong> Mapas e séries com intervalos de credibilidade, probabilidades de excedência e efeitos de covariáveis com incerteza propagada.<br />
+<strong>Atenção.</strong> Custo computacional mais elevado; necessidade de escolhas de priors e de ferramentas específicas; maior cuidado na verificação de convergência e na sensibilidade às suposições.</p>
+<p><strong>Redes neurais e séries temporais espaciais (aprendizado de máquina)</strong><br />
+<strong>Ideia central.</strong> Utilizar arquiteturas capazes de capturar padrões não lineares e interações complexas no espaço e no tempo — por exemplo, ConvLSTM, redes em grafos (GNNs) para dados em malhas/lattice ou redes urbanas, e Transformers com codificação espacial.<br />
+<strong>Força principal.</strong> Previsão e nowcasting em grande escala quando há muito dado e diversas covariáveis (imagens, produtos de satélite, mobilidade, clima), com capacidade de atualização frequente para operações quase em tempo real.<br />
+<strong>Entregáveis típicos.</strong> Predições rápidas e, em geral, acuradas em contextos ricos em dados; úteis para suporte operacional, monitoramento e detecção precoce de anomalias.<br />
+<strong>Atenção.</strong> Menor interpretabilidade e risco de overfitting; a validação deve respeitar separações no espaço e no tempo (evitando “vazamentos” de informação); a incerteza costuma ser menos transparente, exigindo técnicas adicionais (ensembles, quantile regression, MC dropout, entre outras).</p>
+</section>
+</section>
+<section id="etapas-basicas-de-uma-analise-espaco-temporal">
+<h2>5.2 Etapas básicas de uma análise espaço-temporal<a class="headerlink" href="#etapas-basicas-de-uma-analise-espaco-temporal" title="Link to this heading">#</a></h2>
+<p>Uma boa análise espaço-temporal não começa “escolhendo o método”. Começa organizando o problema para que os dados possam responder, de forma verificável, onde e quando algo acontece, por quê e com quanta incerteza. Abaixo, um roteiro em cinco etapas que aparece, em maior ou menor grau, em qualquer estudo — do exploratório ao avançado.</p>
+<p><strong>a) Coleta e estruturação dos dados</strong><br />
+Antes de modelar, é preciso saber o que se está medindo, onde e quando. Esta etapa garante que espaço e tempo estejam bem definidos e que as bases “conversem” entre si.</p>
+<ul class="simple">
+<li><p>Defina o domínio: área de estudo <span class="math notranslate nohighlight">\(A\)</span> com sistema de referência/projeção coerente (CRS) e janela temporal <span class="math notranslate nohighlight">\(T\)</span> com a resolução adequada (hora, dia, mês).</p></li>
+<li><p>Classifique o tipo de dado:</p>
+<ul>
+<li><p>Geoestatístico (variável contínua: chuva, temperatura, PM₂.₅).</p></li>
+<li><p>Eventos <span class="math notranslate nohighlight">\((x,y,t)\)</span> (crimes, casos, raios).</p></li>
+<li><p>Painel por área (unidade areal × tempo: bairros×meses, municípios×anos).</p></li>
+</ul>
+</li>
+<li><p>Integre e padronize no esquema mínimo <span class="math notranslate nohighlight">\((x,y,t)\)</span> + valores/atributos; trate faltantes/outliers; alinhe calendários e fusos; documente metadados (unidades, fonte, mudanças de instrumento).</p></li>
+<li><p>Considere exposição (população em risco): inclua offsets ou covariáveis (população, fluxo viário, intensidade de uso) para não confundir “muitos eventos” com “alto risco”.</p></li>
+</ul>
+<p><strong>b) Exploração visual e descritiva</strong><br />
+Agora, olhamos para os dados. O objetivo é identificar padrões e problemas óbvios antes de escolher um modelo.</p>
+<ul class="simple">
+<li><p>Mapas e séries: mapas temáticos (padrões espaciais), séries temporais (tendências/sazonalidade) e, quando possível, animações ou “cubos” E–T para ver movimento.</p></li>
+<li><p>Primeira ordem (nível médio):</p>
+<ul>
+<li><p>Para eventos, estime intensidade média <span class="math notranslate nohighlight">\(\lambda(\mathbf{x},t)\)</span> (p.ex., KDE espaço-temporal).</p></li>
+<li><p>Para variáveis contínuas, use médias móveis/sazonais.</p></li>
+</ul>
+</li>
+<li><p>Pistas de dependência: autocorrelação temporal, semelhança espacial entre vizinhos, períodos/áreas atípicos.</p></li>
+<li><p>Checagens úteis: separabilidade de primeira ordem <span class="math notranslate nohighlight">\(\lambda(\mathbf{x},t)=\rho(\mathbf{x})\mu(t)?\)</span>; efeitos de borda; MAUP (sensibilidade à agregação).</p></li>
+</ul>
+<p><strong>c) Escolha do tipo de modelo (guiada pela pergunta)</strong><br />
+Com os padrões em mente, a pergunta manda no método. O modelo deve combinar o tipo de dado com o objetivo.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pergunta/objetivo</p></th>
+<th class="head"><p>Tipo de modelo indicado</p></th>
+<th class="head"><p>O que você recebe</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Comparar áreas no tempo (efeitos, políticas, spillovers)</p></td>
+<td><p>Painel espacial (SAR/SEM/SDM; dinâmico se preciso)</p></td>
+<td><p>Efeitos diretos/indiretos e curto vs. longo prazo</p></td>
+</tr>
+<tr class="row-odd"><td><p>Interpolar/prever valores em locais/instantes sem medição</p></td>
+<td><p>Geoestatística E–T (krigagem)</p></td>
+<td><p>Mapas/séries com incerteza e prob. de excedência</p></td>
+</tr>
+<tr class="row-even"><td><p>Detectar hotspots e períodos críticos</p></td>
+<td><p>Clustering E–T (scan; ST-DBSCAN; KDE)</p></td>
+<td><p>Localização, duração, intensidade, significância</p></td>
+</tr>
+<tr class="row-odd"><td><p>Modelar ocorrência de eventos (mecanismo/propagação)</p></td>
+<td><p>Processos pontuais E–T (Poisson inhom., LGCP, Hawkes)</p></td>
+<td><p>Mapas de risco/intensidade; parâmetros de propagação</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Regra prática: comece simples e coerente com a pergunta; só aumente a complexidade se os diagnósticos pedirem.</p>
+<p><strong>d) Ajuste, interpretação e validação</strong><br />
+Aqui o modelo é estimado, os resultados são lidos e a qualidade é testada de modo honesto para espaço e tempo.</p>
+<ul class="simple">
+<li><p><strong>Geoestatística E–T:</strong> modele a tendência <span class="math notranslate nohighlight">\(m(\mathbf{s},t)\)</span>; estime semivariograma/covariância E–T; ajuste modelo (separável vs. não separável); krigue valores e variâncias.<br />
+<strong>Validação:</strong> cross-validation bloqueada no espaço e no tempo; métricas (RMSE/MAE, CRPS); resíduos sem autocorrelação.</p></li>
+<li><p><strong>Processos pontuais:</strong> estime <span class="math notranslate nohighlight">\(\lambda(\mathbf{x},t)\)</span>; avalie segunda ordem (funções <span class="math notranslate nohighlight">\(K\)</span>/par-correlação inhomogêneas); escolha Poisson inhom./LGCP (heterogeneidade) ou intensidade condicional (dinâmica).<br />
+<strong>Validação:</strong> envelopes de simulação, resíduos de intensidade, divisão temporal treino→teste.</p></li>
+<li><p><strong>Painel espacial:</strong> defina <span class="math notranslate nohighlight">\(W\)</span> (contiguidade, distância, rede); escolha SAR/SEM/SDM (dinâmico se houver persistência); estime (MLE/QMLE, IV/GMM); relate impactos direto/indireto/total.<br />
+<strong>Validação:</strong> testes LM, Hausman/Mundlak, sensibilidade a <span class="math notranslate nohighlight">\(W\)</span>, separação temporal em previsão.</p></li>
+<li><p><strong>Clustering E–T:</strong> calibre escalas e parâmetros (raios <span class="math notranslate nohighlight">\(r_s,r_t\)</span>, minPts, bandwidth <span class="math notranslate nohighlight">\(h_s,h_t\)</span>); rode scan/DBSCAN/KDE.<br />
+<strong>Validação:</strong> significância (scan), sensibilidade a escalas, correção de múltiplas comparações e bordas.</p></li>
+</ul>
+<p>Em todos os casos, comunique incerteza (intervalos/bandas, probabilidades, envelopes) e justifique escolhas de parâmetros/escala com análise de sensibilidade.</p>
+<p><strong>e) Comunicação dos resultados</strong><br />
+Por fim, conte a história de forma que quem decide consiga usar.</p>
+<ul class="simple">
+<li><p>Mapas de predição/risco com legendas claras e camadas de incerteza (variância, intervalos, prob. de excedência).</p></li>
+<li><p>Séries e comparativos por área/período; cronogramas de hotspots (início, pico, duração).</p></li>
+<li><p>Painéis interativos quando o público precisa navegar por tempo × espaço.</p></li>
+<li><p>Narrativa final: explicite pergunta, dados, método, achados, incerteza, limitações e implicações para decisão.</p></li>
+</ul>
+<p>Dica: decisões sólidas pedem reprodutibilidade. Versões de dados, scripts e parâmetros devem ficar registrados; assim, resultados podem ser explicados e auditados depois.</p>
+</section>
+<section id="ferramentas-e-softwares-para-modelagem-espaco-temporal">
+<h2>5.3 Ferramentas e Softwares para Modelagem Espaço-Temporal<a class="headerlink" href="#ferramentas-e-softwares-para-modelagem-espaco-temporal" title="Link to this heading">#</a></h2>
+<p>A escolha de ferramentas em análise espaço-temporal raramente é “ou/ou”. Na prática, combinamos SIG para organizar e inspecionar dados, linguagens para modelar e validar, e aplicativos especializados para tarefas pontuais (por exemplo, scan statistics). Nesta seção, cada subseção começa com um breve texto orientador — para situar quando usar — seguido de quadros de referência que facilitam a comparação.</p>
+<section id="ambientes-de-sig-e-analise-espacial">
+<h3>5.3.1 Ambientes de SIG e Análise Espacial<a class="headerlink" href="#ambientes-de-sig-e-analise-espacial" title="Link to this heading">#</a></h3>
+<p>Por que começar por aqui?<br />
+Os SIG são a porta de entrada para ver o fenômeno no mapa, conferir a qualidade dos dados e criar animações temporais. Eles organizam camadas, projeções e tempos de observação com baixo custo de entrada. Quando a análise exige inferência e validação estatística, o fluxo naturalmente migra para R/Python — mas o SIG permanece como hub de visualização e publicação.</p>
+<p>Quadro 3 — SIGs com suporte a tempo</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Software</p></th>
+<th class="head"><p>Características principais</p></th>
+<th class="head"><p>Nível de complexidade</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>QGIS (open source)</p></td>
+<td><p>Interface intuitiva; vetorial/raster; Temporal Controller nativo; ecossistema de plugins.</p></td>
+<td><p>Fácil</p></td>
+</tr>
+<tr class="row-odd"><td><p>ArcGIS Pro (comercial)</p></td>
+<td><p>Fluxos guiados; Space Time Cube (agregação 2D+tempo e análises dedicadas).</p></td>
+<td><p>Intermediário</p></td>
+</tr>
+<tr class="row-even"><td><p>gvSIG / TerrSet / SPRING</p></td>
+<td><p>Plataformas geográficas com recursos de visualização e análises temporais temáticas.</p></td>
+<td><p>Intermediário</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Comparação curta. QGIS é rápido para explorar e comunicar; ArcGIS Pro oferece workflows prontos (p. ex., cubos E–T); demais plataformas atendem nichos institucionais. Todas são ótimas antes da modelagem formal.</p>
+</section>
+<section id="linguagens-estatisticas-e-computacionais">
+<h3>5.3.2 Linguagens Estatísticas e Computacionais<a class="headerlink" href="#linguagens-estatisticas-e-computacionais" title="Link to this heading">#</a></h3>
+<p>Quando sair do SIG?<br />
+Sempre que a pergunta exigir modelagem, predição, inferência e validação, você precisará de uma linguagem. R destaca-se pela maturidade estatística e ecossistema acadêmico; Python brilha na integração com ML, dados massivos e entrega aplicada (APIs, dashboards). MATLAB é frequente em engenharia e sinais.</p>
+<p>Quadro 4 — Linguagens para modelagem E–T</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Linguagem</p></th>
+<th class="head"><p>Pontos fortes</p></th>
+<th class="head"><p>Usos típicos</p></th>
+<th class="head"><p>Pacotes/bibliotecas notáveis</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>R</p></td>
+<td><p>Vocação estatística; comunidade científica; integra com SIG</p></td>
+<td><p>Krigagem E–T, processos pontuais, painéis espaciais, scan</p></td>
+<td><p>sf; terra/stars; gstat; spTimer; INLA; spatstat; stpp; lgcp; smerc; SpatialEpi; spdep/spatialreg; splm</p></td>
+</tr>
+<tr class="row-odd"><td><p>Python</p></td>
+<td><p>Versátil; ML/IA; big data; dashboards</p></td>
+<td><p>Séries/grids E–T, previsão, aprendizado, produção</p></td>
+<td><p>geopandas; rasterio/rioxarray; xarray+dask; PySAL (esda, spreg); scikit-learn; statsmodels; pymc/cmdstanpy; PyTorch/TF</p></td>
+</tr>
+<tr class="row-even"><td><p>MATLAB</p></td>
+<td><p>Ambiente numérico estável</p></td>
+<td><p>Modelagem de sinais/processos; protótipos</p></td>
+<td><p>Toolboxes Mapping e Statistics &amp; ML</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Comparação curta. Geoestatística E–T, processos pontuais e scan: R é mais completo. Dados massivos, ML e entrega: Python. Prototipagem numérica: MATLAB.</p>
+</section>
+<section id="aplicativos-e-servicos-especializados">
+<h3>5.3.3 Aplicativos e Serviços Especializados<a class="headerlink" href="#aplicativos-e-servicos-especializados" title="Link to this heading">#</a></h3>
+<p>Por que usar ferramentas focadas?<br />
+Algumas tarefas — como detecção de clusters com significância ou extração de séries multitemporais de satélite — ficam mais seguras e eficientes com soluções dedicadas. Essas ferramentas complementam R/Python e não os substituem.</p>
+<p>Quadro 5 — Especializados</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Ferramenta</p></th>
+<th class="head"><p>O que faz bem</p></th>
+<th class="head"><p>Observações</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SaTScan</p></td>
+<td><p>Scan statistics espaço-temporais (Poisson/Binomial/Normal), <em>p</em>-values</p></td>
+<td><p>Integra com R/Python por scripts; padrão em vigilância</p></td>
+</tr>
+<tr class="row-odd"><td><p>Google Earth Engine (GEE)</p></td>
+<td><p>Séries temporais de satélite em escala planetária</p></td>
+<td><p>Excelente para covariáveis E–T; análise estatística fora do GEE</p></td>
+</tr>
+<tr class="row-even"><td><p>PostGIS (+ extensões)</p></td>
+<td><p>Consultas e gestão E–T em banco relacional</p></td>
+<td><p>Infra de dados; combine com R/Python para modelar</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Comparação curta. Precisa de clusters auditáveis? SaTScan. Raster multitemporal pesado? GEE. Operação contínua com versionamento de dados? PostGIS.</p>
+</section>
+<section id="qual-ferramenta-para-qual-objetivo">
+<h3>5.3.4 Qual ferramenta para qual objetivo?<a class="headerlink" href="#qual-ferramenta-para-qual-objetivo" title="Link to this heading">#</a></h3>
+<p>Como decidir rápido?<br />
+Pense no resultado que precisa: explorar, modelar, detectar hotspots, prever com incerteza, ou operacionalizar.</p>
+<ul class="simple">
+<li><p>Explorar/comunicar → SIG (QGIS/ArcGIS Pro): mapas, animações, story maps.</p></li>
+<li><p>Interpolar/prever com incerteza → R (gstat, spTimer, INLA) e Python (xarray/dask + implementações de krigagem).</p></li>
+<li><p>Eventos e risco → R (spatstat, stpp, lgcp, smerc/SaTScan); Python (PySAL + integrações).</p></li>
+<li><p>Painel espacial → R (spatialreg, splm) e Python (PySAL.spreg) com efeitos direto/indireto/total.</p></li>
+<li><p>Previsão/ML em larga escala → Python (DL, GNNs, ConvLSTM); incerteza explícita → R–INLA.</p></li>
+</ul>
+</section>
+<section id="interoperabilidade-e-fluxo-de-trabalho">
+<h3>5.3.5 Interoperabilidade e Fluxo de Trabalho<a class="headerlink" href="#interoperabilidade-e-fluxo-de-trabalho" title="Link to this heading">#</a></h3>
+<p>Por que isso importa?<br />
+Resultados confiáveis dependem de reprodutibilidade e de formatos que circulam bem entre ferramentas.</p>
+<ul class="simple">
+<li><p><strong>Formatos padrão:</strong> GeoPackage (vetor), COG (raster), NetCDF/Zarr (grades E–T), Parquet (tabelas grandes).</p></li>
+<li><p><strong>Fluxo típico:</strong> SIG (checar/limpar) → R/Python (modelar/validar) → SIG (publicar mapas preditos/risco).</p></li>
+<li><p><strong>Reprodutibilidade:</strong> R Markdown/Quarto, Jupyter; versionamento de dados e scripts; registrar parâmetros (semivariograma, (W), <em>bandwidths</em>, janelas de scan).</p></li>
+<li><p><strong>Escalabilidade:</strong> xarray+dask (Python); INLA/SPDE (R) para campos contínuos; <em>tiling</em> para rasters grandes.</p></li>
+</ul>
+</section>
+</section>
+<section id="boas-praticas-na-modelagem-espaco-temporal">
+<h2>5.4 Boas práticas na modelagem espaço-temporal<a class="headerlink" href="#boas-praticas-na-modelagem-espaco-temporal" title="Link to this heading">#</a></h2>
+<p>Uma análise E–T sólida se apoia em poucos princípios — simples de enunciar e fáceis de verificar.</p>
+<p><strong>1) Validação no espaço e no tempo.</strong> Resultados só são críveis quando testados sem “vazamento” entre treino e teste. Separe dados em blocos espaciais (regiões, hexágonos, malhas) e janelas temporais (rolling origin, blocos de meses), evitando que vizinhos próximos ou períodos futuros influenciem o ajuste. Vá além da acurácia média: inspecione erros por área e por período; padrões sistemáticos em certas regiões ou estações revelam fragilidades que um único número esconde.</p>
+<p><strong>2) Incerteza visível.</strong> Mapa, série ou tabela sem variância/intervalo conta só metade da história. Em geoestatística, reporte variância de krigagem e probabilidades de excedência; em painéis espaciais, traga impactos direto/indireto/total com intervalos, distinguindo curto vs. longo prazo quando houver dinâmica; em processos pontuais, use envelopes de simulação e diagnósticos de intensidade; em clustering, indique significância (ou níveis qualitativos) e trate múltiplas comparações. O leitor precisa ver quanto estimamos e quão confiantes estamos.</p>
+<p><strong>3) Robustez a escolhas razoáveis.</strong> Conclusões não podem depender de um único variograma, de uma única vizinhança ou de um único <em>bandwidth</em>. Em geoestatística, compare modelos de covariância e discuta o alcance; em painéis, varie a matriz <span class="math notranslate nohighlight">\(W\)</span> (contiguidade, distância, <span class="math notranslate nohighlight">\(k\)</span>-vizinhos, rede) e examine a sensibilidade dos impactos; em métodos de densidade/varredura, justifique <span class="math notranslate nohighlight">\((h_s,h_t,r_s,r_t)\)</span> com curvas de sensibilidade. Se pequenos ajustes derrubam o achado, o problema é menos científico e mais de parametrização.</p>
+<p><strong>4) Reprodutibilidade como critério de qualidade.</strong> Registre CRS/unidades, proveniência e transformações; congele versões de pacotes e scripts; fixe sementes aleatórias; salve, em arquivo de configuração, as escolhas que afetam o resultado (janelas, <span class="math notranslate nohighlight">\(W\)</span>, <em>bandwidths</em>). Outro analista, com o mesmo material, deve reconstruir o estudo e chegar essencialmente às mesmas conclusões.</p>
+<p><strong>5) Fronteira clara entre exploração e inferência.</strong> A exploração (EDA) serve para conhecer o dado, levantar hipóteses e escolher escalas; a inferência confirma (ou refuta) essas hipóteses em um conjunto não usado na exploração. Misturar etapas inflaciona desempenho e produz <em>overfitting</em> “guiado por visualização”. Declare o que foi exploratório e o que foi confirmatório; documente regras de seleção de variáveis e critérios de parada antes de abrir o conjunto de teste.</p>
+<p>Cuidados transversais que evitam tropeços comuns: alinhar fusos e horário de verão; considerar exposição/offset em dados de eventos (população, fluxo); discutir efeitos de borda e MAUP quando houver agregação; verificar autocorrelação residual (no espaço, no tempo e no espaço–tempo) após o ajuste.</p>
+<p>Em suma, boa prática não é sobre a ferramenta “certa”, e sim sobre disciplina: validar de forma honesta, explicitar a incerteza, testar a solidez das escolhas, tornar o caminho reproduzível e separar curiosidade de confirmação. Isso é o que mantém a análise E–T confiável — e útil para decidir.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="capitulo4.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">4. GEOVISUALIZAÇÃO E ANÁLISE DE TRAJETÓRIAS</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="capitulo6.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">6. DINÂMICA DA PAISAGEM E MODELOS DE MUDANÇA</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tipos-de-modelos-espaco-temporais">5.1 Tipos de Modelos Espaço-Temporais</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#krigagem-espaco-temporal">5.1.1 Krigagem Espaço-Temporal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#processos-pontuais-espaco-temporais-step">5.1.2 Processos Pontuais Espaço-Temporais (STEP)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regressao-em-painel-com-dependencia-espacial">5.1.3 Regressão em Painel com Dependência Espacial</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustering-agrupamento-espaco-temporal">5.1.4 Clustering (Agrupamento) Espaço-Temporal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sintese-dos-principais-modelos-espaco-temporais">5.1.5 Síntese dos principais modelos espaço-temporais</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outras-abordagens-emergentes">5.1.6 Outras Abordagens Emergentes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#etapas-basicas-de-uma-analise-espaco-temporal">5.2 Etapas básicas de uma análise espaço-temporal</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ferramentas-e-softwares-para-modelagem-espaco-temporal">5.3 Ferramentas e Softwares para Modelagem Espaço-Temporal</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ambientes-de-sig-e-analise-espacial">5.3.1 Ambientes de SIG e Análise Espacial</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linguagens-estatisticas-e-computacionais">5.3.2 Linguagens Estatísticas e Computacionais</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aplicativos-e-servicos-especializados">5.3.3 Aplicativos e Serviços Especializados</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qual-ferramenta-para-qual-objetivo">5.3.4 Qual ferramenta para qual objetivo?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interoperabilidade-e-fluxo-de-trabalho">5.3.5 Interoperabilidade e Fluxo de Trabalho</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#boas-praticas-na-modelagem-espaco-temporal">5.4 Boas práticas na modelagem espaço-temporal</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Alexandro Gularte Schafer
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1220 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3. AUTOCORRELAÇÃO E DEPENDÊNCIA ESPAÇO-TEMPORAL (ANÁLISE ESPAÇO-TEMPORAL GLOBAL E LOCAL) &#8212; Análise de dados espaço-temporais</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'capitulo3';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4. GEOVISUALIZAÇÃO E ANÁLISE DE TRAJETÓRIAS" href="capitulo4.html" />
+    <link rel="prev" title="2. SÉRIES TEMPORAIS E AUTOCORRELAÇÃO" href="capitulo2.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Análise de dados espaço-temporais - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Análise de dados espaço-temporais - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Introdução
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="capitulo1.html">1. INTRODUÇÃO A ANÁLISE ESPAÇO-TEMPORAL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="capitulo2.html">2. SÉRIES TEMPORAIS E AUTOCORRELAÇÃO</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">3. AUTOCORRELAÇÃO E DEPENDÊNCIA ESPAÇO-TEMPORAL (ANÁLISE ESPAÇO-TEMPORAL GLOBAL E LOCAL)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="capitulo4.html">4. GEOVISUALIZAÇÃO E ANÁLISE DE TRAJETÓRIAS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="capitulo5.html">5. MODELOS ESPAÇO-TEMPORAIS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="capitulo6.html">6. DINÂMICA DA PAISAGEM E MODELOS DE MUDANÇA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="referencias.html">Bibliografia básica</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Alexandrogschafer/spatio-temporal-data-analysis" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Alexandrogschafer/spatio-temporal-data-analysis/edit/main/./capitulo3.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Alexandrogschafer/spatio-temporal-data-analysis/issues/new?title=Issue%20on%20page%20%2Fcapitulo3.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/capitulo3.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>3. AUTOCORRELAÇÃO E DEPENDÊNCIA ESPAÇO-TEMPORAL (ANÁLISE ESPAÇO-TEMPORAL GLOBAL E LOCAL)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estudo-de-caso-analise-do-numero-de-avaliacoes-de-imoveis-no-bairro-de-copacabana-rio-de-janeiro">3.1 Estudo de caso: Análise do número de avaliações de imóveis no bairro de Copacabana, Rio de Janeiro</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-global">3.2 Análise Global</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#indice-de-moran-global-i">3.2.1 Índice de Moran Global ((I))</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#indice-g-de-getis-ord">3.2.2 Índice G de Getis-Ord</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#indice-de-gearys-c">3.2.3 Índice de Geary’s C</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#teste-de-mantel">3.2.4 Teste de Mantel</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#autocorrelacao-temporal">3.2.5 Autocorrelação Temporal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#autocorrelacao-espaco-temporal-global">3.2.6 Autocorrelação Espaço-Temporal Global</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#padroes-espaciais-de-avaliacoes-em-copacabana-analise-global">3.2.7 Padrões Espaciais de Avaliações em Copacabana: Análise Global</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#autocorrelacao-espacial">3.2.7.1 Autocorrelação Espacial</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">3.2.7.2 Autocorrelação temporal</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#autocorrelacao-espaco-temporal">3.2.7.3 Autocorrelação espaço-temporal</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-local">3.3 Análise Local</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lisa-local-moran-s-i">3.3.1 LISA (Local Moran’s I)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getis-ord-g-identificacao-de-hotspots-e-coldspots">3.3.2 Getis-Ord G*: Identificação de Hotspots e Coldspots</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#padroes-espaciais-de-avaliacoes-em-copacabana-analise-local">3.3.3 Padrões Espaciais de Avaliações em Copacabana: Análise Local</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-local-com-o-indice-de-moran-local-lisa">3.3.3.1 Análise Local com o Índice de Moran Local (LISA)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-local-com-o-indice-de-getis-ord-g">3.3.3.2 Análise Local com o Índice de Getis-Ord G*</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-da-persistencia-espacial-dos-padroes-ao-longo-do-tempo">3.3.3.3 Análise da persistência espacial dos padrões ao longo do tempo</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintese-e-perspectivas-integracao-da-analise-espaco-temporal-global-e-local">3.4 Síntese e Perspectivas: Integração da Análise Espaço-Temporal Global e Local</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="autocorrelacao-e-dependencia-espaco-temporal-analise-espaco-temporal-global-e-local">
+<h1>3. AUTOCORRELAÇÃO E DEPENDÊNCIA ESPAÇO-TEMPORAL (ANÁLISE ESPAÇO-TEMPORAL GLOBAL E LOCAL)<a class="headerlink" href="#autocorrelacao-e-dependencia-espaco-temporal-analise-espaco-temporal-global-e-local" title="Link to this heading">#</a></h1>
+<section class="cap-audio">
+  <p><strong>Ouça o resumo do capítulo em áudio:</strong></p>
+  <audio controls preload="none" style="width:100%;max-width:720px">
+    <source src="audio/capitulo3.mp3" type="audio/mpeg">
+    Seu navegador não suporta a reprodução de áudio.
+    <a href="audio/capitulo3.mp3">Baixar MP3</a>
+  </audio>
+</section>
+<p>A análise espaço-temporal desempenha um importante papel na compreensão de fenômenos que variam ao longo do tempo e do espaço, permitindo a identificação de padrões de distribuição e dependência. Fenômenos espaciais frequentemente não seguem uma distribuição aleatória, mas sim padrões específicos influenciados pela proximidade geográfica e pela continuidade temporal. Para investigar essas relações, utilizam-se métricas de autocorrelação, que quantificam a dependência entre valores de uma variável considerando tanto o espaço quanto o tempo.</p>
+<p>A autocorrelação é a correlação de uma variável com ela mesma ao longo de diferentes localizações ou momentos no tempo. No contexto espaço-temporal, considera-se a autocorrelação espacial, temporal e espaço-temporal. A autocorrelação espacial mede a relação entre valores de uma variável em diferentes locais. Se valores semelhantes estão próximos, há autocorrelação positiva (clusters). Se valores diferentes estão próximos, há autocorrelação negativa (dispersão). A Figura 1 ilustra exemplos de diferentes tipos de autocorrelação espacial.</p>
+<p><img alt="Figura 1" src="_images/fig3_1.png" /></p>
+<p>Figura 1: Exemplos de configurações de áreas mostrando diferentes tipos de autocorrelação espacial (Fonte: Adaptado de Moraga, 2023).</p>
+<p>A autocorrelação temporal avalia a persistência de um fenômeno ao longo do tempo em um mesmo local, medindo a tendência de uma variável repetir padrões em intervalos temporais. Já a autocorrelação espaço-temporal combina as dimensões espacial e temporal, permitindo analisar como um fenômeno se distribui ao longo do espaço e do tempo simultaneamente.</p>
+<p>Para quantificar a autocorrelação em diferentes contextos, utilizam-se diversas métricas. O Índice de Moran Global mede a autocorrelação espacial globalmente, indicando se os valores de uma variável se agrupam ou se dispersam em toda a área de estudo. O Local Moran (LISA) oferece uma visão local da autocorrelação espacial, identificando clusters e outliers específicos dentro da área analisada. O Índice G de Getis-Ord foca na identificação de hotspots (alta concentração) e coldspots (baixa concentração) de uma variável no espaço. O Índice de Geary’s C é similar ao Índice de Moran, mas mais sensível a variações locais, medindo a diferença absoluta entre valores vizinhos. Já o variograma espacial, amplamente utilizado em geoestatística, mede a dependência espacial em função da distância.</p>
+<p>A escolha entre análise global e local depende do objetivo do estudo. A análise global oferece uma visão geral dos padrões espaciais na área de estudo como um todo, sendo útil para responder perguntas amplas, como “Os dados seguem um padrão espacial significativo?”. Por outro lado, a análise local aproxima-se da granularidade dos dados, permitindo identificar áreas específicas com padrões distintos, sendo ideal para descobrir hotspots, coldspots e outliers espaciais.</p>
+<section id="estudo-de-caso-analise-do-numero-de-avaliacoes-de-imoveis-no-bairro-de-copacabana-rio-de-janeiro">
+<h2>3.1 Estudo de caso: Análise do número de avaliações de imóveis no bairro de Copacabana, Rio de Janeiro<a class="headerlink" href="#estudo-de-caso-analise-do-numero-de-avaliacoes-de-imoveis-no-bairro-de-copacabana-rio-de-janeiro" title="Link to this heading">#</a></h2>
+<p>Para ilustrar os conceitos discutidos anteriormente, este estudo de caso analisa a distribuição do número de avaliações de hospedagens no bairro de Copacabana, Rio de Janeiro, ao longo do ano de 2024. O objetivo principal é aplicar tanto métricas globais quanto locais de autocorrelação espacial, temporal e espaço-temporal, buscando identificar padrões de agrupamento e dispersão das avaliações, detectar hotspots e coldspots e comparar os resultados das diferentes abordagens. Essa aplicação prática demonstrará como utilizar estatísticas de autocorrelação em um cenário real, oferecendo subsídios concretos paraa tomada de decisão com base em dados.</p>
+<p>O bairro de Copacabana foi escolhido não apenas por sua relevância turística, mas também pela disponibilidade pública dos dados do Airbnb no Rio de Janeiro, o que facilita a aplicação prática das metodologias de análise espaço-temporal. Com uma alta concentração de hospedagens, restaurantes e atrações, o bairro oferece um ambiente ideal para explorar padrões sazonais de avaliações online e identificar áreas de maior demanda turística ao longo do ano. A análise abrange 3.395 imóveis cadastrados na região, que juntos somaram 20.591 avaliações em 2024.</p>
+<p>O arquivo contendo o código em R e os dados está disponível em:<br />
+<a class="reference external" href="https://github.com/Alexandrogschafer/spatio-temporal-data-analysis/blob/main/dados/semana_3_codigoR_dados.zip">semana_3_codigoR_dados.zip</a></p>
+<p>Você também pode acompanhar a execução passo a passo em nosso canal no YouTube:<br />
+<a class="reference external" href="https://youtu.be/Gf9UMUEtPqA">▶Assista ao vídeo da Semana 3</a></p>
+<blockquote>
+<div><p><strong>Observação:</strong> em alguns trechos, o código mostrado no vídeo pode estar ligeiramente diferente do arquivo disponibilizado. Isso acontece porque alguns pacotes foram atualizados, exigindo pequenos ajustes no código da versão mais recente.</p>
+</div></blockquote>
+<p>No quadro 1 apresentam-se as estatísticas das avaliações por imóvel:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Métrica</p></th>
+<th class="head"><p>Valor</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>min_avaliacoes</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>max_avaliacoes</p></td>
+<td><p>135</p></td>
+</tr>
+<tr class="row-even"><td><p>media_avaliacoes</p></td>
+<td><p>20.29</p></td>
+</tr>
+<tr class="row-odd"><td><p>mediana_avaliacoes</p></td>
+<td><p>17</p></td>
+</tr>
+<tr class="row-even"><td><p>desvio_padrao</p></td>
+<td><p>14.56</p></td>
+</tr>
+<tr class="row-odd"><td><p>q1 (1º quartil)</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-even"><td><p>q3 (3º quartil)</p></td>
+<td><p>28</p></td>
+</tr>
+<tr class="row-odd"><td><p>iqr (Intervalo Interquartil)</p></td>
+<td><p>19</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p><em>Mínimo de Avaliações (1):</em> O imóvel menos avaliado recebeu apenas uma avaliação, indicando que alguns imóveis têm baixa rotatividade ou são novos na plataforma.</p></li>
+<li><p><em>Máximo de Avaliações (135):</em> O imóvel mais avaliado recebeu 135 avaliações, sugerindo alta popularidade ou uso frequente.</p></li>
+<li><p><em>Média de Avaliações (20.29):</em> Em média, cada imóvel recebeu cerca de 20 avaliações, o que reflete a distribuição geral das avaliações entre os imóveis.</p></li>
+<li><p><em>Mediana das Avaliações (17):</em> A mediana indica que 50% dos imóveis receberam até 17 avaliações. Como a mediana é menor que a média, isso sugere uma distribuição levemente assimétrica à direita, com alguns imóveis muito avaliados puxando a média para cima.</p></li>
+<li><p><em>Desvio Padrão (14.56):</em> Indica a dispersão das avaliações em relação à média. Um desvio padrão relativamente alto (comparado à média) mostra uma variabilidade significativa na quantidade de avaliações por imóvel.</p></li>
+<li><p><em>1º Quartil (9) e 3º Quartil (28):</em> 25% dos imóveis têm 9 ou menos avaliações, e 75% têm até 28 avaliações.</p></li>
+<li><p><em>Intervalo Interquartil (IQR = 19):</em> A diferença entre o 3º quartil e o 1º quartil (28 - 9) mostra a dispersão central dos dados, sugerindo que a maior parte das avaliações (50% centrais) estão distribuídas entre 9 e 28 avaliações por imóvel.</p></li>
+</ul>
+<p>A Figura 2 apresenta a distribuição espacial das hospedagens e o número total de avaliações recebidas ao longo do ano.</p>
+<p><img alt="Figura 1" src="_images/fig3_2.png" /></p>
+<p>Figura 2. Distribuição espacial das hospedagens e número total de avaliações em 2024.</p>
+<p>Na figura, os pontos representam os imóveis cadastrados e a intensidade das cores reflete a quantidade de avaliações. É possível observar uma maior concentração de hospedagens e avaliações ao longo da orla de Copacabana, especialmente nas proximidades da Avenida Atlântica, que abriga os principais hotéis e pontos turísticos do bairro. Além disso, foram identificados clusters de alta atividade turística em áreas específicas, enquanto regiões mais afastadas da orla apresentaram menor densidade de avaliações.</p>
+<p>A partir dessa análise preliminar, emergem três principais conclusões: (1) a maior parte das hospedagens está concentrada na orla de Copacabana; (2) os estabelecimentos com maior número de avaliações estão localizados em áreas específicas, sugerindo a existência de hotspots turísticos onde a demanda por hospedagem é mais intensa; e (3) a distribuição das avaliações é heterogênea, indicando que fatores como localização e infraestrutura influenciam diretamente o comportamento dos turistas. Para complementar essa análise, a Figura 3 exibe um histograma da distribuição do número de avaliações por imóvel ao longo do ano.</p>
+<p><img alt="Figura 1" src="_images/fig3_3.png" /></p>
+<p>Figura 3. Histograma da distribuição de avaliações por imóvel em Copacabana em 2024.</p>
+<p>O gráfico revela uma assimetria à direita, onde a maioria dos imóveis recebe relativamente poucas avaliações, com uma diminuição gradual na frequência à medida que o número de avaliações aumenta. Observa-se que grande parte das hospedagens acumula menos de 50 avaliações, sugerindo que a maioria dos estabelecimentos tem baixa visibilidade ou atratividade para os turistas. No entanto, uma parcela menor de imóveis se destaca com mais de 100 avaliações, apontando para uma popularidade significativamente maior. Além disso, o histograma ajuda a identificar outliers, ou seja, imóveis com um número excepcionalmente alto de avaliações. Esses casos podem indicar propriedades que se beneficiam de uma combinação de fatores positivos, como alta demanda, qualidade do serviço ou uma forte presença online.</p>
+<p>A Figura 4 apresenta a evolução do número total de avaliações de imóveis do Airbnb ao longo de cada mês do ano de 2024.</p>
+<p><img alt="Figura 1" src="_images/fig3_4.png" /></p>
+<p>Figura 4: Evolução do número total de avaliações mensais dos imóveis em 2024.</p>
+<p>Observa-se uma forte queda no número de avaliações de janeiro a abril, passando de aproximadamente 5000 avaliações em janeiro para cerca de 3000 avaliações em abril. A partir desse ponto, o número de avaliações oscila ao longo do ano, com momentos de alta e baixa distintos.</p>
+<p>O início do ano, em janeiro, registrou o maior número de avaliações, possivelmente devido à alta temporada de verão no Brasil. Por outro lado, abril apresentou o menor número de avaliações, o que pode estar relacionado à baixa temporada ou a uma redução temporária na demanda. Em setembro, houve um novo pico de avaliações, alcançando aproximadamente 5500.
+No entanto, chama atenção a forte queda no número de avaliações em dezembro, atingindo o menor valor do ano.</p>
+<p>A análise do gráfico sugere a existência de um padrão sazonal, em que os picos de demanda ocorrem no início do ano e no terceiro trimestre, enquanto os períodos de baixa demanda se concentram em abril e dezembro. Fatores como o clima, a realização de eventos locais, a influência de feriados, bem como aspectos econômicos, como promoções ou políticas de preços, podem ter contribuído para essa variação ao longo do ano. A queda acentuada em dezembro, em particular, merece uma análise mais aprofundada, pois contrasta com a expectativa de alta demanda típica do período de festas.</p>
+<p>Na figura 5 apresenta-se a distribuição espacial das hospedagens e o número total de avaliações recebidas ao longo de cada mês do ano de 2024.</p>
+<p><img alt="Figura 1" src="_images/fig3_5.png" /></p>
+<p>Figura 5. Distribuição espacial das hospedagens e número total de avaliações mensais ao longo de 2024.</p>
+<p>A figura 6 apresenta a distribuição do número de avaliações por registro de hospedagem no Airbnb ao longo dos meses de 2024. Cada subgráfico representa um mês específico, permitindo a análise da frequência de avaliações por imóvel ao longo do ano.</p>
+<p><img alt="Figura 1" src="_images/fig3_6.png" /></p>
+<p>Figura 6: histograma da distribuição do número mensal de avaliações por imóvel.</p>
+<p>Com base na figura 5 é possível observar, em todos os meses, uma distribuição assimétrica à direita, com a maioria dos registros concentrados em baixas contagens de avaliações. A maior parte dos imóveis recebeu entre 0 e 2 avaliações mensais, independentemente do mês analisado. Essa concentração em baixas frequências sugere que poucos imóveis recebem avaliações de forma recorrente, enquanto a maioria tem pouca ou nenhuma avaliação em um determinado mês.</p>
+<p>Os meses de janeiro (2024_01) e setembro (2024_09) apresentam uma distribuição mais “espalhada” em relação aos demais meses, com um pequeno número de imóveis recebendo até 15 avaliações. Isso é consistente com a análise prévia que identificou esses meses como períodos de alta demanda, provavelmente relacionados à alta temporada de verão e eventos específicos na cidade.</p>
+<p>Por outro lado, meses como abril (2024_04) e junho (2024_06) exibem uma concentração ainda maior na faixa de 0 a 2 avaliações, reforçando a ideia de baixa demanda nesse período. A baixa dispersão nesses meses indica uma menor movimentação de reservas, possivelmente refletindo uma sazonalidade negativa ou baixa atratividade turística nesse período.</p>
+<p>Os resultados até aqui sugerem que o mercado de hospedagens em Copacabana é altamente heterogêneo, com grandes variações no volume de avaliações entre os diferentes estabelecimentos. Na próxima etapa da análise, serão aplicadas métricas estatísticas de autocorrelação espacial e espaço-temporal para verificar se os padrões observados possuem significância estatística. Essas técnicas permitirão verificar se as avaliações estão espacialmente agrupadas e se existe uma dependência temporal na distribuição das interações dos hóspedes ao longo do ano.</p>
+</section>
+<section id="analise-global">
+<h2>3.2 Análise Global<a class="headerlink" href="#analise-global" title="Link to this heading">#</a></h2>
+<p>A análise global é uma abordagem que examina padrões espaciais considerando toda a área de estudo de forma agregada, sem distinguir variações locais específicas. Seu principal objetivo é avaliar se há uma estrutura espacial significativa nos dados, indicando a presença de agrupamentos (clusters) ou dispersão ao longo do espaço. Diferentemente da análise local, que busca identificar onde esses padrões ocorrem, a análise global foca em determinar se um padrão espacial existe, mas sem apontar suas localizações específicas.</p>
+<p>Na prática, a análise global responde a perguntas como:</p>
+<ul class="simple">
+<li><p><em>Os dados exibem um padrão espacial significativo em toda a área de estudo?</em></p></li>
+<li><p><em>A distribuição espacial dos valores é aleatória ou estruturada?</em></p></li>
+<li><p><em>Há uma tendência geral de agrupamento (valores semelhantes próximos) ou de dispersão (valores diferentes próximos)?</em></p></li>
+</ul>
+<p>Para alcançar essas respostas, utiliza-se uma série de métricas estatísticas globais. Entre elas, destaca-se o <strong>Índice de Moran Global</strong>, que mede a autocorrelação espacial em nível global, quantificando se as regiões vizinhas tendem a ter valores semelhantes (autocorrelação positiva) ou diferentes (autocorrelação negativa). Além disso, o <strong>Índice G de Getis-Ord</strong> avalia a intensidade do agrupamento de altos ou baixos valores (hotspots e coldspots globais), enquanto o <strong>Índice de Geary’s C</strong> oferece uma visão complementar ao medir a diferença absoluta entre valores vizinhos. Cada uma dessas métricas traz uma perspectiva única para a análise global, permitindo identificar tendências espaciais gerais sem detalhar variações locais.</p>
+<p>Ao aplicar a análise global, é possível obter uma visão panorâmica da distribuição espacial dos dados, ideal para identificar padrões amplos e testar hipóteses gerais. No entanto, quando o objetivo é detalhar quais regiões específicas contribuem para esses padrões, é necessário complementar a análise global com abordagens locais, como o LISA (Local Indicators of Spatial Association), proporcionando uma análise mais completa e detalhada do fenômeno estudado.</p>
+<section id="indice-de-moran-global-i">
+<h3>3.2.1 Índice de Moran Global ((I))<a class="headerlink" href="#indice-de-moran-global-i" title="Link to this heading">#</a></h3>
+<p>O <strong>Índice de Moran Global</strong> ((I)) (Moran, 1950) é uma métrica amplamente utilizada para medir a <strong>autocorrelação espacial global</strong>, ou seja, a relação entre os valores de uma variável e sua localização no espaço. A equação do índice é dada por:</p>
+<div class="math notranslate nohighlight">
+\[
+I = \frac{n \sum_i \sum_j w_{ij} (Y_i - \bar{Y}) (Y_j - \bar{Y})}{\left( \sum_{i \neq j} w_{ij} \right) \sum_i (Y_i - \bar{Y})^2}
+\]</div>
+<p>onde:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(n\)</span> é o número total de regiões,</p></li>
+<li><p><span class="math notranslate nohighlight">\(Y_i\)</span> representa o valor observado da variável de interesse na região <span class="math notranslate nohighlight">\(i\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bar{Y}\)</span> é a média de todos os valores observados,</p></li>
+<li><p><span class="math notranslate nohighlight">\(w_{ij}\)</span> são os pesos espaciais que definem a relação de proximidade entre as regiões <span class="math notranslate nohighlight">\(i\)</span> e <span class="math notranslate nohighlight">\(j\)</span>, com <span class="math notranslate nohighlight">\(w_{ii} = 0\)</span> e <span class="math notranslate nohighlight">\(i, j = 1, ..., n\)</span>.</p></li>
+</ul>
+<p>A definição dos pesos espaciais depende do contexto da análise e da variável em estudo.</p>
+<p><strong>Teste de Autocorrelação Espacial com o Índice de Moran Global</strong></p>
+<p>O Índice de Moran Global permite testar a presença de autocorrelação espacial, quantificando a similaridade entre uma região e suas vizinhas e obtendo uma média dessas relações. Sob a hipótese nula de ausência de autocorrelação espacial, as observações (Y_i) são independentes e identicamente distribuídas ((i.i.d.)), e o valor esperado e a variância assintótica de (I) são:</p>
+<div class="math notranslate nohighlight">
+\[
+E[I] = \frac{-1}{n-1}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+Var[I] = \frac{n^2 (n-1) S_1 - n (n-1) S_2 - 2 S_0^2 (n+1)}{(n-1)^2 S_0^2}
+\]</div>
+<p>onde:</p>
+<div class="math notranslate nohighlight">
+\[
+S_0 = \sum_{i \neq j} w_{ij}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+S_1 = \frac{1}{2} \sum_{i \neq j} (w_{ij} + w_{ji})^2
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+S_2 = \sum_k \left( \sum_j w_{kj} + \sum_i w_{ik} \right)^2
+\]</div>
+<p><strong>Interpretação do Índice de Moran Global</strong></p>
+<p>O <strong>Índice de Moran ((I))</strong> normalmente varia entre <strong>-1 e 1</strong>, sendo interpretado da seguinte forma:</p>
+<p>O Índice de Moran ((I)) normalmente varia entre -1 e 1, sendo interpretado da seguinte forma:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(I &gt; E[I]\)</span> → Autocorrelação espacial positiva (Clusters): regiões vizinhas apresentam valores semelhantes da variável analisada.</p></li>
+<li><p><span class="math notranslate nohighlight">\(I &lt; E[I]\)</span> → Autocorrelação espacial negativa (Dispersão): regiões vizinhas apresentam valores significativamente diferentes.</p></li>
+<li><p><span class="math notranslate nohighlight">\(I \approx E[I]\)</span> → Padrão espacial aleatório, sem dependência espacial evidente.</p></li>
+</ul>
+<p>Se o número de regiões for suficientemente grande, o índice de Moran (I) segue uma distribuição normal e sua significância estatística pode ser avaliada por meio do <strong>z-score</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+z = \frac{I - E(I)}{\sqrt{Var(I)}}
+\]</div>
+<p>O valor do <strong>z-score</strong> é então comparado com a distribuição normal padrão.</p>
+<p><strong>Método Alternativo: Randomização de Monte Carlo</strong></p>
+<p>Uma abordagem alternativa para testar a significância estatística do Índice de Moran Global é o método de randomização de Monte Carlo, que consiste em:</p>
+<p>a. Redistribuir aleatoriamente os valores observados entre as regiões.</p>
+<p>b. Calcular um novo Índice de Moran ((I)) para cada configuração aleatória.</p>
+<p>c. Criar uma distribuição de referência para (I).</p>
+<p>d. Comparar o valor observado de (I) com essa distribuição simulada.</p>
+<p>Se o valor observado de (I) estiver nas extremidades da distribuição simulada (caudas), a hipótese nula de ausência de autocorrelação espacial pode ser rejeitada.</p>
+<p><strong>Passos para Testar a Autocorrelação Espacial</strong></p>
+<ol class="arabic simple">
+<li><p>Definir as hipóteses estatísticas:</p></li>
+</ol>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(H_0\)</span> (Hipótese Nula): <span class="math notranslate nohighlight">\(I = E[I]\)</span> → Não há autocorrelação espacial.</p></li>
+<li><p><span class="math notranslate nohighlight">\(H_1\)</span> (Hipótese Alternativa): <span class="math notranslate nohighlight">\(I \neq E[I]\)</span> → Existe autocorrelação espacial.</p></li>
+</ul>
+<ol class="arabic simple" start="2">
+<li><p>Escolher o nível de significância (<span class="math notranslate nohighlight">\(\alpha\)</span>), que representa a probabilidade máxima de rejeitar erroneamente <span class="math notranslate nohighlight">\(H_0\)</span> (geralmente <span class="math notranslate nohighlight">\(\alpha = 0.05\)</span>).</p></li>
+<li><p>Calcular o teste estatístico:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[
+z = \frac{I - E(I)}{\sqrt{Var(I)}}
+\]</div>
+<ol class="arabic simple" start="4">
+<li><p>Determinar o valor-p (<span class="math notranslate nohighlight">\(p\)</span>):</p></li>
+</ol>
+<ul class="simple">
+<li><p>Comparar o z-score com a distribuição normal padrão.</p></li>
+<li><p>Alternativamente, utilizar o teste de randomização de Monte Carlo para gerar uma distribuição de referência para <span class="math notranslate nohighlight">\(I\)</span>.</p></li>
+</ul>
+<ol class="arabic simple" start="5">
+<li><p>Tomar uma decisão:</p></li>
+</ol>
+<ul class="simple">
+<li><p>Se <span class="math notranslate nohighlight">\(p &lt; \alpha\)</span> → Rejeitamos <span class="math notranslate nohighlight">\(H_0\)</span> e concluímos que há autocorrelação espacial significativa.</p></li>
+<li><p>Se <span class="math notranslate nohighlight">\(p \geq \alpha\)</span> → Falhamos em rejeitar <span class="math notranslate nohighlight">\(H_0\)</span>, ou seja, não há evidência suficiente para confirmar autocorrelação espacial.</p></li>
+</ul>
+</section>
+<section id="indice-g-de-getis-ord">
+<h3>3.2.2 Índice G de Getis-Ord<a class="headerlink" href="#indice-g-de-getis-ord" title="Link to this heading">#</a></h3>
+<p>O <strong>Índice G de Getis-Ord</strong> é uma alternativa ao Moran Global e mede se valores altos ou baixos estão espacialmente agrupados. Ele avalia a intensidade do agrupamento de uma variável dentro de uma região.</p>
+<p>A fórmula do Índice G Global é:</p>
+<div class="math notranslate nohighlight">
+\[
+G = \frac{\sum_i \sum_j W_{ij} X_i X_j}{\sum_i X_i^2}
+\]</div>
+<p>onde:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(X_i\)</span> e <span class="math notranslate nohighlight">\(X_j\)</span> são os valores da variável de interesse,</p></li>
+<li><p><span class="math notranslate nohighlight">\(W_{ij}\)</span> é a matriz de pesos espaciais.</p></li>
+</ul>
+<p>Se o G for significativamente alto, indica agrupamentos de valores altos (hotspots globais). Se for baixo, indica agrupamentos de valores baixos (coldspots globais).</p>
+<p>Diferente do Moran Global, que mede correlação espacial, o Índice G de Getis-Ord foca na intensidade do agrupamento.</p>
+</section>
+<section id="indice-de-gearys-c">
+<h3>3.2.3 Índice de Geary’s C<a class="headerlink" href="#indice-de-gearys-c" title="Link to this heading">#</a></h3>
+<p>O Índice de Geary é outra estatística de autocorrelação espacial, mas diferente do Moran Global, ele mede a diferença absoluta entre valores vizinhos, e não a correlação entre eles.</p>
+<p>A equação do Índice de Geary’s C é:</p>
+<div class="math notranslate nohighlight">
+\[
+C = \frac{(N - 1) \sum_i \sum_j W_{ij} (X_i - X_j)^2}{2 S_0 \sum_i (X_i - \bar{X})^2}
+\]</div>
+<p>onde:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(S_0 = \sum_i \sum_j W_{ij}\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(X_i\)</span> e <span class="math notranslate nohighlight">\(X_j\)</span> são os valores da variável de interesse.</p></li>
+</ul>
+<p>O Índice de Geary varia de 0 a 2:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(C \approx 0\)</span>: Indica autocorrelação espacial positiva (valores próximos têm valores semelhantes).</p></li>
+<li><p><span class="math notranslate nohighlight">\(C \approx 1\)</span>: Indica ausência de autocorrelação espacial (distribuição aleatória).</p></li>
+<li><p><span class="math notranslate nohighlight">\(C &gt; 1\)</span>: Indica autocorrelação espacial negativa (valores próximos são muito diferentes, sugerindo dispersão).</p></li>
+</ul>
+<p>O Índice de Geary é mais sensível a variações locais do que o Índice de Moran, pois considera as diferenças absolutas entre valores.</p>
+</section>
+<section id="teste-de-mantel">
+<h3>3.2.4 Teste de Mantel<a class="headerlink" href="#teste-de-mantel" title="Link to this heading">#</a></h3>
+<p>O Teste de Mantel mede a correlação entre duas matrizes de distância, podendo ser espacial e temporal. Ele é útil quando se deseja verificar se a estrutura espacial de uma variável influencia outra variável.</p>
+<p>A estatística do Teste de Mantel é baseada na correlação de Pearson:</p>
+<div class="math notranslate nohighlight">
+\[
+r_M = \frac{\sum_{i=1}^{N} \sum_{j=1}^{N} (A_{ij} - \bar{A}) (B_{ij} - \bar{B})}{\sqrt{\sum_{i=1}^{N} \sum_{j=1}^{N} (A_{ij} - \bar{A})^2} \sqrt{\sum_{i=1}^{N} \sum_{j=1}^{N} (B_{ij} - \bar{B})^2}}
+\]</div>
+<p>onde:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(A_{ij}\)</span> e <span class="math notranslate nohighlight">\(B_{ij}\)</span> são as matrizes de distância espacial e da variável de interesse, respectivamente.</p></li>
+</ul>
+<p>Se o teste retorna um valor significativo, indica que a estrutura espacial influencia a variável analisada.</p>
+</section>
+<section id="autocorrelacao-temporal">
+<h3>3.2.5 Autocorrelação Temporal<a class="headerlink" href="#autocorrelacao-temporal" title="Link to this heading">#</a></h3>
+<p>A <strong>autocorrelação temporal</strong> é uma medida estatística que avalia o grau de dependência ou correlação entre os valores de uma mesma variável ao longo do tempo. Em outras palavras, ela indica o quanto os valores atuais de uma variável estão relacionados aos seus valores passados em diferentes intervalos temporais, conhecidos como <strong>lags</strong> ou defasagens. Quando uma variável apresenta <strong>alta autocorrelação temporal</strong>, isso significa que seus valores anteriores influenciam fortemente os valores futuros, sugerindo a presença de um padrão ou tendência ao longo do tempo. Por outro lado, uma <strong>baixa autocorrelação temporal</strong> indica que os valores da variável são mais independentes entre si, apresentando um comportamento mais aleatório.</p>
+<p>Existem diversos exemplos práticos que ajudam a ilustrar o conceito de autocorrelação temporal. No caso das <strong>temperaturas diárias</strong>, por exemplo, a temperatura de hoje tende a ser semelhante à de ontem, especialmente em períodos de estabilidade climática, o que demonstra uma alta autocorrelação temporal em curtos períodos. Outro exemplo são as <strong>vendas sazonais</strong> de uma loja, que podem apresentar picos sempre em dezembro. Ao analisar os dados ao longo de vários anos, espera-se encontrar uma autocorrelação temporal significativa nesse intervalo anual. No contexto de <strong>dados financeiros</strong>, o preço de uma ação na bolsa de valores hoje pode ter alguma relação com o preço de dias anteriores, especialmente em mercados menos voláteis.</p>
+<p>A autocorrelação temporal pode ser medida de diferentes maneiras, sendo a <strong>Função de Autocorrelação (ACF)</strong> uma das mais comuns. Essa função analisa a correlação da série temporal com suas próprias defasagens. Outra medida importante é o <strong>Coeficiente de Autocorrelação (ρ)</strong>, que varia de <strong>-1</strong> a <strong>1</strong>. Valores próximos de <strong>1</strong> indicam uma <strong>correlação positiva perfeita</strong>, o que significa que os valores passados predizem exatamente os valores futuros. Quando o coeficiente é <strong>0</strong>, não há correlação, indicando um comportamento aleatório. Já valores próximos de <strong>-1</strong> apontam para uma <strong>correlação negativa perfeita</strong>, onde valores altos no passado indicam valores baixos no futuro e vice-versa.</p>
+<p>No contexto da <strong>análise espaço-temporal</strong>, a autocorrelação temporal é importante para identificar padrões dinâmicos ao longo do tempo, complementando a análise da <strong>autocorrelação espacial</strong>. A combinação dessas duas abordagens permite uma interpretação mais robusta da distribuição e da evolução dos fenômenos analisados, fornecendo uma base sólida para a tomada de decisões baseadas em dados.</p>
+</section>
+<section id="autocorrelacao-espaco-temporal-global">
+<h3>3.2.6 Autocorrelação Espaço-Temporal Global<a class="headerlink" href="#autocorrelacao-espaco-temporal-global" title="Link to this heading">#</a></h3>
+<p>A autocorrelação espaço-temporal global é uma extensão dos métodos tradicionais de análise espacial, considerando a relação entre as observações em diferentes localizações e instantes no tempo. Enquanto a análise espacial tradicional responde onde ocorrem padrões, a análise espaço-temporal busca entender quando esses padrões surgem e como eles evoluem.</p>
+<p>A questão central da autocorrelação espaço-temporal global é:</p>
+<p><em>“Os valores de uma variável em determinado local e tempo estão relacionados aos valores dessa variável em outros locais e tempos?”</em></p>
+<p>A autocorrelação espaço-temporal global é útil para identificar padrões gerais, como a persistência de clusters ao longo do tempo, mudanças sazonais e tendências.</p>
+<p>Para compreender a dependência espaço-temporal, é necessário definir três tipos de autocorrelação:</p>
+<ul class="simple">
+<li><p><strong>Autocorrelação Espacial:</strong><br />
+Mede a correlação de uma variável consigo mesma no espaço. Se valores semelhantes tendem a estar próximos, há uma autocorrelação espacial positiva. Se valores altos estão cercados por valores baixos, há uma autocorrelação negativa.</p></li>
+<li><p><strong>Autocorrelação Temporal:</strong><br />
+Mede a correlação da variável ao longo do tempo. Se valores em datas próximas são semelhantes, a autocorrelação temporal é positiva. Se há alternância entre valores altos e baixos, a autocorrelação temporal é negativa.</p></li>
+<li><p><strong>Autocorrelação Espaço-Temporal:</strong><br />
+Une as duas dimensões, avaliando se uma variável apresenta padrões similares em locais e tempos próximos. Se um fenômeno ocorre repetidamente em certas áreas ao longo do tempo, ele apresenta autocorrelação espaço-temporal positiva.</p></li>
+</ul>
+<p>Os métodos de autocorrelação global podem ser estendidos para a dimensão tempo-espaço, permitindo quantificar a persistência de padrões espaço-temporais. A autocorrelação espaço-temporal global fornece uma visão ampla da dinâmica dos fenômenos analisados, permitindo identificar não apenas onde ocorrem padrões espaciais, mas também quando esses padrões se manifestam e como eles evoluem ao longo do tempo. Essa abordagem é de grande utilidade para estudos que envolvem séries temporais espaciais, como a análise da distribuição de avaliações de hospedagens em Copacabana ao longo dos meses.</p>
+<p>A seguir, abordaremos alguns dos índices e coeficientes mais utilizados no contexto da análise espaço-temporal, destacando suas aplicações, interpretações e limitações.</p>
+<p><strong>Índice de Moran Espaço-Temporal (STI)</strong></p>
+<p>O Índice de Moran Espaço-Temporal (STI) é uma extensão do Índice de Moran Global, adaptado para capturar simultaneamente a dependência espacial e a dependência temporal de uma variável. Enquanto o Índice de Moran tradicional mede apenas a autocorrelação espacial, o STI amplia essa análise ao incorporar a dimensão temporal, avaliando se os valores de uma variável apresentam padrões de agrupamento não apenas no espaço, mas também ao longo do tempo.</p>
+<p>A fórmula do Índice de Moran Espaço-Temporal é dada por:</p>
+<div class="math notranslate nohighlight">
+\[
+I_{ST} = \frac{N \sum_{i=1}^{N} \sum_{j=1}^{N} w_{ij} (x_i - \bar{x})(x_j - \bar{x})}{\left(\sum_{i=1}^{N} (x_i - \bar{x})^2\right) \left(\sum_{i=1}^{N} \sum_{j=1}^{N} w_{ij}\right)}
+\]</div>
+<p><em>Componentes da Fórmula:</em></p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N\)</span>: Número total de observações, considerando todas as localidades e todos os momentos no tempo.</p></li>
+<li><p><span class="math notranslate nohighlight">\(w_{ij}\)</span>: Matriz de pesos espaço-temporais, que define a relação entre as observações nos diferentes locais e tempos. Esses pesos podem considerar tanto a proximidade espacial quanto a proximidade temporal.</p></li>
+<li><p><span class="math notranslate nohighlight">\(x_i\)</span> e <span class="math notranslate nohighlight">\(x_j\)</span>: Valores da variável de interesse nas localidades <span class="math notranslate nohighlight">\(i\)</span> e <span class="math notranslate nohighlight">\(j\)</span>, respectivamente.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bar{x}\)</span>: Média global da variável, calculada considerando todas as observações no espaço e no tempo.</p></li>
+</ul>
+<p><em>Interpretação do <span class="math notranslate nohighlight">\(I_{ST}\)</span>:</em></p>
+<ul class="simple">
+<li><p>Quando o <span class="math notranslate nohighlight">\(I_{ST}\)</span> é <strong>positivo</strong> e <strong>estatisticamente significativo</strong>, isso indica que padrões espaciais similares se repetem ao longo do tempo, sugerindo uma persistência ou sazonalidade no fenômeno analisado. Por exemplo, no contexto das avaliações de hospedagens em Copacabana, um <span class="math notranslate nohighlight">\(I_{ST}\)</span> positivo poderia indicar que áreas com altas avaliações em um mês tendem a manter altas avaliações nos meses seguintes.</p></li>
+<li><p>Se o <span class="math notranslate nohighlight">\(I_{ST}\)</span> for <strong>negativo</strong>, isso sugere uma dispersão espaço-temporal, onde áreas de altos valores em determinado período são cercadas por áreas de baixos valores em períodos subsequentes, indicando uma dinâmica mais volátil e menos previsível.</p></li>
+<li><p>Quando o <span class="math notranslate nohighlight">\(I_{ST}\)</span> se aproxima de <strong>zero</strong>, isso indica ausência de autocorrelação espaço-temporal, sugerindo que os padrões observados no espaço não possuem uma relação temporal consistente, ou seja, o fenômeno ocorre de forma mais <strong>aleatória</strong> ao longo do tempo.</p></li>
+</ul>
+<p><strong>Coeficiente de Correlação de Mantel</strong></p>
+<p>O Coeficiente de Correlação de Mantel é uma medida estatística que avalia a correlação entre duas matrizes de distâncias, sendo amplamente utilizado na análise espaço-temporal para investigar se padrões espaciais mudam de forma significativa ao longo do tempo. Essencialmente, o teste de Mantel busca responder à pergunta:</p>
+<p><em>“Existe uma relação estatisticamente significativa entre a proximidade espacial e a proximidade temporal de um fenômeno?”</em></p>
+<p>O teste de Mantel calcula a correlação de Pearson entre os elementos de duas matrizes de distâncias:</p>
+<ul class="simple">
+<li><p><strong>Matriz de Distâncias Espaciais (<span class="math notranslate nohighlight">\(A_{ij}\)</span>)</strong>: Representa a proximidade física entre diferentes pontos no espaço. Por exemplo, se estamos analisando avaliações de hospedagem em Copacabana, essa matriz indicaria o quão próximos ou distantes estão os diferentes estabelecimentos entre si.</p></li>
+<li><p><strong>Matriz de Distâncias Temporais (<span class="math notranslate nohighlight">\(B_{ij}\)</span>)</strong>: Indica a proximidade temporal entre as observações. Para o mesmo exemplo, essa matriz mostraria a relação temporal entre os dados, como avaliações coletadas em meses consecutivos ou distantes.</p></li>
+</ul>
+<p>A fórmula do Coeficiente de Correlação de Mantel ((r_M)) é:</p>
+<div class="math notranslate nohighlight">
+\[
+r_M = \frac{\sum_{i=1}^{N} \sum_{j=1}^{N} (A_{ij} - \bar{A}) (B_{ij} - \bar{B})}{\sqrt{\sum_{i=1}^{N} \sum_{j=1}^{N} (A_{ij} - \bar{A})^2} \sqrt{\sum_{i=1}^{N} \sum_{j=1}^{N} (B_{ij} - \bar{B})^2}}
+\]</div>
+<p>Onde:</p>
+<ul class="simple">
+<li><p><strong><span class="math notranslate nohighlight">\(A_{ij}\)</span></strong> e <strong><span class="math notranslate nohighlight">\(B_{ij}\)</span></strong> são os elementos das matrizes de distância espacial e temporal, respectivamente.</p></li>
+<li><p><strong><span class="math notranslate nohighlight">\(\bar{A}\)</span></strong> e <strong><span class="math notranslate nohighlight">\(\bar{B}\)</span></strong> representam as médias das distâncias nas respectivas matrizes.</p></li>
+<li><p><strong><span class="math notranslate nohighlight">\(N\)</span></strong> é o número total de observações.</p></li>
+</ul>
+<p>O resultado <strong><span class="math notranslate nohighlight">\(r_M\)</span></strong> varia de <strong>-1</strong> a <strong>1</strong>, onde:</p>
+<ul class="simple">
+<li><p><strong><span class="math notranslate nohighlight">\(r_M = 1\)</span></strong> indica uma correlação positiva perfeita, ou seja, à medida que os pontos estão mais próximos no espaço, eles também estão próximos no tempo (e vice-versa).</p></li>
+<li><p><strong><span class="math notranslate nohighlight">\(r_M = -1\)</span></strong> indica uma correlação negativa perfeita, sugerindo que pontos espacialmente próximos têm eventos que ocorrem em tempos muito diferentes.</p></li>
+<li><p><strong><span class="math notranslate nohighlight">\(r_M = 0\)</span></strong> indica nenhuma correlação, sugerindo que a proximidade espacial não tem relação com a proximidade temporal.</p></li>
+</ul>
+<p><em>Interpretação do Teste de Mantel:</em></p>
+<p>Se o coeficiente de Mantel for alto e estatisticamente significativo, isso indica uma forte relação entre a estrutura espacial e temporal, ou seja, padrões espaciais mudam de forma sistemática ao longo do tempo. Por exemplo, se os hotspots de avaliações positivas em hospedagens de Copacabana permanecem nas mesmas áreas ao longo de diferentes meses, o teste de Mantel poderá identificar essa persistência espaço-temporal.</p>
+<p>Por outro lado, um valor baixo ou não significativo sugere que não há relação consistente entre os padrões espaciais e temporais, indicando que os padrões espaciais podem estar mudando de forma aleatória ou sem uma tendência clara ao longo do tempo.</p>
+<p><strong>Índice de Geary Espaço-Temporal</strong></p>
+<p>O Índice de Geary Espaço-Temporal é uma adaptação do Índice de Geary tradicional, desenvolvido para avaliar simultaneamente as dimensões espacial e temporal de um fenômeno. Enquanto o Índice de Moran foca na autocorrelação espacial global, o Índice de Geary oferece uma visão mais sensível às diferenças locais, medindo a discrepância absoluta entre os valores de uma variável em locais vizinhos e em momentos próximos no tempo.</p>
+<p>A fórmula do Índice de Geary Espaço-Temporal (<span class="math notranslate nohighlight">\(C_{ST}\)</span>) é uma extensão da versão espacial, incorporando a dimensão temporal na matriz de pesos espaço-temporais.</p>
+<div class="math notranslate nohighlight">
+\[
+C_{ST} = \frac{(N - 1) \sum_{i=1}^{N} \sum_{j=1}^{N} w_{ij} (x_i - x_j)^2}{2 \sum_{i=1}^{N} (x_i - \bar{x})^2}
+\]</div>
+<p>Onde:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N\)</span> é o número total de observações (considerando todas as localidades e períodos analisados).</p></li>
+<li><p><span class="math notranslate nohighlight">\(w_{ij}\)</span> é a matriz de pesos espaço-temporais, considerando tanto a proximidade espacial quanto a proximidade temporal.</p></li>
+<li><p><span class="math notranslate nohighlight">\(x_i\)</span> e <span class="math notranslate nohighlight">\(x_j\)</span> representam os valores da variável nos locais e tempos <span class="math notranslate nohighlight">\(i\)</span> e <span class="math notranslate nohighlight">\(j\)</span>, respectivamente.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bar{x}\)</span> é a média global da variável analisada.</p></li>
+</ul>
+<p><em>Interpretação dos valores do <span class="math notranslate nohighlight">\(C_{ST}\)</span>:</em></p>
+<p>O Índice de Geary Espaço-Temporal varia de 0 a 2, com diferentes interpretações para cada faixa de valores:</p>
+<ul class="simple">
+<li><p><strong>Valores próximos de 0:</strong><br />
+Indicam uma alta autocorrelação espaço-temporal, sugerindo que padrões persistentes ocorrem em áreas e períodos próximos. Em termos práticos, isso poderia significar que as avaliações de hospedagens em Copacabana se mantêm consistentes ao longo do tempo nas mesmas regiões, refletindo uma estabilidade espacial e temporal.</p></li>
+<li><p><strong>Valores próximos de 1:</strong><br />
+Sugerem a ausência de autocorrelação espaço-temporal, indicando uma distribuição aleatória da variável tanto no espaço quanto no tempo. Nesse cenário, os padrões espaciais não têm uma relação consistente com a dimensão temporal, o que pode refletir uma dinâmica mais imprevisível do fenômeno estudado.</p></li>
+<li><p><strong>Valores próximos de 2:</strong><br />
+Apontam para padrões dispersos ao longo do tempo, o que indica que valores altos de uma variável estão cercados por valores baixos (e vice-versa) tanto no espaço quanto no tempo. Esse comportamento pode ser interpretado como uma dispersão espaço-temporal, onde os fenômenos não seguem uma tendência clara de persistência.</p></li>
+</ul>
+</section>
+<section id="padroes-espaciais-de-avaliacoes-em-copacabana-analise-global">
+<h3>3.2.7 Padrões Espaciais de Avaliações em Copacabana: Análise Global<a class="headerlink" href="#padroes-espaciais-de-avaliacoes-em-copacabana-analise-global" title="Link to this heading">#</a></h3>
+<p>Realizaremos, a seguir, uma análise global da distribuição espacial das avaliações de hospedagens em Copacabana ao longo de 2024, utilizando o <strong>Índice de Moran Global (<span class="math notranslate nohighlight">\(I\)</span>)</strong> para identificar possíveis padrões de agrupamento ou dispersão nos dados. Essa análise permite avaliar a presença de dependência espacial nas avaliações, comparando o <strong>Índice de Moran Calculado</strong> com o <strong>Índice de Moran Esperado (<span class="math notranslate nohighlight">\(E(I)\)</span>)</strong>, que representa o valor esperado sob a hipótese de aleatoriedade. Essa comparação é fundamental para determinar se os padrões espaciais observados são estatisticamente significativos ou se podem ser atribuídos ao acaso.</p>
+<p>Além da autocorrelação espacial, também investigaremos a <strong>autocorrelação temporal</strong>, analisando se os padrões de avaliações se mantêm consistentes ao longo do tempo. Para complementar a análise, será aplicada a <strong>autocorrelação espaço-temporal</strong>, integrando as dimensões de espaço e tempo para identificar dinâmicas complexas que podem influenciar a distribuição das avaliações. Essa abordagem permitirá uma compreensão mais profunda dos fenômenos estudados, evidenciando tanto padrões persistentes quanto mudanças sazonais ou comportamentais ao longo do ano.</p>
+<section id="autocorrelacao-espacial">
+<h4>3.2.7.1 Autocorrelação Espacial<a class="headerlink" href="#autocorrelacao-espacial" title="Link to this heading">#</a></h4>
+<p>A tabela 1 apresenta os valores de <strong><span class="math notranslate nohighlight">\(I\)</span></strong> calculados para cada mês de 2024, juntamente com seus respectivos <strong>p-valores</strong>, indicando quais meses apresentaram autocorrelação espacial estatisticamente significativa.</p>
+<p>Tabela 1:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Mês</strong></p></th>
+<th class="head"><p><strong>(I) Calculado</strong></p></th>
+<th class="head"><p><strong>(E(I)) Esperado</strong></p></th>
+<th class="head"><p><strong>p-valor</strong></p></th>
+<th class="head"><p><strong>Interpretação</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Jan</strong></p></td>
+<td><p>0.0127</p></td>
+<td><p>-0.00029</p></td>
+<td><p>0.1572</p></td>
+<td><p>Maior que esperado, mas sem significância estatística.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Fev</strong></p></td>
+<td><p>0.0129</p></td>
+<td><p>-0.00029</p></td>
+<td><p>0.1557</p></td>
+<td><p>Maior que esperado, mas sem significância estatística.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Mar</strong></p></td>
+<td><p>0.0079</p></td>
+<td><p>-0.00029</p></td>
+<td><p>0.2904</p></td>
+<td><p>Levemente maior, sem significância.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Abr</strong></p></td>
+<td><p>0.0134</p></td>
+<td><p>-0.00029</p></td>
+<td><p>0.1953</p></td>
+<td><p>Maior que esperado, sem significância.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Mai</strong></p></td>
+<td><p>0.0214</p></td>
+<td><p>-0.00029</p></td>
+<td><p>0.0598</p></td>
+<td><p>Marginalmente significativo ((p \approx 0.06)).</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Jun</strong></p></td>
+<td><p>0.0455</p></td>
+<td><p>-0.00029</p></td>
+<td><p><strong>0.0010</strong></p></td>
+<td><p><strong>Muito maior que esperado e significativo ((p &lt; 0.05))</strong>.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Jul</strong></p></td>
+<td><p>0.0202</p></td>
+<td><p>-0.00029</p></td>
+<td><p>0.0910</p></td>
+<td><p>Maior que esperado, mas sem significância.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Ago</strong></p></td>
+<td><p><strong>-0.0098</strong></p></td>
+<td><p>-0.00029</p></td>
+<td><p>0.7193</p></td>
+<td><p><strong>Menor que esperado, sem significância estatística.</strong></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Set</strong></p></td>
+<td><p>0.0119</p></td>
+<td><p>-0.00029</p></td>
+<td><p>0.1599</p></td>
+<td><p>Maior que esperado, sem significância.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Out</strong></p></td>
+<td><p>0.0110</p></td>
+<td><p>-0.00029</p></td>
+<td><p>0.2104</p></td>
+<td><p>Maior que esperado, sem significância.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Nov</strong></p></td>
+<td><p>0.0031</p></td>
+<td><p>-0.00029</p></td>
+<td><p>0.3929</p></td>
+<td><p>Maior que esperado, sem significância.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Dez</strong></p></td>
+<td><p>0.0382</p></td>
+<td><p>-0.00029</p></td>
+<td><p><strong>0.0059</strong></p></td>
+<td><p><strong>Muito maior que esperado e significativo ((p &lt; 0.05))</strong>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A análise dos resultados do Índice de Moran Global revela que, na maior parte dos meses, o valor calculado é maior que o esperado, o que sugere que as avaliações das hospedagens não estão distribuídas de maneira completamente aleatória. No entanto, essa diferença não é estatisticamente significativa na maioria dos meses, indicando apenas uma fraca dependência espacial na distribuição das avaliações ao longo do ano.</p>
+<p>Entre os meses analisados, junho ((I = 0.0455, p = 0.0010)) e dezembro ((I = 0.0382, p = 0.0059)) se destacam por apresentarem valores significativamente maiores que o esperado, evidenciando a formação de <strong>clusters espaciais</strong> de avaliações. Isso sugere que, nesses períodos, as hospedagens com maior número de avaliações tendem a estar concentradas em determinadas regiões.</p>
+<p>Nos meses de janeiro, fevereiro, março, abril, setembro, outubro e novembro, o Moran Calculado é levemente maior que o esperado, mas sem significância estatística ((p &gt; 0.05)). Isso indica que a distribuição das avaliações não segue um padrão espacial bem definido e que os valores estão próximos da aleatoriedade. Dessa forma, não há evidências de uma forte autocorrelação espacial nesses períodos.</p>
+<p>Um caso particular ocorre em agosto, quando o Índice de Moran assume um valor negativo ((-0.0098)), enquanto o valor esperado é de (-0.00029). Esse resultado poderia indicar um padrão de dispersão, no qual hospedagens com muitas avaliações estão cercadas por outras com poucas avaliações e vice-versa. Entretanto, o p-valor elevado ((p = 0.7193)) sugere que essa diferença não é estatisticamente significativa, podendo ser apenas um efeito aleatório, sem uma estrutura espacial claramente definida.</p>
+</section>
+<section id="id1">
+<h4>3.2.7.2 Autocorrelação temporal<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<p>Para compreender a dinâmica temporal da autocorrelação espacial das avaliações das hospedagens em Copacabana, vamos calcular o <strong>correlograma temporal</strong> do Índice de Moran ao longo do período analisado. O correlograma temporal é uma ferramenta que permite visualizar como a <strong>autocorrelação espacial</strong> varia ao longo do tempo, mostrando a persistência ou a dissipação dos padrões espaciais em diferentes defasagens temporais.</p>
+<p>A análise do Índice de Moran em uma perspectiva temporal possibilita identificar se os padrões espaciais observados em determinados meses se repetem em períodos subsequentes ou se se dissipam rapidamente. Isso é relevante no contexto de Copacabana, onde a sazonalidade do turismo e a variação na demanda por hospedagens podem influenciar diretamente a distribuição espacial das avaliações.</p>
+<p>Ao construir o <strong>correlograma temporal</strong>, serão calculados os <strong>coeficientes de autocorrelação temporal</strong> para o Índice de Moran em diferentes lags mensais. O termo <strong>“lag”</strong> (ou defasagem)refere-se aos intervalos de tempo utilizados para medir a defasagem temporal em uma série temporal, indicando o quanto uma observação atual está relacionada com observações passadas e permitindo avaliar como os eventos anteriores influenciam os valores presentes ou futuros. Na figura 7 apresenta-se o correlograma temporal do índice de Moran.</p>
+<p><img alt="Figura 1" src="_images/fig3_7.png" /></p>
+<p>Figura 7. Correlograma temporal do índice de Moran</p>
+<p>O correlograma temporal do Índice de Moran apresentado na imagem exibe a autocorrelação do índice ao longo do tempo para diferentes defasagens (lags). Em <strong>lag 0</strong>, o valor é <strong>1.0</strong>, o que é esperado, já que a correlação de uma variável com ela mesma é sempre perfeita. Para defasagens maiores, a autocorrelação mostra comportamentos distintos: em <strong>lag 2</strong>, a autocorrelação se torna negativa, indicando uma possível inversão no padrão espacial após dois períodos. Nos <strong>lags 3 e 4</strong>, a correlação continua negativa, sugerindo que a estrutura espacial pode estar oscilando ao longo do tempo. Já nos <strong>lags 6 e 7</strong>, há um retorno para valores positivos, o que aponta para uma possível recorrência dos padrões espaciais.</p>
+<p>A oscilação entre valores positivos e negativos pode indicar um comportamento cíclico ou uma mudança periódica nos padrões espaciais ao longo dos meses. Essa dinâmica pode ser influenciada por fatores sazonais, como variações no comportamento dos usuários da plataforma ao longo do ano. Além disso, a alternância nos padrões espaciais pode estar relacionada a mudanças estruturais nos clusters espaciais, potencialmente ligadas a flutuações no mercado imobiliário, no turismo ou em outros fatores externos.</p>
+<p>A análise do correlograma sugere que existe dependência temporal na estrutura espacial dos dados, mas essa dependência não se mantém estável ao longo do tempo. A presença de períodos de correlação negativa e positiva indica que o padrão espacial pode passar por mudanças cíclicas ou intermitentes. Para investigar melhor essa oscilação, uma abordagem interessante seria testar a autocorrelação espacial sazonal, verificando se há padrões recorrentes em determinadas épocas do ano.</p>
+</section>
+<section id="autocorrelacao-espaco-temporal">
+<h4>3.2.7.3 Autocorrelação espaço-temporal<a class="headerlink" href="#autocorrelacao-espaco-temporal" title="Link to this heading">#</a></h4>
+<p>Para analisar a dinâmica espaço-temporal das avaliações das hospedagens em Copacabana em nosso estudo de caso, será utilizada a métrica do Índice de Moran Espaço-Temporal (STI). Essa abordagem permite avaliar tanto a distribuição espacial quanto a evolução temporal dos padrões de autocorrelação espacial, fornecendo uma visão abrangente sobre a persistência ou dissipação dos clusters espaciais ao longo do período estudado.</p>
+<p>A aplicação do Índice de Moran Espaço-Temporal (STI) possibilitará identificar se os padrões espaciais observados em determinados meses se repetem em períodos subsequentes ou se apresentam uma dinâmica mais volátil. Um STI positivo e significativo indicará a manutenção de padrões espaciais similares ao longo do tempo, sugerindo sazonalidade ou estabilidade na distribuição das avaliações. Em contrapartida, um STI negativo apontará para uma dispersão espaço-temporal, indicando mudanças frequentes nos padrões espaciais.</p>
+<p>A análise se concentrará em determinar se os clusters de altas ou baixas avaliações persistem nas mesmas regiões ao longo do ano ou se novas áreas surgem como pontos de destaque em determinados períodos.</p>
+<p>A Figura 8 apresenta a evolução do Índice de Moran Espaço-Temporal ao longo dos meses de 2024, permitindo uma visualização da variação da autocorrelação espaço-temporal das avaliações das hospedagens em Copacabana.</p>
+<p><img alt="Figura 1" src="_images/fig3_8.png" /></p>
+<p>Figura 8. Evolução do Índice de Moran Espaço-Temporal das Avaliações de Hospedagens em Copacabana ao Longo de 2024</p>
+<p>Observa-se que o Índice de Moran Espaço-Temporal mantém-se relativamente baixo durante a maior parte do período analisado, indicando uma baixa dependência espaço-temporal na distribuição das avaliações. No entanto, destaca-se o mês de junho (2024_06), onde o índice atinge seu pico máximo, evidenciando a formação de padrões espaciais significativos nesse período. Esse comportamento pode estar relacionado a fatores sazonais, como o aumento do turismo no inverno, refletindo uma concentração de avaliações em regiões específicas.</p>
+<p>Outro ponto notável é o mês de agosto (2024_08), onde o índice atinge um valor negativo, sugerindo uma dispersão espaço-temporal, ou seja, a ausência de padrões consistentes na distribuição espacial das avaliações. Nos meses seguintes, o índice retorna a valores positivos, mas sem atingir significância estatística, indicando uma leve autocorrelação sem um padrão claro de persistência espaço-temporal.</p>
+<p>A presença de pontos em vermelho na figura indica os períodos em que o Índice de Moran Espaço-Temporal foi estatisticamente significativo, reforçando a importância de uma análise detalhada nesses meses específicos. Esses resultados fornecem uma base sólida para explorar os fatores subjacentes que influenciam a distribuição das avaliações em diferentes épocas do ano, contribuindo para o planejamento estratégico e para a gestão eficiente do turismo em Copacabana.</p>
+</section>
+</section>
+</section>
+<section id="analise-local">
+<h2>3.3 Análise Local<a class="headerlink" href="#analise-local" title="Link to this heading">#</a></h2>
+<p>Enquanto a análise global fornece uma visão ampla da distribuição espacial e temporal dos dados, a análise local permite examinar como esses padrões variam dentro da região de estudo. Esse tipo de abordagem é de suma importância para identificar clusters (áreas onde valores semelhantes estão concentrados) e outliers espaciais (pontos que se diferenciam significativamente de seus vizinhos).</p>
+<p>Entre os métodos mais utilizados na análise local estão o LISA (Local Indicators of Spatial Association) e o Getis-Ord G*. O LISA mede a autocorrelação espacial localmente, permitindo identificar clusters de valores altos ou baixos, além de destacar áreas com padrões espaciais diferenciados. Já o Getis-Ord G* foca em áreas de alta e baixa intensidade, identificando hotspots, que representam concentrações significativas de valores elevados, e coldspots, que indicam concentrações significativas de valores baixos.</p>
+<p>Esses dois métodos complementam-se na análise local, oferecendo diferentes perspectivas sobre a distribuição espacial dos dados e ajudando a revelar padrões locais específicos que poderiam não ser detectados em uma análise global.</p>
+<p>A análise local responde a perguntas como:</p>
+<ul class="simple">
+<li><p><em>Quais áreas possuem os maiores agrupamentos de valores elevados?</em></p></li>
+<li><p><em>Existem regiões que apresentam um padrão diferente do restante do espaço?</em></p></li>
+<li><p><em>Há áreas que se destacam por comportamento atípico em relação ao seu entorno?</em></p></li>
+</ul>
+<p>Essas ferramentas possibilitam uma análise mais detalhada dos padrões espaciais, permitindo uma interpretação <strong>granular e contextualizada</strong> dos dados.</p>
+<p>Além da dimensão espacial, a análise local pode ser ampliada para considerar também a dimensão temporal, fornecendo uma perspectiva espaço-temporal dos padrões locais. Essa abordagem permite identificar não apenas onde os clusters e outliers estão localizados, mas também quando esses padrões se manifestam e como evoluem ao longo do tempo.</p>
+<p>A análise espaço-temporal local é importante em contextos onde o comportamento dos dados é influenciado por fatores sazonais ou mudanças dinâmicas ao longo do tempo. Por exemplo, ao analisar as avaliações de hospedagens em Copacabana, essa metodologia ajuda a responder questões como:</p>
+<ul class="simple">
+<li><p><em>Quais regiões mantêm altas avaliações de forma consistente ao longo do ano?</em></p></li>
+<li><p><em>Existem áreas que se tornam hotspots apenas em períodos específicos, como alta temporada turística?</em></p></li>
+<li><p><em>Como os padrões espaciais de avaliações variam de um mês para outro?</em></p></li>
+</ul>
+<p>Ao incorporar a dimensão temporal na análise local, é possível detectar padrões persistentes, mudanças sazonais e até mesmo anomalias temporárias que poderiam passar despercebidas em uma análise puramente espacial ou global. Essa abordagem mais detalhada e dinâmica contribui para uma interpretação mais completa dos fenômenos espaço-temporais.</p>
+<section id="lisa-local-moran-s-i">
+<h3>3.3.1 LISA (Local Moran’s I)<a class="headerlink" href="#lisa-local-moran-s-i" title="Link to this heading">#</a></h3>
+<p>O Índice Local de Moran ((I_L)), também chamado de LISA (Local Indicators of Spatial Association), é uma estatística que mede a autocorrelação espacial local, ou seja, verifica se um ponto ou região apresenta uma dependência espacial significativa em relação aos seus vizinhos. Quando adaptado para o contexto espaço-temporal, o LISA permite não apenas identificar padrões espaciais locais, mas também avaliar como esses padrões evoluem ao longo do tempo, ampliando a análise para uma dimensão mais dinâmica e complexa.</p>
+<p>A equação do Índice Local de Moran é:</p>
+<div class="math notranslate nohighlight">
+\[
+I_L = \frac{(D_i - \overline{D}) \sum_{j=1}^{n} W_{ij} (D_j - \overline{D})}{\sum_{i=1}^{n} (D_i - \overline{D})^2}
+\]</div>
+<p>onde:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(I_L\)</span> representa o Índice Local de Moran para cada ponto <span class="math notranslate nohighlight">\(i\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(D_i\)</span> e <span class="math notranslate nohighlight">\(D_j\)</span> são os valores da variável de interesse nas localidades <span class="math notranslate nohighlight">\(i\)</span> e <span class="math notranslate nohighlight">\(j\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\overline{D}\)</span> é a média global da variável,</p></li>
+<li><p><span class="math notranslate nohighlight">\(W_{ij}\)</span> é a matriz de pesos espaciais, indicando a influência dos vizinhos sobre o ponto <span class="math notranslate nohighlight">\(i\)</span>.</p></li>
+</ul>
+<p>No contexto espaço-temporal, o LISA é adaptado para incorporar a dimensão temporal, analisando a autocorrelação local não apenas entre pontos no espaço, mas também ao longo de diferentes períodos de tempo. A matriz de pesos espaciais (W_{ij}) é substituída por uma matriz de pesos espaço-temporais, que considera tanto a proximidade espacial quanto a proximidade temporal das observações:</p>
+<div class="math notranslate nohighlight">
+\[
+I_{LST} = \frac{(D_{it} - \overline{D}) \sum_{j=1}^{n} W_{ijt} (D_{jt} - \overline{D})}{\sum_{i=1}^{n} (D_{it} - \overline{D})^2}
+\]</div>
+<p>onde:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(D_{it}\)</span> e <span class="math notranslate nohighlight">\(D_{jt}\)</span> são os valores da variável nas localidades <span class="math notranslate nohighlight">\(i\)</span> e <span class="math notranslate nohighlight">\(j\)</span> em um instante de tempo <span class="math notranslate nohighlight">\(t\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(W_{ijt}\)</span> é a matriz de pesos espaço-temporais, integrando a influência espacial e a proximidade temporal.</p></li>
+</ul>
+<p>Essa extensão permite identificar não apenas onde os clusters espaciais estão localizados, mas também quando eles ocorrem, fornecendo uma visão detalhada da persistência, sazonalidade ou volatilidade dos padrões espaciais ao longo do tempo.</p>
+<p>O mapa de clusters LISA espaço-temporal classifica as regiões nas mesmas cinco categorias principais do LISA tradicional, mas com uma interpretação que incorpora o componente temporal:</p>
+<ul class="simple">
+<li><p><em>Alto-Alto (H-H):</em> Regiões com valores elevados que permanecem cercadas por outras regiões de valores elevados ao longo do tempo, indicando clusters persistentes.</p></li>
+<li><p><em>Baixo-Baixo (L-L):</em> Áreas com valores baixos constantes cercadas por outras regiões de valores baixos, sugerindo padrões de baixa intensidade estáveis.</p></li>
+<li><p><em>Baixo-Alto (L-H):</em> Locais com valores baixos cercados por regiões de valores altos, indicando outliers espaciais negativos que podem surgir ou desaparecer em diferentes períodos.</p></li>
+<li><p><em>Alto-Baixo (H-L):</em> Áreas com valores altos cercadas por valores baixos, representando outliers espaciais positivos que podem indicar anomalias temporárias.</p></li>
+<li><p><em>Sem Significância:</em> Regiões onde não há autocorrelação espaço-temporal estatisticamente significativa, sugerindo um comportamento aleatório ao longo do espaço e do tempo.</p></li>
+</ul>
+</section>
+<section id="getis-ord-g-identificacao-de-hotspots-e-coldspots">
+<h3>3.3.2 Getis-Ord G*: Identificação de Hotspots e Coldspots<a class="headerlink" href="#getis-ord-g-identificacao-de-hotspots-e-coldspots" title="Link to this heading">#</a></h3>
+<p>O Índice Getis-Ord G* é uma ferramenta de análise espacial amplamente utilizada para identificar hotspots (áreas com alta intensidade de um fenômeno) e coldspots (regiões com baixa intensidade) em uma determinada área de estudo. Ao contrário do Índice de Moran, que mede a autocorrelação espacial considerando a relação entre um ponto e seus vizinhos, o Getis-Ord G* foca na intensidade dos valores dentro de uma área específica, avaliando se uma região apresenta uma concentração significativa de valores altos ou baixos, independentemente da correlação direta entre os pontos.</p>
+<p>A estatística ( G^* ) calcula a concentração espacial de uma variável dentro de uma janela de vizinhança especificada, o que permite identificar padrões locais em diferentes escalas espaciais. A fórmula do Índice Getis-Ord G* para uma localização ( i ) é expressa como:</p>
+<div class="math notranslate nohighlight">
+\[
+G^*_i = \frac{\sum_j W_{ij} X_j}{\sum_j X_j}
+\]</div>
+<p>onde:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(G^*_i\)</span> representa o valor do índice para o local <span class="math notranslate nohighlight">\(i\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(X_j\)</span> é o valor da variável de interesse no local <span class="math notranslate nohighlight">\(j\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(W_{ij}\)</span> é a matriz de pesos espaciais, que define a influência dos vizinhos <span class="math notranslate nohighlight">\(j\)</span> sobre o ponto <span class="math notranslate nohighlight">\(i\)</span>.</p></li>
+</ul>
+<p>A interpretação do <span class="math notranslate nohighlight">\(G^*_i\)</span> é baseada em sua significância estatística:</p>
+<ul class="simple">
+<li><p>Quando o <span class="math notranslate nohighlight">\(G^*_i\)</span> é significativamente alto, o local <span class="math notranslate nohighlight">\(i\)</span> está cercado por valores altos, configurando um hotspot. Isso indica a presença de uma concentração significativa de altos valores dentro da vizinhança definida, o que pode ser indicativo de áreas de alta demanda, incidência de eventos ou zonas de interesse estratégico.</p></li>
+<li><p>Se o <span class="math notranslate nohighlight">\(G^*_i\)</span> é significativamente baixo, o local <span class="math notranslate nohighlight">\(i\)</span> encontra-se em meio a valores baixos, caracterizando um coldspot. Essa situação aponta para uma concentração estatisticamente significativa de valores baixos, o que pode revelar regiões menos favorecidas, áreas de baixa demanda ou zonas críticas que merecem atenção específica.</p></li>
+<li><p>Quando o <span class="math notranslate nohighlight">\(G^*_i\)</span> não apresenta significância estatística, a distribuição dos valores é próxima da aleatoriedade, sem a formação de padrões espaciais claros.</p></li>
+</ul>
+<p>No contexto espaço-temporal, o Índice Getis-Ord G* pode ser adaptado para identificar hotspots e coldspots que persistem ou surgem ao longo do tempo. A fórmula espaço-temporal incorpora a dimensão temporal na matriz de pesos, permitindo analisar se uma região mantém altas ou baixas intensidades em diferentes períodos de tempo:</p>
+<div class="math notranslate nohighlight">
+\[
+G^*_{ST}(i) = \frac{\sum_{j,t} W_{ijt} X_{jt}}{\sum_{j,t} X_{jt}}
+\]</div>
+<p>onde:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(W_{ijt}\)</span> é a matriz de pesos espaço-temporais, que considera proximidade espacial e proximidade temporal.</p></li>
+<li><p><span class="math notranslate nohighlight">\(X_{jt}\)</span> é o valor da variável de interesse no local <span class="math notranslate nohighlight">\(j\)</span> e no tempo <span class="math notranslate nohighlight">\(t\)</span>.</p></li>
+</ul>
+<p>Essa adaptação permite identificar <strong>padrões dinâmicos</strong> e responder a perguntas como:</p>
+<ul class="simple">
+<li><p><em>Os hotspots de uma variável permanecem nas mesmas regiões ao longo do ano?</em></p></li>
+<li><p><em>Há uma sazonalidade na distribuição espacial dos valores altos ou baixos?</em></p></li>
+<li><p><em>Quais áreas apresentam mudanças significativas ao longo do tempo?</em></p></li>
+</ul>
+</section>
+<section id="padroes-espaciais-de-avaliacoes-em-copacabana-analise-local">
+<h3>3.3.3 Padrões Espaciais de Avaliações em Copacabana: Análise Local<a class="headerlink" href="#padroes-espaciais-de-avaliacoes-em-copacabana-analise-local" title="Link to this heading">#</a></h3>
+<p>Compreendidas as diferenças e aplicações do <strong>LISA</strong> e do <strong>Getis-Ord G*</strong>, agora partiremos para a aplicação prática dessas metodologias na <strong>nossa área de estudo</strong>.</p>
+<p>Nesta seção, realizaremos uma <strong>análise local</strong> das avaliações das hospedagens em <strong>Copacabana</strong>, utilizando tanto o <strong>Índice Local de Moran (LISA)</strong> quanto o <strong>Getis-Ord G*</strong>. O objetivo é identificar onde estão localizados os <strong>clusters espaciais</strong>, os <strong>hotspots</strong> e os <strong>coldspots</strong>, além de detectar possíveis <strong>outliers espaciais</strong>.</p>
+<p>A aplicação dessas ferramentas permitirá uma visão mais detalhada da distribuição das avaliações, fornecendo informações sobre como os padrões espaciais variam ao longo do bairro e ao longo do tempo. Ao final, espera-se obter mapas temáticos que destaquem as áreas com comportamento diferenciado, contribuindo para a interpretação da dinâmica espacial das avaliações.</p>
+<section id="analise-local-com-o-indice-de-moran-local-lisa">
+<h4>3.3.3.1 Análise Local com o Índice de Moran Local (LISA)<a class="headerlink" href="#analise-local-com-o-indice-de-moran-local-lisa" title="Link to this heading">#</a></h4>
+<p>Inicialmente realizaremos o cálculo do Índice de Moran Local (LISA) para todos os meses do período analisado e interpretaremos os resultados por meio de um boxplot. Para evitar sobrecarga visual e facilitar a interpretação, focaremos a visualização detalhada em apenas dois meses, selecionados com base nos valores do Índice de Moran Global.</p>
+<p>A Figura 9 apresenta uma série de mapas mostrando a distribuição dos clusters espaciais detectados pelo Índice de Moran Local (LISA) ao longo de 12 meses em 2024.</p>
+<p><img alt="Figura 1" src="_images/fig3_9.png" /></p>
+<p>Figura 9. Clusters espaciais detectados pelo Índice de Moran Local (LISA)</p>
+<p>Cada mapa representa a configuração espacial dos clusters de avaliações para um determinado mês, permitindo identificar padrões de autocorrelação espacial e possíveis variações temporais. A maioria dos pontos, em todos os meses, está classificada como “Sem Significância”, o que indica que, na maior parte do tempo, não há uma autocorrelação espacial forte nas avaliações.</p>
+<p>No entanto, observa-se variação na presença e intensidade dos clusters Alto-Alto (Hotspot) e Baixo-Baixo (Coldspot), assim como dos outliers Baixo-Alto e Alto-Baixo, sugerindo mudanças na distribuição espacial ao longo do tempo. Os meses de janeiro, maio, junho, setembro e outubro apresentam uma maior concentração de Hotspots, indicando a formação de regiões onde avaliações mais altas estão agrupadas. Em contrapartida, nos meses de março, agosto e novembro, os Hotspots são menos frequentes e mais dispersos, sugerindo uma distribuição mais aleatória das avaliações nesses períodos.</p>
+<p>A distribuição dos Coldspots ocorre de forma mais esparsa, com destaque para junho, julho e outubro, enquanto em outros meses esses clusters são quase inexistentes. Já os outliers Baixo-Alto e Alto-Baixo aparecem de maneira relativamente uniforme ao longo do tempo, sem variações sazonais significativas.</p>
+<p>Os resultados indicam que a autocorrelação espacial das avaliações não é estável ao longo do ano, podendo estar relacionada a fatores sazonais na formação dos clusters. O aumento de Hotspots em meses como junho, setembro e outubro pode sinalizar períodos de maior demanda ou sazonalidade do turismo. A presença reduzida de Coldspots sugere que não há uma concentração constante de avaliações baixas em uma mesma área. A variação na dispersão dos outliers indica que algumas acomodações se destacam ocasionalmente de seus vizinhos, mas sem um padrão fixo.</p>
+<p>A Figura 10 ilustra a distribuição do Índice de Moran Local ((I_i)) ao longo dos meses analisados.</p>
+<p><img alt="Figura 1" src="_images/fig3_10.png" /></p>
+<p>Figura 10. Distribuição do Índice de Moran Local</p>
+<p>De forma geral, os valores se mantêm relativamente estáveis, próximos de zero, sugerindo uma baixa autocorrelação espacial na maioria dos casos. No entanto, algumas variações podem ser observadas, principalmente nos meses de junho (2024_06) e dezembro (2024_12), que apresentam valores extremos mais distantes.</p>
+<p>A presença de outliers, indicados por pontos vermelhos, revela que algumas localidades possuem um Moran Local significativamente diferente da média do mês, indicando a existência de clusters espaciais relevantes, como hotspots ou coldspots. A dispersão dos valores varia entre os meses, sugerindo que a estrutura espacial das avaliações pode sofrer mudanças ao longo do tempo.</p>
+<p>Os meses de junho e dezembro mostram maior variabilidade, o que pode estar relacionado a flutuações sazonais na autocorrelação espacial.</p>
+<p>Agora vamos realizar uma análise mais detalhada considerando somente os meses de junho e agosto. Esses meses foram escolhidos com base nos resultados da Análise Global realizada na seção anterior. O mês de junho (2024_06) apresentou o maior índice de Moran, com um valor de 0.0455 e um p-valor de 0.0010, indicando uma maior autocorrelação espacial positiva e, consequentemente, padrões espaciais mais definidos. Em contraste, o mês de agosto (2024_08) registrou o menor Moran’s I, com um valor de -0.0098 e um p-valor de 0.7193, sugerindo pouca ou nenhuma autocorrelação espacial e um padrão mais aleatório na distribuição dos dados. A Figura 8 apresenta os mapas comparativos dos clusters espaciais detectados pelo Índice de Moran Local (LISA) nesses meses.</p>
+<p><img alt="Figura 1" src="_images/fig3_11.png" /></p>
+<p>Figura 11. Clusters espaciais detectados pelo Índice de Moran Local (LISA) nos meses de junho (2024_06) e agosto (2024_08)</p>
+<p>No mês de junho, destaca-se uma forte presença de clusters Alto-Alto (Hotspot), representados por pontos vermelhos, especialmente em algumas áreas do centro e do norte. Os clusters Baixo-Baixo (Coldspot), indicados pelos pontos azuis, são menos evidentes ou ausentes. Além disso, há outliers Baixo-Alto e Alto-Baixo, identificados pelos pontos roxos e amarelos, que aparecem de forma limitada e dispersa.</p>
+<p>Em contraste, o mês de agosto apresenta um padrão espacial menos estruturado. Os Hotspots são menos numerosos e mais dispersos em comparação a junho, enquanto os outliers continuam presentes, mas sem formar grandes agrupamentos. Os Coldspots permanecem ausentes, e a maioria dos pontos segue classificada como “Sem Significância”, sugerindo um padrão espacial menos definido.</p>
+<p>Essas diferenças podem estar associadas a mudanças sazonais na demanda, variações na oferta de acomodações ou alterações no comportamento dos usuários ao longo do tempo.</p>
+<p><strong>Teste de Kruskal-Wallis</strong></p>
+<p>Para complementar a análise dos clusters espaciais e verificar se as diferenças observadas entre os meses são estatisticamente significativas, aplicamos o Teste de Kruskal-Wallis. Esse teste não paramétrico é adequado para comparar distribuições de dados em diferentes grupos, permitindo avaliar se o Índice de Moran Local (LISA) apresenta variações relevantes ao longo do tempo.</p>
+<ul class="simple">
+<li><p><em>Resultado:</em></p>
+<ul>
+<li><p>Estatística Qui-quadrado = 12.485</p></li>
+<li><p>Graus de liberdade (df) = 11</p></li>
+<li><p>p-valor = 0.3283</p></li>
+</ul>
+</li>
+</ul>
+<p>Os resultados do Teste de Kruskal-Wallis apresentaram um p-valor de 0.3283, indicando que não há evidências estatísticas suficientes para afirmar que a distribuição do Índice de Moran Local (LISA) difere significativamente entre os meses analisados. Como o p-valor obtido é maior que o nível de significância usual (0.05), não rejeitamos a hipótese nula, sugerindo que os meses possuem distribuições semelhantes do LISA.</p>
+<p>O valor do teste (chi-squared = 12.485, df = 11) reforça essa interpretação, mostrando que as diferenças entre os meses são pequenas em relação à variabilidade total dos dados. O p-valor elevado sugere que as variações no Índice de Moran Local observadas ao longo do tempo podem ser explicadas pelo acaso, sem indicar um padrão estatisticamente significativo.</p>
+<p>Esses resultados corroboram a hipótese de que a autocorrelação espacial das avaliações se mantém relativamente estável ao longo do ano, sem apresentar mudanças estruturais expressivas na distribuição dos clusters.</p>
+<p>Apesar de o Teste de Kruskal-Wallis não ter identificado diferenças significativas, avançaremos para a próxima etapa da análise, aplicando o Getis-Ord G. Essa abordagem permitirá uma avaliação mais detalhada da intensidade dos hotspots ao longo do tempo, oferecendo uma nova perspectiva sobre a concentração espacial dos clusters de valores altos e possibilitando a identificação de padrões espaciais sutis que possam ter passado despercebidos na análise anterior.</p>
+</section>
+<section id="analise-local-com-o-indice-de-getis-ord-g">
+<h4>3.3.3.2 Análise Local com o Índice de Getis-Ord G*<a class="headerlink" href="#analise-local-com-o-indice-de-getis-ord-g" title="Link to this heading">#</a></h4>
+<p>Como vimos anteriormente, o Getis-Ord G permite identificar e quantificar a intensidade dos hotspots e coldspots, ou seja, áreas onde as avaliações apresentam valores significativamente altos ou baixos em relação ao entorno. Enquanto o Índice de Moran Local (LISA) mede a autocorrelação espacial e classifica os pontos em clusters de alta e baixa correlação, o Getis-Ord G* foca na identificação da intensidade dessas concentrações espaciais, fornecendo uma perspectiva complementar sobre a estrutura espacial dos dados.</p>
+<p>Com essa abordagem, poderemos avaliar se existem regiões que mantêm padrões de altas ou baixas avaliações de forma persistente, além de detectar possíveis variações sazonais ao longo dos meses.</p>
+<p><img alt="Figura 1" src="_images/fig3_12.png" /></p>
+<p>Figura 12. Distribuição espacial dos hotspots e coldspots detectados pelo Getis-Ord G* ao longo dos meses de 2024.</p>
+<p>A imagem apresenta os resultados da análise do Getis-Ord G* para cada mês de 2024, permitindo identificar padrões espaciais na distribuição das avaliações ao longo do tempo. Essa técnica estatística destaca hotspots e coldspots, onde os hotspots, representados em vermelho, indicam áreas com concentrações significativamente altas de avaliações, enquanto os coldspots, em azul, correspondem a regiões onde as avaliações são significativamente mais baixas do que a média do entorno. As áreas em cinza representam locais onde não há um padrão espacial significativo.</p>
+<p>Observa-se uma variação temporal na distribuição dos hotspots e coldspots, sugerindo que a estrutura espacial das avaliações não permanece constante ao longo do ano. Em meses como maio, junho e outubro, há uma forte concentração de hotspots, indicando que nesses períodos há um agrupamento maior de avaliações altas, possivelmente relacionado a fatores sazonais, como maior demanda por acomodações ou eventos específicos que influenciam as avaliações. Por outro lado, em meses como janeiro, março, julho e agosto, há uma distribuição mais equilibrada entre hotspots e coldspots, sugerindo que as avaliações são mais variadas e não apresentam uma predominância clara de áreas com quantidade de avaliações alta ou baixa. Em meses como fevereiro e abril, observa-se uma dispersão maior dos padrões espaciais, indicando que as avaliações podem estar menos estruturadas espacialmente, sem uma tendência clara de concentração.</p>
+<p>Os resultados indicam que a intensidade dos hotspots e coldspots varia ao longo do ano, com períodos onde a concentração de avaliações altas é mais evidente e outros onde há uma distribuição mais difusa das avaliações. A presença de hotspots persistentes em determinados meses pode indicar a existência de regiões preferidas pelos usuários ao longo do tempo, enquanto a alternância entre hotspots e coldspots em outros meses sugere variações na demanda ou mudanças sazonais no comportamento das avaliações. A análise do Getis-Ord G* complementa os resultados do Índice de Moran Local (LISA) ao destacar tanto a presença de clusters quanto a intensidade dessas concentrações e sua evolução temporal.</p>
+</section>
+<section id="analise-da-persistencia-espacial-dos-padroes-ao-longo-do-tempo">
+<h4>3.3.3.3 Análise da persistência espacial dos padrões ao longo do tempo<a class="headerlink" href="#analise-da-persistencia-espacial-dos-padroes-ao-longo-do-tempo" title="Link to this heading">#</a></h4>
+<p>A análise da persistência espacial dos padrões ao longo do tempo permite identificar áreas em que os hotspots e coldspots permaneceram consistentes ao longo dos meses analisados. Em contraste com as abordagens anteriores, que observaram a distribuição mensal dos clusters, essa análise busca entender a estabilidade dessas concentrações espaciais, classificando as áreas como hotspots persistentes, coldspots persistentes ou neutras, dependendo da frequência com que essas categorias foram identificadas ao longo do período.</p>
+<p>Para isso, foram contabilizadas a ocorrência de hotspots (95% e 99%) e coldspots (95% e 99%) para cada localidade ao longo dos meses. Aquelas regiões que apresentaram predominantemente hotspots ao longo do tempo foram classificadas como hotspots persistentes, enquanto as áreas onde predominam coldspots foram classificadas como coldspots persistentes. As regiões onde não houve predominância de nenhuma dessas categorias foram consideradas neutras, indicando que não houve um padrão significativo e recorrente de concentração de avaliações altas ou baixas.</p>
+<p>A Figura 13 apresenta o resultado da análise de persistência espacial dos padrões ao longo do tempo, destacando regiões onde os hotspots e coldspots se mantiveram constantes durante o período analisado.</p>
+<p><img alt="Figura 1" src="_images/fig3_13.png" /></p>
+<p>Figura 13. Persistência espacial dos hotspots e coldspots ao longo do tempo.</p>
+<p>Os pontos vermelhos representam os hotspots persistentes, ou seja, áreas que apresentaram concentração elevada de avaliações altas ao longo de vários meses. Os pontos azuis indicam os coldspots persistentes, correspondendo a regiões com avaliações consistentemente baixas ao longo do tempo. Os pontos em cinza representam áreas classificadas como neutras, ou seja, locais onde não houve uma predominância clara de hotspots ou coldspots durante o período analisado.</p>
+<p>A distribuição espacial dos hotspots persistentes revela que há regiões que mantêm avaliações consistentemente altas ao longo do tempo, indicando locais com uma oferta de acomodações com maior número de avaliações. Por outro lado, os coldspots persistentes são menos frequentes e aparecem em pontos dispersos, mas ainda assim indicam locais onde as avaliações tendem a permanecer mais baixas ao longo do tempo. A presença de um grande número de pontos neutros sugere que, para uma parcela significativa dos imóveis, não há um padrão espacial persistente, indicando que o número de avaliações pode sofrer variações ao longo dos meses, sem uma tendência clara de quantidade de avaliações alta ou baixa.</p>
+</section>
+</section>
+</section>
+<section id="sintese-e-perspectivas-integracao-da-analise-espaco-temporal-global-e-local">
+<h2>3.4 Síntese e Perspectivas: Integração da Análise Espaço-Temporal Global e Local<a class="headerlink" href="#sintese-e-perspectivas-integracao-da-analise-espaco-temporal-global-e-local" title="Link to this heading">#</a></h2>
+<p>Ao longo deste capítulo, exploramos as principais abordagens para a análise espaço-temporal, tanto em uma perspectiva global quanto local. As metodologias apresentadas, como o Índice de Moran Global, o Índice G de Getis-Ord, o LISA (Local Indicators of Spatial Association) e o Getis-Ord G*, foram aplicadas ao estudo de caso das avaliações de hospedagens em Copacabana, fornecendo uma compreensão sobre os padrões espaciais e temporais presentes nos dados.</p>
+<p>Na análise global, identificamos que, na maior parte do período analisado, a autocorrelação espacial foi baixa, sugerindo uma distribuição relativamente aleatória das avaliações na maior parte do ano. No entanto, meses como junho e dezembro se destacaram ao apresentar clusters espaciais significativos, indicando sazonalidade e possíveis impactos do turismo nessas épocas específicas. A análise do Índice de Moran Espaço-Temporal reforçou essa interpretação, ao revelar que, embora a persistência espaço-temporal não seja uma regra, existem períodos em que os padrões espaciais se mostram mais definidos e estáveis.</p>
+<p>Ao avançar para a análise local, o uso do LISA e do Getis-Ord G* permitiu uma avaliação mais granular, destacando regiões específicas de hotspots e coldspots. Observamos que os hotspots não apenas variam ao longo do tempo, mas também se concentram em áreas específicas. A análise da persistência espacial acrescentou uma dimensão importante, mostrando que, embora algumas regiões mantenham altas avaliações consistentemente, a maioria dos imóveis apresenta um comportamento mais dinâmico e variável ao longo do ano.</p>
+<p>Os testes estatísticos, como o Kruskal-Wallis, complementaram a interpretação dos resultados ao indicar que, apesar das flutuações observadas, as diferenças na autocorrelação espacial entre os meses não foram estatisticamente significativas na maior parte dos casos. Isso reforça a ideia de que, embora existam picos sazonais, o comportamento espacial das avaliações tende a ser relativamente estável ou explicado pelo acaso em boa parte do ano.</p>
+<p>Em síntese, este capítulo evidenciou como a combinação de análises globais e locais, integrando as dimensões espacial e temporal, pode proporcionar uma compreensão aprofundada da dinâmica espacial de fenômenos complexos. No contexto das avaliações de hospedagens em Copacabana, essa abordagem permitiu identificar tanto padrões persistentes quanto mudanças sazonais.</p>
+<p>Contudo, é importante ressaltar que este capítulo ofereceu apenas uma introdução aos conceitos de análise global e local no contexto espaço-temporal. A análise espaço-temporal é um campo amplo e em constante evolução, com diversas outras metodologias e abordagens avançadas que podem ser exploradas para estudos mais complexos. Técnicas como análise de séries temporais espaciais, modelos de processos espaço-temporais estocásticos e abordagens baseadas em aprendizado de máquina são exemplos de caminhos para aprofundar o conhecimento nessa área.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="capitulo2.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">2. SÉRIES TEMPORAIS E AUTOCORRELAÇÃO</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="capitulo4.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">4. GEOVISUALIZAÇÃO E ANÁLISE DE TRAJETÓRIAS</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estudo-de-caso-analise-do-numero-de-avaliacoes-de-imoveis-no-bairro-de-copacabana-rio-de-janeiro">3.1 Estudo de caso: Análise do número de avaliações de imóveis no bairro de Copacabana, Rio de Janeiro</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-global">3.2 Análise Global</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#indice-de-moran-global-i">3.2.1 Índice de Moran Global ((I))</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#indice-g-de-getis-ord">3.2.2 Índice G de Getis-Ord</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#indice-de-gearys-c">3.2.3 Índice de Geary’s C</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#teste-de-mantel">3.2.4 Teste de Mantel</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#autocorrelacao-temporal">3.2.5 Autocorrelação Temporal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#autocorrelacao-espaco-temporal-global">3.2.6 Autocorrelação Espaço-Temporal Global</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#padroes-espaciais-de-avaliacoes-em-copacabana-analise-global">3.2.7 Padrões Espaciais de Avaliações em Copacabana: Análise Global</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#autocorrelacao-espacial">3.2.7.1 Autocorrelação Espacial</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">3.2.7.2 Autocorrelação temporal</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#autocorrelacao-espaco-temporal">3.2.7.3 Autocorrelação espaço-temporal</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-local">3.3 Análise Local</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lisa-local-moran-s-i">3.3.1 LISA (Local Moran’s I)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getis-ord-g-identificacao-de-hotspots-e-coldspots">3.3.2 Getis-Ord G*: Identificação de Hotspots e Coldspots</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#padroes-espaciais-de-avaliacoes-em-copacabana-analise-local">3.3.3 Padrões Espaciais de Avaliações em Copacabana: Análise Local</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-local-com-o-indice-de-moran-local-lisa">3.3.3.1 Análise Local com o Índice de Moran Local (LISA)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-local-com-o-indice-de-getis-ord-g">3.3.3.2 Análise Local com o Índice de Getis-Ord G*</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-da-persistencia-espacial-dos-padroes-ao-longo-do-tempo">3.3.3.3 Análise da persistência espacial dos padrões ao longo do tempo</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sintese-e-perspectivas-integracao-da-analise-espaco-temporal-global-e-local">3.4 Síntese e Perspectivas: Integração da Análise Espaço-Temporal Global e Local</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Alexandro Gularte Schafer
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

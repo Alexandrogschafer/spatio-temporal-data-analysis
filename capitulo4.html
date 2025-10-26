@@ -1,0 +1,1151 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4. GEOVISUALIZAÇÃO E ANÁLISE DE TRAJETÓRIAS &#8212; Análise de dados espaço-temporais</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'capitulo4';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="5. MODELOS ESPAÇO-TEMPORAIS" href="capitulo5.html" />
+    <link rel="prev" title="3. AUTOCORRELAÇÃO E DEPENDÊNCIA ESPAÇO-TEMPORAL (ANÁLISE ESPAÇO-TEMPORAL GLOBAL E LOCAL)" href="capitulo3.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Análise de dados espaço-temporais - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Análise de dados espaço-temporais - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Introdução
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="capitulo1.html">1. INTRODUÇÃO A ANÁLISE ESPAÇO-TEMPORAL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="capitulo2.html">2. SÉRIES TEMPORAIS E AUTOCORRELAÇÃO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="capitulo3.html">3. AUTOCORRELAÇÃO E DEPENDÊNCIA ESPAÇO-TEMPORAL (ANÁLISE ESPAÇO-TEMPORAL GLOBAL E LOCAL)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">4. GEOVISUALIZAÇÃO E ANÁLISE DE TRAJETÓRIAS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="capitulo5.html">5. MODELOS ESPAÇO-TEMPORAIS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="capitulo6.html">6. DINÂMICA DA PAISAGEM E MODELOS DE MUDANÇA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="referencias.html">Bibliografia básica</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Alexandrogschafer/spatio-temporal-data-analysis" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Alexandrogschafer/spatio-temporal-data-analysis/edit/main/./capitulo4.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Alexandrogschafer/spatio-temporal-data-analysis/issues/new?title=Issue%20on%20page%20%2Fcapitulo4.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/capitulo4.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>4. GEOVISUALIZAÇÃO E ANÁLISE DE TRAJETÓRIAS</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aplicacoes-da-analise-de-trajetorias-espaco-temporais">4.1 Aplicações da Análise de Trajetórias Espaço-Temporais</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deslocamento-de-veiculos">4.1.1 Deslocamento de veículos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#migracao-de-aves">4.1.2 Migração de aves</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rastreamento-de-poluicao-atmosferica">4.1.3 Rastreamento de poluição atmosférica</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fundamentos-da-analise-de-trajetorias">4.2 Fundamentos da Análise de Trajetórias</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-geometrica-de-trajetorias">4.2.1 Análise Geométrica de Trajetórias</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#segmentacao-de-trajetorias">4.2.1.1 Segmentação de Trajetórias</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacao-de-uma-trajetoria-representativa">4.2.1.2 Identificação de uma Trajetória Representativa</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-geometrica-dependente-de-escala">4.2.1.3 Análise Geométrica Dependente de Escala</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#padroes-espaco-temporais">4.2.1.4 Padrões Espaço-Temporais</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#similaridade-e-agrupamento-de-trajetorias">4.2.2 Similaridade e Agrupamento de Trajetórias</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#agrupamento-geometrico-e-similaridade">4.2.2.1 Agrupamento Geométrico e Similaridade</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#similaridade-baseada-em-atributos-fisicos-do-movimento">4.2.2.2 Similaridade Baseada em Atributos Físicos do movimento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#similaridade-sensivel-ao-contexto-baseada-em-uma-combinacao-de-atributos">4.2.2.3 Similaridade sensível ao contexto baseada em uma combinação de atributos</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacao-espaco-temporal-e-analise-visual-de-trajetorias">4.2.3 Visualização Espaço-Temporal e Análise Visual de Trajetórias</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#representacoes-espaco-temporais-cubo-espaco-temporal-e-outras-abordagens">4.2.3.1 Representações Espaço-Temporais: Cubo espaço-temporal e outras abordagens</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#agregacoes-visuais-agregacoes-geometricas-e-densidades-por-kernel">4.2.3.2 Agregações Visuais: Agregações Geométricas e Densidades por Kernel</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-visual-do-movimento">4.2.3.3 Análise Visual do Movimento</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#desafios-limitacoes-e-tendencias-futuras">4.4 Desafios, Limitações e Tendências Futuras</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="geovisualizacao-e-analise-de-trajetorias">
+<h1>4. GEOVISUALIZAÇÃO E ANÁLISE DE TRAJETÓRIAS<a class="headerlink" href="#geovisualizacao-e-analise-de-trajetorias" title="Link to this heading">#</a></h1>
+<section class="cap-audio">
+  <p><strong>Ouça o resumo do capítulo em áudio:</strong></p>
+  <audio controls preload="none" style="width:100%;max-width:720px">
+    <source src="audio/capitulo4.mp3" type="audio/mpeg">
+    Seu navegador não suporta a reprodução de áudio.
+    <a href="audio/capitulo4.mp3">Baixar MP3</a>
+  </audio>
+</section>
+<p>A análise de dados de movimento consolidou-se como um campo interdisciplinar de grande relevância científica, impulsionado pela crescente disponibilidade de informações espaço-temporais provenientes de sensores, dispositivos móveis, satélites e plataformas digitais. Esses dados permitem compreender como pessoas, animais, veículos, fenômenos atmosféricos e até corpos celestes se deslocam e evoluem no tempo, apoiando estudos em transporte, ecologia, meteorologia, urbanismo e saúde pública.</p>
+<p>As fontes de dados de movimento são altamente heterogêneas, variando em resolução temporal (frequente ou esparsa, regular ou irregular), resolução espacial, dimensão (2D ou 3D), restrições de deslocamento (em rede ou livres), modelo de movimento (lagrangiano ou euleriano), tipo de rastreamento (cooperativo ou não) e questões de privacidade e volume.</p>
+<p>Historicamente, na geografia e nas ciências espaciais, o estudo do movimento restringia-se a fluxos origem–destino (OD). Com o avanço das tecnologias de rastreamento, tornou-se possível observar trajetórias quase contínuas, capazes de reconstruir o percurso efetivo dos objetos ao longo do tempo. Nesse contexto, trajetória passou a ser um conceito central: uma série temporal discreta de posições medidas, que descreve o caminho e a evolução de um objeto em movimento.</p>
+<p>O conceito de trajetória, entretanto, varia entre disciplinas. Na geografia e no contexto geoespacial, define-se como a sequência espaço-temporal de posições de um objeto discreto, em que cada posição está associada a um instante específico. Essa combinação de onde (coordenadas espaciais) e quando (tempo) é a base da análise de movimento e da geovisualização, que integram métodos computacionais e visuais para explorar grandes volumes de dados de maneira eficiente.</p>
+<p>A ausência de uma terminologia padronizada reflete a natureza interdisciplinar do campo. Termos como trajetória, rota, caminho, movimento ou viagem podem ser usados de forma intercambiável, enquanto as pausas e atividades são descritas como paradas, estadas ou eventos. Essa diversidade conceitual enriquece as abordagens, mas também impõe desafios de integração entre métodos e sistemas.</p>
+<p>Diversos autores oferecem definições complementares para o conceito de trajetória, refletindo diferentes perspectivas teóricas e aplicações. Alvares et al. (2007) e Baglioni et al. (2009) a descrevem como uma sequência de movimentos e paradas, enfatizando a alternância entre deslocamento e imobilidade. Andrienko et al. (2013) definem a trajetória como uma função que relaciona posições espaciais e atributos temáticos ao longo do tempo, destacando seu caráter analítico e multidimensional.</p>
+<p>Para Spaccapietra et al. (2008), a trajetória assume um significado semântico, sendo interpretada como uma viagem com propósito ou um evento dotado de contexto. Klus e Pebesma (2015) tratam-na como uma série contínua de localizações, enfatizando sua natureza temporal e sua representação matemática. Por fim, Vouros et al. (2018) introduzem o conceito de trajetórias semânticas, que incorporam contexto, propósito e estado, ampliando a análise do movimento para além da geometria e do tempo, ao incluir dimensões cognitivas e situacionais.</p>
+<p>A geovisualização espaço-temporal tem como objetivo transformar registros ((x, y, t)) em representações visuais que revelem padrões invisíveis em tabelas ou estatísticas. Ao integrar espaço e tempo em uma mesma estrutura gráfica, torna-se possível observar tendências, deslocamentos, concentrações e episódios de mudança de forma direta e interpretável.
+Visualizar trajetórias é converter movimento em evidência perceptível: sem representação adequada, trajetórias são apenas coordenadas; com boas escolhas visuais, tornam-se narrativas que mostram onde, quando e como os fenômenos ocorrem.</p>
+<p>As principais finalidades da geovisualização incluem reduzir a carga cognitiva, revelar relações espaço-temporais, validar resultados computacionais e comparar escalas e grupos. Na prática, três estratégias se complementam:</p>
+<ul class="simple">
+<li><p>representação direta, quando o volume de dados é pequeno;</p></li>
+<li><p>resumo e agregação, para sintetizar o essencial; e</p></li>
+<li><p>extração computacional de padrões, validada visualmente.</p></li>
+</ul>
+<p>Técnicas como mapas estáticos, séries temporais de mapas, animações cartográficas e vinculação entre mapa e gráfico temporal permitem explorar o movimento em diferentes escalas e níveis de detalhe.</p>
+<p>A qualidade da visualização depende de escolhas conscientes de escala, resolução e design. É fundamental manter consistência visual, declarar a granularidade temporal e explicitar incertezas, como erros de GPS ou lacunas. Mais do que mostrar tudo, o objetivo é tornar o movimento compreensível, convertendo padrões em argumentos visuais para análise, modelagem e comunicação científica.</p>
+<p>Em síntese, a geovisualização e análise de trajetórias representam o elo entre dados, espaço, tempo e significado.  Mais do que descrever deslocamentos, buscam entender padrões, contextos e intenções subjacentes ao movimento, oferecendo meios para interpretar fenômenos complexos e multiescalares. Nos capítulos seguintes, serão apresentados os principais métodos geométricos, estatísticos e visuais que transformam trajetórias em conhecimento, revelando como o movimento se organiza, se repete e se transforma no espaço-tempo.</p>
+<section id="aplicacoes-da-analise-de-trajetorias-espaco-temporais">
+<h2>4.1 Aplicações da Análise de Trajetórias Espaço-Temporais<a class="headerlink" href="#aplicacoes-da-analise-de-trajetorias-espaco-temporais" title="Link to this heading">#</a></h2>
+<p>A análise de trajetórias espaço-temporais tem se mostrado uma ferramenta versátil e poderosa em diferentes campos, desde o monitoramento urbano até os estudos ambientais e ecológicos. Ao combinar informações de posição e tempo, é possível reconstruir deslocamentos, identificar padrões de movimento e compreender processos dinâmicos que ocorrem no espaço.
+Nesta seção, são apresentados três exemplos representativos de aplicação:
+(1) o deslocamento de veículos em áreas urbanas e rodoviárias;
+(2) a migração de aves; e
+(3) o rastreamento de poluição atmosférica.
+Esses casos ilustram como diferentes técnicas de visualização e modelagem — como mapas interativos, séries temporais e cubos espaço-temporais — auxiliam na interpretação de fenômenos complexos e na tomada de decisão em mobilidade, conservação e gestão ambiental.</p>
+<section id="deslocamento-de-veiculos">
+<h3>4.1.1 Deslocamento de veículos<a class="headerlink" href="#deslocamento-de-veiculos" title="Link to this heading">#</a></h3>
+<p>No contexto urbano e rodoviário, dados de GPS veicular permitem reconstruir rotas e identificar paradas (stops) e trechos de movimento (moves), cada um associado a um instante no tempo. A partir da sequência de posições ((x, y, t)), é possível calcular métricas como velocidade, aceleração e mudanças de direção, revelando padrões de mobilidade — horários de pico, rotas preferenciais e pontos de congestionamento.</p>
+<p>Visualmente, diferentes abordagens podem ser aplicadas para representar essas trajetórias: séries de mapas por faixa horária destacam a variação diária dos deslocamentos; mapas com codificação por cor ao longo da linha evidenciam trechos lentos e rápidos; animações cartográficas permitem observar o fluxo contínuo ao longo do tempo; e agregações em grade ou mapas de densidade reduzem o emaranhado de linhas, destacando hotspots de circulação.</p>
+<p>A Figura 1 ilustra um exemplo de análise visual, apresentando o perfil espacial de velocidade ao longo de trajetórias veiculares.</p>
+<p><img alt="Figura 1" src="_images/fig4_1.png" /></p>
+<p><strong>Figura 1 — Perfil espacial de velocidade ao longo de trajetórias veiculares.</strong><br />
+Fonte: MovingPandas GitHub Repository.</p>
+<p>O perfil mostra o deslocamento de um veículo em Nova Délhi, representado por uma linha colorida em que cada cor indica a velocidade média de um trecho do percurso. A escala varia do vermelho (baixa velocidade) ao verde (alta velocidade), permitindo identificar zonas de tráfego intenso, cruzamentos ou semáforos (tons quentes), bem como trechos de fluxo livre (tons frios). Essa visualização, gerada com a biblioteca MovingPandas, evidencia a distribuição espacial da velocidade e auxilia na detecção de gargalos e padrões de mobilidade urbana.</p>
+</section>
+<section id="migracao-de-aves">
+<h3>4.1.2 Migração de aves<a class="headerlink" href="#migracao-de-aves" title="Link to this heading">#</a></h3>
+<p>Enquanto a análise de trajetórias veiculares destaca padrões de mobilidade urbana, no campo da ecologia o foco desloca-se para o comportamento migratório de espécies. Transmissores GPS, GSM ou Argos registram as trajetórias de indivíduos ao longo de ciclos sazonais, revelando corredores migratórios, áreas de parada e ritmos de deslocamento. Essas trajetórias podem ser analisadas individualmente — para compreender rotas e comportamentos específicos — ou de forma agregada, permitindo identificar padrões populacionais e variações interanuais.
+Visualmente, diferentes abordagens são empregadas: pequenos múltiplos por temporada facilitam a comparação entre anos; linhas com marcações temporais ((t_0, t_1, t_2, \dots)) evidenciam ritmo e direção; e representações em cubos espaço-temporais permitem observar a persistência de presença em determinados locais ao longo do tempo, destacando períodos críticos do ciclo migratório.</p>
+<p><img alt="Figura 1" src="_images/fig4_2.png" /></p>
+<p><strong>Figura 2 — Análise de trajetórias de aves migratórias (Larus fuscus).</strong></p>
+<p>Complementarmente, a Figura 3 mostra o perfil espacial de velocidade da mesma trajetória, em que a coloração dos segmentos reflete a velocidade média de cada trecho.</p>
+<p><img alt="Figura 1" src="_images/fig4_3.png" /></p>
+<p><strong>Figura 3 — Perfil espacial de velocidade em trajetória migratória de ave monitorada por GNSS.</strong><br />
+Fonte: MovingPandas — Bird Migration Example. Disponível em: <a class="reference external" href="https://movingpandas.github.io/movingpandas-website/2-analysis-examples/bird-migration.html">https://movingpandas.github.io/movingpandas-website/2-analysis-examples/bird-migration.html</a><br />
+A escala de cores varia do vermelho (menor velocidade) ao verde (maior velocidade), destacando momentos de voo rápido — correspondentes a deslocamentos migratórios diretos — e períodos de velocidade reduzida, que indicam paradas, forrageamento ou descanso. Essa visualização, gerada com a biblioteca MovingPandas, permite compreender o comportamento dinâmico de voo e identificar variações de velocidade e direção ao longo do percurso, representando uma abordagem fundamental para o estudo da ecologia do movimento.</p>
+</section>
+<section id="rastreamento-de-poluicao-atmosferica">
+<h3>4.1.3 Rastreamento de poluição atmosférica<a class="headerlink" href="#rastreamento-de-poluicao-atmosferica" title="Link to this heading">#</a></h3>
+<p>As plumas de poluentes atmosféricos — como ozônio (O₃), material particulado fino (PM2.5), dióxido de nitrogênio (NO₂), dióxido de enxofre (SO₂) e fumaça — não são objetos pontuais, mas massas extensas que se deslocam, diluem, reagem e variam em intensidade ao longo do tempo. Técnicas de rastreamento permitem extrair centroides e envoltórias poligonais a partir de campos observados por satélites, modelos atmosféricos ou redes de sensores, gerando trajetórias que combinam posição, direção, velocidade e variações de área ou concentração.
+A visualização dessas trajetórias pode assumir diferentes formas:</p>
+<ul class="simple">
+<li><p>Mapas instantâneos, que mostram o estado atual da dispersão;</p></li>
+<li><p>Séries de mapas, que permitem acompanhar a evolução passo a passo;</p></li>
+<li><p>Animações (nowcasting), que ilustram o deslocamento contínuo;</p></li>
+<li><p>Produtos derivados, como vetores de deslocamento e trilhas dos centroides das plumas.</p></li>
+</ul>
+<p><img alt="Figura 1" src="_images/fig4_4.png" /></p>
+<p><strong>Figura 4 — Trajetórias de poluição e agregação espacial por células hexagonais.</strong><br />
+As linhas azuis representam trajetórias percorridas por sensores móveis que medem partículas finas (PM2.5) ao longo do tempo. Os valores registrados são agregados em células hexagonais do sistema H3, cada uma colorida conforme a média de concentração: tons amarelados indicam áreas de menor poluição, enquanto tons alaranjados e vermelhos evidenciam zonas críticas de qualidade do ar. Essa visualização facilita a identificação de padrões de dispersão, rotas mais afetadas e zonas de risco ambiental, além de permitir comparações espaciais e temporais e integração com dados de outras fontes.</p>
+</section>
+</section>
+<section id="fundamentos-da-analise-de-trajetorias">
+<h2>4.2 Fundamentos da Análise de Trajetórias<a class="headerlink" href="#fundamentos-da-analise-de-trajetorias" title="Link to this heading">#</a></h2>
+<p>Uma trajetória é a sequência ordenada de posições de um objeto ao longo do tempo, representada por coordenadas ((x, y)) e carimbos temporais. Ao conectar posições sucessivas, obtemos o caminho percorrido, a partir do qual podem ser derivadas métricas como distância, velocidade, aceleração e tempo de permanência. Entre dois pontos consecutivos há um segmento, usado para calcular medidas locais (distância, direção, velocidade). Trechos em que o objeto permanece quase imóvel por tempo significativo são chamados paradas (stops); os demais são movimentos (moves). Essa distinção permite identificar onde o objeto permaneceu e por onde se deslocou, revelando padrões de comportamento e uso do espaço.</p>
+<p>Em síntese, uma trajetória é a história espaço-temporal de um objeto, composta por segmentos, paradas e deslocamentos. A qualidade das análises depende da definição de limiares adequados, da precisão espacial e da clareza metodológica empregada na modelagem.</p>
+<p>A análise de trajetórias busca compreender como objetos, pessoas ou fenômenos se deslocam no espaço e no tempo, revelando padrões de movimento, comportamentos individuais ou coletivos e relações com o ambiente. Esse campo é inerentemente interdisciplinar, combinando conceitos da geografia, ciência da computação, estatística, ecologia e ciências cognitivas para transformar dados de movimento em conhecimento espacial significativo.</p>
+<p>De modo geral, as abordagens podem ser organizadas em três grandes categorias analíticas, que se complementam e representam diferentes níveis de abstração e interpretação:</p>
+<p><strong>Análise Geométrica de Trajetórias:</strong> Concentra-se na forma, estrutura e propriedades espaciais do movimento, descrevendo como uma trajetória se desenha no espaço e como variam parâmetros como direção, curvatura e velocidade. As principais métricas derivadas de ((x, y, t)) incluem:</p>
+<ul class="simple">
+<li><p>Distância percorrida — soma das distâncias entre pontos consecutivos, indicando a extensão do deslocamento;</p></li>
+<li><p>Velocidade — distância dividida pelo tempo do segmento, resumindo o ritmo médio e identificando outliers;</p></li>
+<li><p>Aceleração — variação da velocidade ao longo do tempo, revelando mudanças bruscas de movimento;</p></li>
+<li><p>Tempo de permanência — duração das paradas, evidenciando áreas de interesse;</p></li>
+<li><p>Tempo de deslocamento — intervalo efetivo de movimento, útil para avaliar eficiência e comportamento.</p></li>
+</ul>
+<p>Essas métricas transformam registros brutos de posição e tempo em indicadores interpretáveis de movimento, fundamentais para compreender trajetórias no espaço geográfico.</p>
+<p><strong>Similaridade e Agrupamento de Trajetórias:</strong> Compara trajetórias entre si, avaliando distâncias geométricas ou comportamentais e identificando grupos com padrões semelhantes de deslocamento.
+Essa abordagem permite reconhecer classes de comportamento, trajetos típicos e anomalias em conjuntos de dados complexos.</p>
+<p><strong>Visualização e Análise Visual de Trajetórias:</strong> Utiliza representações gráficas e interativas para explorar, sintetizar e interpretar dados espaço-temporais, apoiando tanto a descoberta de padrões quanto a comunicação dos resultados. A visualização atua como um elo entre análise computacional e interpretação humana, tornando perceptíveis estruturas que números isolados não revelam.</p>
+<p>Em conjunto, essas três categorias formam o núcleo metodológico da análise de movimento — articulando descrição, comparação e interpretação visual como etapas complementares do processo analítico. Elas constituem a base conceitual que orienta os métodos e aplicações apresentados nas seções seguintes.</p>
+<hr class="docutils" />
+<section id="analise-geometrica-de-trajetorias">
+<h3>4.2.1 Análise Geométrica de Trajetórias<a class="headerlink" href="#analise-geometrica-de-trajetorias" title="Link to this heading">#</a></h3>
+<p>A análise geométrica é o ponto de partida para compreender o movimento. Ela se concentra nas propriedades espaciais e formais das trajetórias — forma, direção, curvatura, velocidade e continuidade — descrevendo como o deslocamento se desenha no espaço ao longo do tempo.</p>
+<p>Como base da análise espaço-temporal, essa abordagem fornece ferramentas conceituais e matemáticas para descrever o movimento, identificar suas partes significativas e reconhecer padrões espaciais. Com ela, passamos da simples representação de pontos a uma visão estruturada do deslocamento, o que permite compreender sua forma, ritmo e variação, além de preparar o terreno para análises mais complexas de similaridade, comportamento e contexto.</p>
+<p>A partir dessa base conceitual, avançamos por diferentes níveis de detalhamento. Primeiro, exploramos a segmentação de trajetórias, que busca identificar e delimitar trechos homogêneos dentro de um deslocamento contínuo. Em seguida, analisamos o caminho representativo, empregado para sintetizar múltiplas trajetórias em um percurso médio ou típico.  Depois, abordamos a análise dependente de escala, que investiga como a percepção e os padrões do movimento variam conforme a resolução espacial e temporal adotada. Por fim, discutimos a identificação de padrões espaço-temporais, em que as trajetórias passam a ser analisadas de forma integrada, revelando regularidades e estruturas de mobilidade no espaço e no tempo.</p>
+<section id="segmentacao-de-trajetorias">
+<h4>4.2.1.1 Segmentação de Trajetórias<a class="headerlink" href="#segmentacao-de-trajetorias" title="Link to this heading">#</a></h4>
+<p>A segmentação geométrica de trajetórias consiste em dividir uma trajetória contínua em partes menores — os segmentos —, de modo que cada trecho represente um comportamento ou padrão geométrico distinto. Essa técnica é essencial para compreender o movimento de indivíduos ou objetos ao longo do tempo, pois permite identificar mudanças de estado, como períodos de deslocamento rápido, repouso ou busca de alimento.</p>
+<p>Em termos simples, a segmentação busca responder perguntas como: “Quando o movimento muda de direção?”, “Em que momento o deslocamento se torna mais lento?” ou “Quais trechos indicam paradas prolongadas?”. Ao aplicar critérios geométricos — como velocidade, direção, curvatura, localização e duração temporal — é possível dividir trajetórias longas em partes que correspondem a diferentes comportamentos de movimento.</p>
+<p>Na Figura 5, observa-se um exemplo clássico oriundo da ecologia do movimento, em que algoritmos identificam automaticamente segmentos que representam voos, pousos e períodos de forrageamento (busca por alimento). Esses métodos associam propriedades geométricas do deslocamento ao comportamento observado, traduzindo dados espaciais em informações ecológicas significativas.</p>
+<p><img alt="Figura 1" src="_images/fig4_5.png" /></p>
+<p><strong>Figura 5 — Segmentação geométrica de uma trajetória (Adaptado de Demšar et al., 2015).</strong><br />
+Na figura, os trechos em vermelho indicam segmentos de voo, enquanto os amarelos representam períodos de parada. Marcadores azuis mostram o final de cada pausa. O algoritmo utiliza critérios geométricos para identificar automaticamente esses comportamentos.</p>
+<p>Os algoritmos de segmentação buscam equilibrar simplicidade e coerência, minimizando o número de segmentos sem perder a representatividade espacial e temporal. Alguns utilizam critérios monotônicos — por exemplo, se um segmento cumpre um certo limiar de velocidade mínima, então todos os seus subsegmentos também o cumprem. Outros combinam critérios crescentes e decrescentes, permitindo identificar padrões mais complexos, como alternâncias entre movimentos rápidos e lentos. Esse tipo de modelagem é essencial para capturar transições comportamentais, cuja detecção depende tanto da natureza dos dados quanto da regularidade das observações.</p>
+<p>Além das abordagens puramente geométricas, há também métodos baseados em modelos estatísticos, nos quais cada segmento é descrito por parâmetros uniformes de movimento. Critérios de informação, como o Akaike Information Criterion (AIC), são empregados para determinar o número ideal de segmentos. Um exemplo é o uso das pontes brownianas, que incorporam a incerteza entre observações sucessivas e permitem identificar encontros, pausas e trajetórias paralelas, mesmo em dados com amostragem irregular no tempo.</p>
+<p>A segmentação também é amplamente aplicada fora da ecologia. Em estudos urbanos, por exemplo, ela é usada para detectar locais importantes e modos de transporte em trajetórias humanas. Os trechos entre pontos de interesse podem ser classificados como caminhadas, deslocamentos de ônibus ou de carro, enquanto as paradas indicam locais de permanência prolongada. Esse mesmo raciocínio aplica-se a animais migratórios, identificando locais de descanso e rotas preferenciais de deslocamento.</p>
+<p>Outra vertente é a segmentação por representatividade, que distingue trechos típicos — os que expressam o comportamento médio de movimento — de trechos atípicos ou raros. Essa diferenciação é especialmente útil quando se deseja comparar múltiplas trajetórias em contextos com variação espacial e temporal, destacando desvios de padrão e comportamentos excepcionais.</p>
+</section>
+<section id="identificacao-de-uma-trajetoria-representativa">
+<h4>4.2.1.2 Identificação de uma Trajetória Representativa<a class="headerlink" href="#identificacao-de-uma-trajetoria-representativa" title="Link to this heading">#</a></h4>
+<p>Em muitos estudos de movimento, é comum lidar com múltiplas trajetórias semelhantes — por exemplo, animais migrando por rotas parecidas, veículos circulando por vias próximas ou pessoas percorrendo caminhos quase idênticos. Surge então uma questão central: como representar esse conjunto de trajetórias por um único caminho “médio” ou representativo?<br />
+Essa trajetória sintetizadora permite resumir padrões coletivos, comparar rotas e identificar percursos mais prováveis ou recorrentes. Do ponto de vista geométrico, o desafio consiste em encontrar uma trajetória que represente o conjunto de forma fiel, sem coincidir exatamente com nenhuma das originais. A ideia é construir um caminho médio que siga o traçado espacial das rotas observadas, mesmo quando os deslocamentos individuais ocorrem em tempos diferentes.<br />
+Essa abordagem é especialmente útil em estudos de ecologia do movimento, nos quais se busca compreender rotinas migratórias, consistência em trajetos e rotas preferenciais ao longo do tempo.<br />
+A Figura 6 ilustra um dos métodos mais conhecidos, proposto por Buchin et al. (2010), que introduziram uma solução baseada em geometria computacional. Nesse modelo, a trajetória representativa — denominada trajetória mediana (<em>median trajectory</em>) — é construída combinando trechos das trajetórias reais que compartilham caminhos semelhantes. O resultado é um percurso que sintetiza o comportamento coletivo sem eliminar a variabilidade individual.</p>
+<p><img alt="Figura 1" src="_images/fig4_6.png" /></p>
+<p><strong>Figura 6 —</strong> Trajetória mediana representando um conjunto de rotas. (a) Três trajetórias com ponto inicial e final comuns. (b) A trajetória mediana (em negrito) é formada por partes das trajetórias originais, alternando entre elas nos pontos de interseção e criando um caminho que resume o padrão coletivo. (Adaptado de Buchin et al., 2010).</p>
+<p>Além dessa abordagem, diversas metodologias têm sido desenvolvidas no campo da Ciência da Informação Geográfica (GIScience), ampliando as possibilidades de representação e comparação de trajetórias múltiplas em diferentes contextos espaciais.<br />
+Uma delas utiliza curvas principais (<em>principal curves</em>) para identificar a rota mais provável a partir de um conjunto de trajetórias de GPS, como as de pedestres.<br />
+Outras técnicas lidam com trajetórias em três dimensões, permitindo reconstruir percursos de bicicletas, aves, morcegos ou mamíferos marinhos, cuja movimentação envolve variações de altitude ou profundidade.<br />
+Há também modelos que consideram a incerteza nas medições, representando cada trajetória como um vetor difuso (<em>fuzzy vector</em>); a partir dessa representação, é possível derivar uma trajetória centróide, construída com base na densidade dos pontos de movimento ao longo do tempo.<br />
+Essas diferentes abordagens mostram que não há um único conceito de trajetória representativa — sua definição depende do objetivo da análise, da escala de observação e do tipo de dado disponível.<br />
+É importante lembrar que a trajetória representativa é sempre uma abstração coletiva: ela descreve o padrão médio de deslocamento, mas não reflete necessariamente o comportamento de um indivíduo específico.<br />
+Em estudos ecológicos, essa distinção entre modelo médio populacional e modelo individual é análoga à diferença entre modelos globais e locais na estatística espacial — ambos são complementares, mas respondem a perguntas diferentes sobre o fenômeno analisado.</p>
+</section>
+<section id="analise-geometrica-dependente-de-escala">
+<h4>4.2.1.3 Análise Geométrica Dependente de Escala<a class="headerlink" href="#analise-geometrica-dependente-de-escala" title="Link to this heading">#</a></h4>
+<p>O movimento de um ser vivo ou objeto não é um fenômeno simples: ele resulta da interação de processos que ocorrem em diferentes escalas espaciais e temporais. Compreendê-lo exige investigar como o comportamento observado muda conforme a escala de observação — seja ao ampliar o intervalo de tempo entre medições, seja ao reduzir a resolução espacial dos dados.<br />
+Essa ideia está diretamente relacionada a um dos princípios fundamentais da Ciência da Informação Geográfica (GIScience): os fenômenos geográficos são dependentes da escala. Em outras palavras, o padrão que percebemos depende do “nível de zoom” com que observamos o mundo. O mesmo vale para as trajetórias: um percurso que parece retilíneo em escala continental pode revelar-se sinuoso e cheio de desvios quando analisado em escala local.<br />
+Estudos na área de análise de movimento mostram que parâmetros geométricos — como velocidade, curvatura, ângulo de mudança e sinuosidade — variam conforme a resolução temporal dos dados. Quanto menor o intervalo de tempo entre observações, mais detalhada é a trajetória e mais complexos parecem os padrões de deslocamento. Esse fenômeno, conhecido como “granularity grief” (<em>sofrimento da granularidade</em>), descreve como o resultado da análise depende da frequência de amostragem: quando os registros são muito espaçados, perdem-se informações sobre pequenas variações de direção ou velocidade; quando são muito frequentes, ruídos e incertezas de posicionamento do GPS tornam-se mais evidentes.<br />
+A Figura 7 ilustra a influência da escala na análise de trajetórias, mostrando a progressão de um conjunto de trajetórias ao longo do tempo. O eixo horizontal representa o tempo, e as cores indicam agrupamentos de trajetórias formados com base na proximidade espacial e temporal dos objetos. Cada grupo (bege, amarelo, laranja, cinza) reflete diferentes padrões coletivos de movimento observados em uma mesma escala temporal.</p>
+<p><img alt="Figura 1" src="_images/fig4_7.png" /></p>
+<p><strong>Figura 7 —</strong> Progressão de um conjunto de trajetórias ao longo do tempo. O eixo horizontal representa o tempo, e as cores indicam agrupamentos de trajetórias formados com base na proximidade espacial e temporal dos objetos. Cada grupo (bege, amarelo, laranja, cinza) reflete diferentes padrões coletivos observados em uma mesma escala temporal. (Adaptado de Laube et al., 2015).</p>
+<p>Pesquisas recentes indicam que analisar trajetórias em múltiplas escalas simultaneamente amplia a capacidade de compreender o comportamento do movimento, permitindo observar tanto padrões locais de detalhe quanto tendências globais de deslocamento.<br />
+Por exemplo, em estudos com peixes-zebra, observou-se que o uso de parâmetros geométricos extraídos em várias resoluções espaciais e temporais melhora significativamente a classificação automática de comportamentos, quando comparado à análise em uma única escala.<br />
+Da mesma forma, em pesquisas com aves aquáticas, a extração de informações geométricas e contextuais em diferentes escalas permitiu identificar, com alta precisão, comportamentos de forrageamento (<em>busca por alimento</em>) utilizando apenas dados de GPS — sem necessidade de sensores adicionais como acelerômetros.<br />
+Esses resultados mostram que o movimento é um fenômeno intrinsecamente multiescalar.<br />
+Compreender o deslocamento de um animal, de um veículo ou de uma pessoa requer observar o dado sob diferentes resoluções, pois cada escala revela aspectos complementares do comportamento.<br />
+Enquanto escalas amplas evidenciam trajetos gerais e padrões migratórios, escalas finas revelam pausas, desvios e microdecisões no percurso — compondo, juntas, uma visão mais completa e realista do movimento no espaço e no tempo.</p>
+</section>
+<section id="padroes-espaco-temporais">
+<h4>4.2.1.4 Padrões Espaço-Temporais<a class="headerlink" href="#padroes-espaco-temporais" title="Link to this heading">#</a></h4>
+<p>A análise geométrica de trajetórias não se limita à medição ou segmentação do movimento — ela também permite identificar padrões recorrentes no espaço e no tempo, como áreas de passagem frequente, zonas de parada, trajetos compartilhados ou sincronias de deslocamento entre indivíduos.<br />
+Esses padrões ajudam a responder perguntas essenciais, como:</p>
+<ul class="simple">
+<li><p>Onde o movimento se concentra?</p></li>
+<li><p>Em quais períodos há maior intensidade de deslocamentos?</p></li>
+<li><p>Quais locais funcionam como corredores ou nós de circulação?</p></li>
+</ul>
+<p>A descoberta desses padrões baseia-se em técnicas de agregação, densidade e associação espaço-temporal, que transformam múltiplas trajetórias individuais em representações coletivas.<br />
+Ao sintetizar dados dispersos, essas técnicas revelam estruturas latentes de mobilidade — como fluxos dominantes, rotas preferenciais e áreas de convergência.<br />
+Em resumo, a identificação de padrões espaço-temporais converte trajetórias individuais em indicadores coletivos de comportamento, mostrando como o espaço é utilizado, quando os deslocamentos ocorrem e de que forma movimentos independentes se articulam em sistemas dinâmicos.<br />
+Esses padrões são fundamentais para compreender a organização espacial de fenômenos naturais e humanos, servindo de base para análises mais complexas de agrupamento, modelagem e predição.</p>
+</section>
+</section>
+<section id="similaridade-e-agrupamento-de-trajetorias">
+<h3>4.2.2 Similaridade e Agrupamento de Trajetórias<a class="headerlink" href="#similaridade-e-agrupamento-de-trajetorias" title="Link to this heading">#</a></h3>
+<p>Um dos desafios mais frequentes na análise de trajetórias é agrupar trajetórias semelhantes dentro de um grande conjunto de dados.<br />
+Esse processo, conhecido como agrupamento de trajetórias (<em>trajectory clustering</em>), busca organizar o movimento em grupos de comportamento semelhante, reunindo trajetórias que seguem padrões parecidos e separando aquelas que diferem entre si.</p>
+<p>De modo geral, o agrupamento envolve duas etapas principais:</p>
+<ol class="arabic simple">
+<li><p><strong>Definir uma medida de similaridade</strong>, isto é, um critério que permita comparar duas trajetórias;</p></li>
+<li><p><strong>Aplicar um método de agrupamento</strong>, que organiza as trajetórias em grupos (<em>clusters</em>) com base nessas similaridades.</p></li>
+</ol>
+<p>O princípio é simples: trajetórias dentro de um mesmo grupo devem ser mais parecidas entre si do que com as de outros grupos.<br />
+Essa técnica é amplamente empregada em estudos de mobilidade urbana, transporte, ecologia do movimento e análise de fluxos humanos, revelando rotas típicas, padrões sazonais e trajetórias anômalas.</p>
+<p>Como os dados de trajetória são espaço-temporais — contendo posição, tempo e atributos derivados, como velocidade e direção — as medidas de similaridade podem ser calculadas em diferentes dimensões.<br />
+Três abordagens principais são utilizadas:</p>
+<ul class="simple">
+<li><p><strong>Similaridade geométrica:</strong> compara trajetórias que percorrem rotas semelhantes no espaço e em momentos próximos no tempo.<br />
+<em>Exemplo:</em> duas aves migratórias podem ser consideradas semelhantes se voarem por caminhos próximos durante o mesmo período do ano, ainda que em dias diferentes.</p></li>
+<li><p><strong>Similaridade baseada em atributos físicos:</strong> considera características cinemáticas, como velocidade, aceleração, direção ou ângulo de virada.<br />
+Essa abordagem é útil para distinguir tipos de movimento — por exemplo, trajetórias rápidas e retilíneas (voo) em contraste com trajetórias lentas e sinuosas (busca por alimento).</p></li>
+<li><p><strong>Similaridade sensível ao contexto:</strong> combina múltiplas dimensões — espaciais, temporais e ambientais — permitindo comparar trajetórias com base em fatores adicionais, como tipo de habitat, hora do dia ou condição climática.<br />
+Essa visão integradora aproxima a análise geométrica de uma interpretação mais comportamental e ecológica do movimento.</p></li>
+</ul>
+<p>Um exemplo prático desse processo pode ser observado na <strong>Figura 8</strong>, adaptada de Andrienko &amp; Andrienko (2012), que ilustra um agrupamento progressivo de trajetórias marítimas.</p>
+<p><img alt="Figura 1" src="_images/fig4_8.png" /></p>
+<p><strong>Figura 8 —</strong> Agrupamento progressivo de trajetórias marítimas (adaptado de Andrienko &amp; Andrienko, 2012).</p>
+<p>As trajetórias de navios são inicialmente agrupadas por destino (painel a). Em seguida, um desses grupos é selecionado (painel b) e submetido a um novo agrupamento baseado na similaridade geométrica das rotas (painel c). Por fim, o resultado é visualizado em um cubo espaço-temporal, no qual o ruído é excluído (painel d). Esse exemplo demonstra como diferentes critérios de similaridade podem ser aplicados de forma hierárquica, permitindo revelar padrões espaciais e temporais de navegação com maior clareza.</p>
+<section id="agrupamento-geometrico-e-similaridade">
+<h4>4.2.2.1 Agrupamento Geométrico e Similaridade<a class="headerlink" href="#agrupamento-geometrico-e-similaridade" title="Link to this heading">#</a></h4>
+<p>Os métodos de similaridade geométrica partem da ideia de que duas trajetórias são semelhantes quando seus pontos estão próximos no espaço e seguem formas parecidas ao longo do tempo.<br />
+Essas abordagens utilizam medidas de distância espacial para quantificar o grau de semelhança entre trajetórias — isto é, o quanto seus percursos se sobrepõem ou divergem no espaço e no tempo.</p>
+<p>Inicialmente, essas medidas foram desenvolvidas para comparar formas geométricas simples, como linhas ou polígonos, considerando apenas a posição dos pontos.<br />
+Entre as medidas mais conhecidas estão:</p>
+<ul class="simple">
+<li><p><strong>Distância Euclidiana:</strong> mede a distância direta entre pares de pontos correspondentes em duas trajetórias, sendo a forma mais básica de comparação.</p></li>
+<li><p><strong>Distância de Hausdorff:</strong> calcula a maior das menores distâncias entre os conjuntos de pontos — isto é, identifica o ponto mais distante de uma trajetória em relação à outra, medindo o desvio máximo entre elas.</p></li>
+<li><p><strong>Distância de Fréchet:</strong> considera não apenas a localização dos pontos, mas também a ordem em que são percorridos.<br />
+É frequentemente chamada de “distância da coleira” (<em>dog-walking distance</em>), pois representa o comprimento mínimo da coleira entre uma pessoa e um cachorro que caminham em trajetórias diferentes, mas sincronizadas, sem retroceder no percurso.</p></li>
+</ul>
+<p>Essas medidas são amplamente utilizadas para avaliar a similaridade de formas e trajetos, mas com o tempo foram sendo adaptadas para considerar também aspectos temporais do movimento.<br />
+Assim, além da proximidade espacial, passa-se a levar em conta <strong>quando</strong> os pontos foram registrados.<br />
+Alguns métodos comparam trajetórias no mesmo instante de tempo, enquanto outros permitem pequenos deslocamentos temporais, reconhecendo que nem todos os movimentos ocorrem perfeitamente sincronizados.</p>
+<p>Outra forma de avaliar a similaridade geométrica é calcular <strong>a área entre duas trajetórias</strong>, em que áreas menores indicam maior semelhança.<br />
+Também existem abordagens que buscam padrões de interação geométrica, como <strong>perseguição</strong>, <strong>evasão</strong> ou <strong>convergência</strong>, aplicando algoritmos capazes de detectar automaticamente esses comportamentos em conjuntos de trajetórias.</p>
+<p>Além de comparar trajetórias inteiras, é possível aplicar essas medidas a <strong>subtrajetórias</strong>, isto é, trechos menores que representam partes específicas do movimento.<br />
+Essa análise é particularmente útil para identificar <strong>grupos dinâmicos</strong> — conjuntos de entidades (animais, veículos, pessoas) que se deslocam próximas entre si por determinado período de tempo.<br />
+Tais grupos podem se formar, dividir ou fundir ao longo do tempo, revelando padrões de interação coletiva e comportamento coordenado.</p>
+<p>Métodos mais recentes incorporam técnicas como o <strong>Dynamic Time Warping (DTW)</strong>, que ajusta o tempo para comparar trajetórias com diferentes durações, e o <strong>Longest Common Subsequence (LCSS)</strong>, que identifica os trechos mais semelhantes entre duas trajetórias, mesmo que ocorram em momentos distintos.<br />
+Essas abordagens ampliam a robustez das comparações, permitindo lidar com ruídos, lacunas e diferentes frequências de amostragem.</p>
+<p>Em síntese, os métodos de similaridade geométrica são a base do agrupamento de trajetórias, permitindo descobrir padrões coletivos de movimento e compreender como grupos de indivíduos se formam, interagem e se dispersam no espaço e no tempo.<br />
+Na ecologia, essas análises podem revelar interações sociais, migrações sincronizadas e rotas compartilhadas;<br />
+em contextos urbanos, ajudam a mapear fluxos de tráfego, deslocamentos coletivos e comportamentos emergentes em redes de mobilidade.</p>
+</section>
+<section id="similaridade-baseada-em-atributos-fisicos-do-movimento">
+<h4>4.2.2.2 Similaridade Baseada em Atributos Físicos do movimento<a class="headerlink" href="#similaridade-baseada-em-atributos-fisicos-do-movimento" title="Link to this heading">#</a></h4>
+<p>Além da comparação geométrica entre trajetórias, é possível avaliar a semelhança considerando atributos físicos do movimento, isto é, as propriedades que descrevem como o deslocamento ocorre ao longo do tempo.<br />
+Esses atributos incluem velocidade, aceleração, direção, ângulo de virada, curvatura, sinuosidade e tortuosidade — variáveis que caracterizam a dinâmica do movimento e revelam aspectos comportamentais do agente em deslocamento.<br />
+Esses parâmetros podem ser medidos diretamente por sensores, como GPS, acelerômetros e giroscópios, ou derivados das próprias trajetórias, com base nas posições e tempos registrados. Por essa razão, são chamados de parâmetros de movimento.<br />
+Na ecologia do movimento, por exemplo, agrupar trajetórias com base nesses parâmetros permite inferir padrões comportamentais, como períodos de forrageamento, repouso, fuga ou migração coordenada, contribuindo para identificar diferentes estados de atividade.</p>
+<p>Alguns autores propõem a classificação das trajetórias em quatro tipos de similaridade — duas geométricas (espacial e espaço-temporal) e duas baseadas em atributos físicos de movimento:<br />
+uma focada em velocidade e aceleração, e outra na direção do deslocamento.<br />
+Essas últimas são particularmente valiosas, pois capturam semelhanças no comportamento dinâmico, indo além da mera proximidade espacial.</p>
+<p>Uma contribuição importante nessa linha é o conceito de Espaço de Parâmetros de Movimento (Movement Parameter Space – MP Space), no qual cada trajetória é representada não por suas coordenadas geográficas, mas por curvas temporais dos parâmetros físicos.<br />
+Nesse espaço conceitual, as trajetórias são comparadas com base em sua evolução temporal de variáveis como velocidade, aceleração e ângulo de virada.<br />
+Duas trajetórias são consideradas semelhantes quando exibem progressões parecidas nesse espaço de parâmetros, indicando comportamentos compatíveis, mesmo que ocorram em locais distintos.</p>
+<p>Com base nesse conceito, distinguem-se dois tipos principais de relação entre trajetórias:<br />
+<strong>Concordância (concurrence):</strong> ocorre quando trajetórias apresentam evolução semelhante no espaço dos parâmetros de movimento, ainda que em regiões geográficas diferentes.</p>
+<p><strong>Coincidência (coincidence):</strong> ocorre quando, além de comportamentos semelhantes, há também proximidade espacial e temporal, sugerindo deslocamento conjunto ou interação direta.</p>
+<p>Essas abordagens têm aplicações variadas, desde o rastreamento de furacões — onde padrões de velocidade e curvatura ajudam a identificar trajetórias equivalentes — até a análise de pedestres, em que se combinam atributos físicos com métodos de agrupamento de séries temporais.<br />
+Nesses casos, o movimento pode ser visualizado em um cubo espaço-temporal (STC), que é decomposto em projeções bidimensionais de tempo versus coordenadas geográficas.<br />
+As trajetórias são então comparadas pela forma matemática das curvas resultantes, permitindo distinguir comportamentos típicos, como movimentos lineares, sinuosidades, paradas frequentes ou deslocamentos erráticos.<br />
+A Figura 9 ilustra um exemplo desse tipo de análise, mostrando trajetórias do olhar e do mouse em uma tarefa de busca visual.</p>
+<p><img alt="Figura 1" src="_images/fig4_9.png" /></p>
+<p><strong>Figura 9 —</strong> Trajetórias do olhar e do mouse em uma tarefa de busca visual (adaptado de [135]).</p>
+<p>Os percursos — em vermelho para o olhar e em azul para o mouse — são analisados com base em atributos físicos como velocidade, direção e distância ao alvo, representados ao longo do tempo.<br />
+Essa visualização demonstra como medidas cinemáticas podem ser utilizadas para comparar comportamentos e agrupar padrões coordenados de movimento, integrando dados espaciais e temporais para identificar comportamentos semelhantes e compreender padrões de coordenação.</p>
+</section>
+<section id="similaridade-sensivel-ao-contexto-baseada-em-uma-combinacao-de-atributos">
+<h4>4.2.2.3 Similaridade sensível ao contexto baseada em uma combinação de atributos<a class="headerlink" href="#similaridade-sensivel-ao-contexto-baseada-em-uma-combinacao-de-atributos" title="Link to this heading">#</a></h4>
+<p>O movimento dos animais — e, por extensão, de qualquer entidade móvel — ocorre sempre dentro de um contexto ambiental, que influencia profundamente as trajetórias observadas.<br />
+Assim, a análise de similaridade entre trajetórias deve considerar não apenas as dimensões espaciais e temporais, mas também as condições ambientais, ecológicas e comportamentais associadas ao deslocamento.</p>
+<p>Com esse propósito, Buchin et al. [137] propuseram um método que amplia as medidas geométricas tradicionais — como distância temporal igual, distância de Hausdorff e distância de Fréchet — por meio da inclusão de uma distância contextual.<br />
+Essa abordagem permite incorporar variáveis externas e internas ao fenômeno, resultando em um modelo mais realista de comparação entre trajetórias.</p>
+<p>No estudo de caso apresentado pelos autores, envolvendo trajetórias de furacões, a distância contextual foi construída a partir de dois grupos principais de fatores:<br />
+<strong>Fatores externos</strong>, relacionados ao ambiente físico, como condições atmosféricas (temperatura e pressão do ar), uso e cobertura da terra (terra e mar) e topografia.</p>
+<p><strong>Fatores internos</strong>, associados às propriedades dinâmicas do próprio fenômeno, como intensificação, velocidade dos ventos, velocidade de deslocamento e diâmetro do furacão.</p>
+<p>Essa integração permite distinguir trajetórias que seguem rotas espaço-temporais semelhantes, mas apresentam contextos ambientais e dinâmicos distintos — o que é essencial, por exemplo, para identificar furacões que percorrem trajetos próximos, mas evoluem de forma diferente devido às condições locais.</p>
+<p>Em uma aplicação mais detalhada, [138] incorporaram a variação temporal no uso sequencial de feições ambientais, analisando como animais utilizam diferentes tipos de habitat ao longo do tempo.<br />
+O objetivo foi detectar padrões espaço-temporais de uso do habitat e compreender como esses padrões se relacionam com características individuais e ecológicas.</p>
+<p>Para isso, os autores aplicaram o método de alinhamento de sequências (Sequence Alignment Method – SAM) [139] a trajetórias de corços (roe deer).<br />
+Cada sequência foi construída a partir das trajetórias geográficas, associando cada ponto a uma classe de uso de habitat, definida pela combinação entre tipo de cobertura da terra e faixa de altitude.<br />
+O SAM foi então utilizado para agrupar as trajetórias em dendrogramas hierárquicos, revelando grupos de indivíduos com padrões de deslocamento semelhantes em diferentes níveis de detalhe.<br />
+A Figura 10 apresenta o agrupamento hierárquico de trajetórias de corços com base no uso sequencial do habitat.</p>
+<p><img alt="Figura 1" src="_images/fig4_10.png" /></p>
+<p><strong>Figura 10 —</strong> Agrupamento hierárquico de trajetórias de corços com base no uso sequencial do habitat. (Adaptado de [138]).</p>
+<p>O dendrograma evidencia grupos de indivíduos que compartilham padrões de movimento e uso ambiental semelhantes, definidos pela sequência temporal dos tipos de habitat e faixas de altitude percorridas.<br />
+Ao incorporar covariáveis adicionais — como sexo, idade ou características fisiológicas — aos grupos resultantes, os pesquisadores puderam explorar relações entre comportamento, contexto e movimento, reforçando o potencial dessa abordagem para compreender a dinâmica ecológica de espécies em ambientes complexos.<br />
+Essa visualização destaca como a similaridade contextual permite revelar estruturas comportamentais e ecológicas que não seriam detectadas apenas pela forma geométrica das trajetórias.</p>
+</section>
+</section>
+<section id="visualizacao-espaco-temporal-e-analise-visual-de-trajetorias">
+<h3>4.2.3 Visualização Espaço-Temporal e Análise Visual de Trajetórias<a class="headerlink" href="#visualizacao-espaco-temporal-e-analise-visual-de-trajetorias" title="Link to this heading">#</a></h3>
+<p>A visualização de dados é uma das formas mais poderosas de compreender e comunicar informações complexas sobre o movimento.<br />
+A visão humana é o principal canal de interação entre pessoas e sistemas computacionais, e a representação visual desempenha um papel central no processamento cognitivo, auxiliando na transformação de grandes volumes de dados em informações compreensíveis e interpretáveis.</p>
+<p>Ao representar visualmente os dados de movimento, torna-se possível identificar padrões, tendências e anomalias que dificilmente seriam perceptíveis por meio de tabelas ou estatísticas isoladas.<br />
+A visualização permite reconhecer regularidades e relações espaço-temporais em diferentes escalas — do padrão individual ao coletivo — além de evidenciar problemas de qualidade nos dados, como lacunas, ruídos ou registros inconsistentes, que se tornam rapidamente perceptíveis quando mapeados.</p>
+<p>Tradicionalmente, as abordagens de visualização se distribuem em três grandes comunidades de pesquisa, que diferem pelo tipo de dado e pela finalidade analítica:</p>
+<ul class="simple">
+<li><p><strong>Visualização científica:</strong> voltada à representação de fenômenos espaciais e físicos, como campos de temperatura, trajetórias, simulações ambientais ou padrões de fluxo.</p></li>
+<li><p><strong>Visualização da informação:</strong> dedicada a dados não espaciais, como séries temporais, redes ou atributos categóricos, enfatizando a estrutura e as relações abstratas entre variáveis.</p></li>
+<li><p><strong>Análise visual (visual analytics):</strong> combina a capacidade humana de raciocínio e reconhecimento de padrões com o poder computacional de processamento e modelagem, permitindo análises interativas, exploratórias e interpretativas.</p></li>
+</ul>
+<p>Com o avanço dos sensores e rastreadores, a abundância de dados de movimento em alta resolução impulsionou o desenvolvimento de novos métodos e ferramentas de visualização.<br />
+Esses recursos possibilitam explorar o movimento de maneira mais rica e dinâmica, integrando dimensões espaciais, temporais e contextuais em uma mesma interface.</p>
+<p>As principais abordagens contemporâneas podem ser organizadas em <strong>três categorias complementares:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Visualizações espaço-temporais:</strong><br />
+Representam simultaneamente posição e tempo, como o <strong>cubo espaço-tempo (STC)</strong> e suas variações bidimensionais, permitindo observar a evolução do movimento em diferentes janelas temporais.</p></li>
+<li><p><strong>Agregações visuais:</strong><br />
+Incluem <strong>técnicas geométricas e métodos de densidade kernel</strong>, que reduzem a complexidade de grandes conjuntos de trajetórias, sintetizando volumes massivos de dados em padrões visuais legíveis e comparáveis.</p></li>
+<li><p><strong>Análise visual de movimento:</strong><br />
+<strong>Integra visualização interativa</strong> com <strong>técnicas de mineração e agrupamento de dados</strong>, permitindo identificar <strong>padrões coletivos</strong>, <strong>comportamentos emergentes</strong> e <strong>correlações espaciais e temporais</strong>.<br />
+Essa abordagem dá suporte a processos de <strong>descoberta visual</strong>, em que o analista alterna entre observação e modelagem para refinar hipóteses.</p></li>
+</ol>
+<p>Essas técnicas contribuem de forma decisiva para revelar padrões espaço-temporais complexos, facilitando a detecção de dinâmicas coletivas, mudanças comportamentais e interações entre entidades móveis e o ambiente.<br />
+As agregações visuais, em especial, ajudam a representar como o uso do espaço varia ao longo do tempo, apoiando estudos sobre ocupação, mobilidade e dinâmica territorial.</p>
+<section id="representacoes-espaco-temporais-cubo-espaco-temporal-e-outras-abordagens">
+<h4>4.2.3.1 Representações Espaço-Temporais: Cubo espaço-temporal e outras abordagens<a class="headerlink" href="#representacoes-espaco-temporais-cubo-espaco-temporal-e-outras-abordagens" title="Link to this heading">#</a></h4>
+<p>Representar tempo e espaço de forma conjunta é um dos maiores desafios na análise de trajetórias.<br />
+Enquanto os mapas bidimensionais mostram onde os eventos ocorrem, eles não revelam como esses eventos se desenrolam ao longo do tempo.<br />
+As representações espaço-temporais surgem justamente para preencher essa lacuna, permitindo observar <strong>onde</strong>, <strong>quando</strong> e <strong>de que maneira</strong> o movimento acontece.<br />
+Essa integração é essencial para compreender padrões de deslocamento, períodos de pausa, mudanças de velocidade e variações sazonais de comportamento.</p>
+<p>Entre as diversas formas de visualização espaço-temporal, o <strong>Cubo Espaço-Tempo (CET)</strong> é uma das mais consolidadas.<br />
+Ele integra as dimensões espaciais (<strong>x</strong>, <strong>y</strong>) e temporais (<strong>t</strong>) em uma estrutura tridimensional, onde o tempo é representado como um eixo vertical.<br />
+Cada “camada” do cubo corresponde a um instante ou intervalo de tempo, empilhando a evolução do território em sucessivas fatias temporais.<br />
+A <strong>Figura 11</strong> apresenta uma representação conceitual desse modelo: cada célula espacial é empilhada ao longo do eixo temporal, permitindo acompanhar a evolução de uma mesma localização em múltiplos intervalos de tempo.</p>
+<p><img alt="Figura 1" src="_images/fig4_11.png" /></p>
+<p><strong>Figura 11 —</strong> Representação conceitual do cubo espaço-temporal. Cada célula espacial é empilhada ao longo do eixo do tempo, permitindo acompanhar a evolução de uma mesma localização em múltiplos intervalos temporais.<br />
+Fonte: <a class="reference external" href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/space-time-pattern-mining/space-time-cubes-101.htm">ArcGIS Space Time Cubes 101</a></p>
+<p>Cada observação espaço-temporal — um ponto com coordenadas (x, y) e carimbo de tempo (t) — torna-se um elemento dentro do volume 3D.<br />
+Uma sequência ordenada de observações de um mesmo objeto forma uma <strong>trajetória</strong>, enquanto variáveis agregadas (como densidades ou indicadores) ocupam volumes contínuos no interior do cubo.<br />
+Assim, o CET transforma dados de movimento em uma representação visual integrada, mostrando onde e quando os fenômenos ocorrem.</p>
+<p>Para tornar essa representação operacional, o espaço e o tempo são discretizados: o território é dividido em <strong>células regulares</strong> (quadradas, hexagonais ou administrativas) e o tempo em <strong>intervalos uniformes</strong> (minutos, horas, dias, meses).<br />
+A combinação <strong>célula + intervalo</strong> define um <em>bin</em> (ou <em>voxel</em>, volume element), a menor unidade do cubo.<br />
+Cada voxel armazena resumos estatísticos das observações contidas naquele espaço e tempo — como contagem, soma, média ou variância de uma variável.<br />
+A <strong>Figura 12</strong> detalha essa estrutura, destacando os conceitos de <em>bin time series</em> (coluna amarela), <em>time slice</em> (fatia verde) e <em>bin</em> (célula unitária), que juntos compõem a estrutura tridimensional do CET.</p>
+<p><img alt="Figura 1" src="_images/fig4_12.png" /></p>
+<p><strong>Figura 12 —</strong> Estrutura e componentes do cubo espaço-temporal. O painel destaca os conceitos de <em>bin time series</em> (coluna amarela), <em>time slice</em> (fatia verde) e <em>bin</em> (célula unitária), que compõem a estrutura 3D do CET.<br />
+Fonte: <a class="reference external" href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/space-time-pattern-mining/space-time-cubes-101.htm">ArcGIS Space Time Cubes 101</a></p>
+<p>O resultado é uma matriz tridimensional (<strong>x × y × t</strong>) que possibilita diferentes leituras:</p>
+<ul class="simple">
+<li><p>olhando <strong>verticalmente</strong>, visualiza-se a <strong>série temporal local</strong>;</p></li>
+<li><p>olhando <strong>horizontalmente</strong>, obtém-se um <strong>mapa de um instante específico</strong>;</p></li>
+<li><p>e, observando o <strong>cubo completo</strong>, percebem-se <strong>tendências</strong>, <strong>persistências</strong> e <strong>episódios</strong> no espaço e no tempo.</p></li>
+</ul>
+<p><img alt="Figura 1" src="_images/fig4_13.png" /></p>
+<p>A <strong>Figura 13</strong> ilustra uma trajetória individual representada dentro do cubo espaço-temporal.<br />
+O exemplo mostra o percurso diário de um indivíduo, com os locais visitados (<em>home, work, pool, restaurant</em>) e seus horários correspondentes, integrando posição e tempo em uma mesma visualização.<br />
+Essa abordagem reforça a capacidade do CET de sintetizar, em um único modelo, as relações entre movimento, localização e temporalidade.</p>
+<p><strong>Figura 13 —</strong> Trajetória representada em um cubo espaço-temporal.<br />
+O exemplo mostra o percurso diário de um indivíduo, destacando locais visitados (<em>home, work, pool, restaurant</em>) e horários correspondentes, integrando posição e tempo em uma mesma visualização.</p>
+<p>A representação em cubo oferece <strong>três vantagens principais</strong>:</p>
+<ul class="simple">
+<li><p><strong>Coerência de escala:</strong> a definição explícita do tamanho da célula e do intervalo temporal garante comparações consistentes e reduz ambiguidades.</p></li>
+<li><p><strong>Comparabilidade:</strong> todos os voxels medem a mesma variável no mesmo período, permitindo comparações diretas entre locais e tempos.</p></li>
+<li><p><strong>Legibilidade de padrões:</strong> o arranjo volumétrico facilita a identificação de tendências, persistências, picos episódicos e deslocamentos espaciais.</p></li>
+</ul>
+<p>Uma vez construído o cubo, é possível analisar padrões dinâmicos e responder perguntas como:</p>
+<ul class="simple">
+<li><p>Há locais que mantêm valores elevados (ou baixos) de forma persistente?</p></li>
+<li><p>Existem tendências espaciais ascendentes ou decrescentes?</p></li>
+<li><p>Quais regiões apresentam picos episódicos fora da rotina?</p></li>
+<li><p>O fenômeno se desloca de um local para outro ao longo do tempo?</p></li>
+</ul>
+<p>Essas leituras ajudam a classificar áreas quanto à estabilidade, mudança e anomalia, sendo amplamente aplicadas em <strong>planejamento urbano</strong>, <strong>gestão ambiental</strong>, <strong>mobilidade</strong> e <strong>monitoramento social</strong>.<br />
+A <strong>Figura 14</strong> exemplifica essa aplicação, mostrando a localização de áreas persistentes, tendências e episódios (<em>hot</em> e <em>cold spots</em>).<br />
+A representação tridimensional destaca agrupamentos de <em>hot spots</em> (vermelhos) e <em>cold spots</em> (azuis) identificados por análise espaço-temporal, evidenciando regiões com padrões estáveis ou emergentes ao longo do tempo.</p>
+<p><img alt="Figura 1" src="_images/fig4_14.png" /></p>
+<p><strong>Figura 14 —</strong> Localização de áreas persistentes, tendências e episódios (<em>hot</em> e <em>cold spots</em>), identificadas por análise espaço-temporal.<br />
+Fonte: <a class="reference external" href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/space-time-pattern-mining/createwebscene.htm">ArcGIS Create Web Scene</a></p>
+<p><strong>Limitações e Cuidados de Interpretação</strong></p>
+<p>Como toda técnica de agregação, o cubo apresenta <strong>limitações importantes</strong>.<br />
+A agregação espacial e temporal pode <strong>suavizar o fenômeno</strong>, <strong>ocultar detalhes finos</strong> ou <strong>gerar padrões artificiais</strong> — um efeito conhecido como <strong>MAUP (Modifiable Areal Unit Problem)</strong>.<br />
+Há também <strong>vieses de observação</strong>: áreas com mais sensores ou registros podem aparentar maior intensidade, sem que o fenômeno seja de fato mais frequente.<br />
+Além disso, <strong>unidades espaciais heterogêneas</strong> (por exemplo, áreas rurais extensas versus quarteirões urbanos) exigem cautela na comparação.<br />
+Em <strong>dados sensíveis</strong>, a questão da <strong>privacidade</strong> é central — a anonimização e a agregação devem proteger indivíduos e contextos observados.<br />
+Reconhecer essas limitações não enfraquece o método; ao contrário, torna suas conclusões mais éticas e responsáveis.</p>
+<p><strong>Variações e Extensões Contemporâneas</strong></p>
+<p>Um exemplo contemporâneo e aplicado do conceito de cubo espaço-temporal é o <strong>Brazil Data Cube (BDC)</strong>, desenvolvido pelo <strong>Instituto Nacional de Pesquisas Espaciais (INPE)</strong>.<br />
+O projeto tem como objetivo <strong>produzir, organizar e disponibilizar grandes volumes de imagens de sensoriamento remoto</strong> do território brasileiro na forma de <strong>cubos de dados multidimensionais</strong>.<br />
+Esses cubos integram dimensões <strong>espaciais</strong>, <strong>temporais</strong> e de <strong>atributos</strong>, permitindo análises que exploram simultaneamente variações no espaço e no tempo.</p>
+<p>A <strong>Figura 15</strong> apresenta a estrutura e os componentes do Brazil Data Cube, ilustrando o ecossistema completo do projeto — desde a geração dos cubos de dados até os <strong>serviços web (WTSS, WLTS, BDC STAC, SITS)</strong> e as <strong>aplicações voltadas à análise e visualização</strong>, como o <strong>BDC Explorer</strong> e o <strong>TERRA Collect</strong>.</p>
+<p><img alt="Figura 1" src="_images/fig4_15.png" /></p>
+<p><strong>Figura 15 —</strong> Estrutura e componentes do Brazil Data Cube (BDC).<br />
+Fonte: <a class="reference external" href="https://data.inpe.br/bdc/sobre-o-brazil-data-cube/">https://data.inpe.br/bdc/sobre-o-brazil-data-cube/</a></p>
+<p>O BDC transforma milhares de cenas de satélite em <strong>coleções padronizadas e prontas para análise (Analysis-Ready Data – ARD)</strong>, aplicando <strong>correções radiométricas e geométricas</strong>, <strong>registro espacial</strong> e <strong>padronização entre sensores e períodos</strong>.<br />
+Essas coleções alimentam a organização dos cubos de dados, que integram <strong>séries temporais</strong>, <strong>metadados</strong> e <strong>atributos derivados</strong>, servindo de base para <strong>mapear uso e cobertura da terra</strong>, <strong>detectar mudanças</strong> e <strong>treinar modelos de classificação</strong>.</p>
+<p>Em síntese, o BDC disponibiliza <strong>três camadas principais de informação</strong>:</p>
+<ol class="arabic simple">
+<li><p><strong>Dados consistentes (ARD);</strong></p></li>
+<li><p><strong>Estruturas analíticas (cubos de dados);</strong></p></li>
+<li><p><strong>Produtos derivados (mosaicos e classificações)</strong> — todos prontos para exploração espaço-temporal.</p></li>
+</ol>
+<p>A etapa de visualização e acesso é realizada por meio do <strong>BDC Explorer</strong>, o portal web interativo do projeto (<strong>Figura 16</strong>).<br />
+A interface permite buscar dados por região e período, visualizar coleções, cubos, mosaicos e classificações, ajustar composições RGB, comparar períodos com a ferramenta <em>swipe</em> e baixar dados em larga escala.<br />
+O Explorer também integra os serviços <strong>WTSS (Web Time Series Service)</strong> e <strong>WLTS (Web Land Trajectory Service)</strong>, que possibilitam <strong>extrair séries temporais e trajetórias de uso e cobertura da terra</strong> diretamente no navegador, antes mesmo de exportar para um ambiente de programação.</p>
+<p><img alt="Figura 1" src="_images/fig4_16.png" /></p>
+<p><strong>Figura 16 —</strong> BDC Explorer.<br />
+Interface do portal interativo do Brazil Data Cube, que possibilita filtrar, visualizar e comparar cubos de dados e séries temporais por região e intervalo de tempo.<br />
+Fonte: <a class="reference external" href="https://data.inpe.br/bdc/explorer/explore">https://data.inpe.br/bdc/explorer/explore</a></p>
+<p>Essas séries temporais permitem identificar <strong>tendências</strong> (aumento ou redução progressiva), <strong>episódios</strong> (picos pontuais fora da rotina) e <strong>persistências</strong> (estabilidade ao longo do tempo) — conceitos diretamente relacionados aos discutidos anteriormente sobre o <strong>Cubo Espaço-Temporal (CET)</strong>.<br />
+Combinando cubos de dados, análise visual e serviços integrados, o <strong>Brazil Data Cube</strong> consolida-se como uma plataforma estratégica para <strong>monitoramento ambiental</strong>, <strong>planejamento territorial</strong> e <strong>ciência de dados geoespaciais</strong>, reafirmando o papel do Brasil como referência internacional em observação da Terra.</p>
+</section>
+<section id="agregacoes-visuais-agregacoes-geometricas-e-densidades-por-kernel">
+<h4>4.2.3.2 Agregações Visuais: Agregações Geométricas e Densidades por Kernel<a class="headerlink" href="#agregacoes-visuais-agregacoes-geometricas-e-densidades-por-kernel" title="Link to this heading">#</a></h4>
+<p>Quando os conjuntos de dados de movimento são muito extensos, a simples exibição de todas as trajetórias em um único mapa torna-se ineficiente.<br />
+O acúmulo de linhas sobrepostas (<em>overplotting</em>) gera poluição visual, dificultando a percepção de padrões relevantes.<br />
+Mesmo com o uso de técnicas de atenuação visual — como ajustes de espessura, transparência ou cor —, a saturação se torna inevitável em bases de alta densidade.</p>
+<p>Para lidar com esse problema, utiliza-se o conceito de <strong>agregação visual de dados</strong>, que consiste em combinar múltiplos elementos individuais em uma representação sintética e mais legível.<br />
+A agregação reduz a complexidade visual ao condensar um grande número de trajetórias em estruturas representativas, permitindo identificar <strong>tendências coletivas</strong>, <strong>zonas de concentração</strong> e <strong>direções dominantes de movimento</strong>.</p>
+<p>Entretanto, esse processo implica certo grau de <strong>generalização</strong> e <strong>perda de detalhe local</strong>, uma vez que parte da variabilidade original é abstraída para destacar padrões globais.<br />
+Assim, é importante que o <strong>nível de agregação</strong> seja adequado ao objetivo da análise: quanto maior a agregação, maior a legibilidade, mas menor a fidelidade ao comportamento individual.</p>
+<p>De modo geral, as agregações visuais dividem-se em duas grandes categorias:</p>
+<ul class="simple">
+<li><p><strong>Agregações geométricas</strong>, que simplificam ou fundem as trajetórias com base em propriedades espaciais e formais (forma, direção, curvatura, proximidade).</p></li>
+<li><p><strong>Agregações baseadas em densidade kernel</strong>, que transformam o conjunto de trajetórias em campos contínuos de intensidade, representando a probabilidade ou frequência de passagem pelo espaço.</p></li>
+</ul>
+<p>Essas duas abordagens são <strong>complementares</strong>:<br />
+as geométricas evidenciam <strong>rotas típicas</strong> e <strong>estruturas espaciais</strong>, enquanto as densidades kernel revelam <strong>zonas de maior uso</strong> e <strong>concentração de movimento</strong>.<br />
+Juntas, elas tornam possível compreender tanto a <strong>forma</strong> quanto a <strong>intensidade</strong> do deslocamento, equilibrando simplicidade visual e profundidade analítica.</p>
+<p><strong>Agregações Geométricas</strong></p>
+<p>Uma técnica amplamente utilizada para lidar com grandes volumes de trajetórias é o <strong>agrupamento de arestas (<em>edge bundling</em>)</strong>, no qual subtrajetórias espacialmente próximas são fundidas em um único caminho representativo.<br />
+Essa fusão cria uma estrutura visual mais limpa, reduzindo a sobreposição de linhas e destacando padrões coletivos de deslocamento.</p>
+<p>O <em>edge bundling</em> é particularmente útil em <strong>dados de origem e destino (OD)</strong>, nos quais apenas os pontos iniciais e finais são conhecidos, mas há interesse em revelar <strong>rotas prováveis</strong> ou <strong>fluxos dominantes</strong> entre esses locais.<br />
+Ao unir trajetórias que compartilham direções semelhantes, o método transforma uma rede caótica de linhas em <strong>corredores de movimento coerentes</strong>, facilitando a identificação de <strong>eixos principais</strong>, <strong>concentrações de tráfego</strong> e <strong>tendências direcionais</strong>.</p>
+<p>Existem diversas abordagens para realizar o agrupamento, incluindo:</p>
+<ul class="simple">
+<li><p><strong>Métodos baseados em forças (<em>force-directed bundling</em>):</strong> modelam as trajetórias como segmentos que se atraem ou repelem segundo leis físicas simuladas, até atingir uma configuração estável e visualmente organizada.</p></li>
+<li><p><strong>Técnicas combinatórias:</strong> agrupam trajetórias por critérios de similaridade topológica ou angular, buscando caminhos que compartilhem segmentos comuns.</p></li>
+<li><p><strong>Métodos baseados em imagem:</strong> aplicam princípios de processamento visual (como convolução ou suavização) para fundir trajetórias em superfícies contínuas de fluxo.</p></li>
+</ul>
+<p>Essas estratégias reduzem o “emaranhado” de linhas e revelam estruturas globais antes invisíveis, como <strong>rotas dominantes</strong>, <strong>corredores de tráfego</strong> e <strong>direções preferenciais de movimento</strong>.</p>
+<p>Além disso, a <strong>renderização esquemática</strong> — isto é, a simplificação visual da forma das trajetórias agrupadas — pode enriquecer a interpretação ao enfatizar a lógica do agrupamento e não apenas o traçado original.<br />
+Essa abordagem favorece a leitura de grandes conjuntos de dados, aproximando a visualização da <strong>cartografia sintética</strong>, na qual o foco é a estrutura e o fluxo, não o detalhe geométrico.</p>
+<p>Por fim, versões mais avançadas integram o <em>bundling</em> com <strong>linhas temporais</strong> ou <strong>dimensões espaço-temporais</strong>, permitindo visualizar como os fluxos evoluem ao longo do tempo.<br />
+Assim, é possível acompanhar <strong>mudanças sazonais ou horárias</strong> em padrões de mobilidade urbana, <strong>migrações graduais de animais</strong> ou <strong>alterações no comportamento de tráfego</strong>, combinando o eixo temporal à dinâmica dos grupos de trajetórias.</p>
+<p><strong>Agregações por Densidade Kernel</strong></p>
+<p>Outra forma de sintetizar trajetórias é por meio da <strong>Estimativa de Densidade Kernel (Kernel Density Estimation – KDE)</strong>, amplamente utilizada para representar <strong>distribuições de uso do espaço (utilisation distributions)</strong> e <strong>áreas de vida (home ranges)</strong>.<br />
+Essas estimativas transformam pontos ou segmentos de trajetórias em superfícies de probabilidade, indicando as regiões mais frequentemente visitadas.</p>
+<p>Tradicionalmente, os kernels são aplicados sobre <strong>pontos individuais</strong>, tratando cada observação como uma amostra independente.<br />
+No entanto, essa abordagem ignora a <strong>sequência temporal e direcional</strong> das trajetórias.<br />
+Para superar essa limitação, surgiram os <strong>kernels segmentares</strong>, aplicados não sobre pontos isolados, mas sobre <strong>segmentos formados por dois pontos consecutivos</strong>.<br />
+Cada segmento é então convertido em uma pequena superfície de densidade, e o conjunto de segmentos compõe uma <strong>representação contínua e coerente do deslocamento</strong>.<br />
+Essa comparação é apresentada na <strong>Figura 17</strong>, que ilustra diferentes formas de aplicar o método.</p>
+<p><img alt="Figura 1" src="_images/fig4_17.png" /></p>
+<p><strong>Figura 17 – Abordagens baseadas em densidade kernel para trajetórias</strong><br />
+<em>Adaptado de [190].</em><br />
+O painel (a) mostra kernels pontuais aplicados de forma independente, sem considerar a sequência temporal.<br />
+Os painéis (b), (c) e (d) apresentam kernels segmentares, nos quais a ordem dos pontos consecutivos é incorporada ao cálculo, resultando em superfícies bidimensionais de densidade mais fiéis ao movimento real.</p>
+<p>Na <strong>Ciência da Informação Geográfica (GIScience)</strong>, esses kernels segmentares são frequentemente inspirados em princípios da <strong>Geografia do Tempo</strong>, como os <strong>prismas de probabilidade espaço-temporais</strong>, que delimitam a área acessível entre dois pontos observados.<br />
+Esses modelos geram <strong>kernels elípticos</strong> capazes de estimar todas as possíveis rotas entre dois pontos e são amplamente empregados para modelar <strong>movimentos animais</strong>, <strong>tráfego marítimo</strong> e <strong>fluxos de transporte</strong>.</p>
+<p>Em versões mais avançadas, incorporam-se variáveis como <strong>velocidade e aceleração</strong>, resultando em <strong>kernels direcionais</strong> que refletem o comportamento dinâmico dos indivíduos.<br />
+Outro avanço importante foi a inclusão da <strong>incerteza no movimento</strong>, representada pelos <strong>modelos de pontes Brownianas (Brownian Bridges)</strong>, que descrevem <strong>trajetórias probabilísticas</strong> entre pontos de observação.<br />
+A aplicação desse conceito pode ser observada na <strong>Figura 18</strong>, onde duas trajetórias (azul e roxa) apresentam <strong>interseções probabilísticas (em vermelho e verde)</strong>, indicando momentos potenciais de interação espacial e temporal entre entidades móveis.</p>
+<p><img alt="Figura 1" src="_images/fig4_18.png" /></p>
+<p><strong>Figura 18 – Modelo Browniano de interação entre trajetórias</strong><br />
+<em>Adaptado de [182].</em><br />
+As trajetórias (azul e roxa) apresentam interseções probabilísticas (em vermelho e verde), indicando momentos potenciais de sobreposição espacial e temporal entre entidades móveis.</p>
+<p>Esses modelos possibilitam representar <strong>padrões de interação complexos</strong>, como <strong>encontros</strong>, <strong>evasões</strong>, <strong>atrações</strong>, <strong>visitas recorrentes</strong> e <strong>seguimento entre trajetórias</strong>.<br />
+Em síntese, as <strong>agregações por densidade kernel</strong> transformam trajetórias individuais em <strong>campos contínuos de movimento</strong>, combinando <strong>estatística espacial</strong>, <strong>modelagem probabilística</strong> e <strong>interpretação visual</strong>.<br />
+Essa abordagem revela não apenas <strong>onde o movimento ocorre</strong>, mas também <strong>como</strong> e <strong>com que frequência</strong> o espaço é utilizado, permitindo compreender <strong>padrões comportamentais</strong> e <strong>processos espaciais dinâmicos</strong> de forma integrada e intuitiva.</p>
+<p><strong>Densidades em 3D e Extensões Espaço-Temporais</strong></p>
+<p>Embora a maioria dos modelos de densidade kernel seja tradicionalmente representada em <strong>superfícies bidimensionais</strong>, é possível estendê-los ao <strong>espaço tridimensional</strong>, incorporando o <strong>tempo como uma dimensão adicional</strong>.<br />
+Nessa abordagem, cada ponto ou segmento de trajetória é projetado em um <strong>cubo espaço-temporal</strong>, no qual o eixo vertical representa o tempo.<br />
+Essa integração permite visualizar como a densidade se distribui simultaneamente no espaço e no tempo, revelando <strong>padrões dinâmicos</strong> que permaneceriam invisíveis em mapas puramente espaciais.</p>
+<p>A <strong>Figura 19</strong> apresenta diferentes abordagens de <strong>kernels tridimensionais aplicados a trajetórias</strong>, comparando modos de representar o movimento em volumes espaço-temporais.<br />
+No painel (a), observa-se uma densidade pontual em espaço-tempo com <strong>kernels cilíndricos</strong>, que desconsideram a sequência temporal.<br />
+Já os painéis (b) a (d) mostram <strong>kernels de polilinhas</strong>, nos quais cada trajetória é representada por um kernel volumétrico único.<br />
+O painel (d) destaca a <strong>versão Browniana empilhada</strong>, na qual a largura do kernel varia conforme a posição temporal entre pontos consecutivos, refletindo variações na velocidade e na intensidade do movimento.</p>
+<p><img alt="Figura 1" src="_images/fig4_19.png" /></p>
+<p><strong>Figura 19 — Kernels tridimensionais para trajetórias</strong><br />
+<em>(Adaptado de [190]).</em></p>
+<p>A generalização mais avançada desse conceito é o <strong>modelo de densidade espaço-temporal de polilinhas</strong>, em que o kernel é aplicado à trajetória inteira — e não apenas a pontos ou segmentos isolados.<br />
+O resultado é um <strong>volume tridimensional contínuo</strong>, formado pela união de cilindros suavizados ao longo do percurso.<br />
+Essa técnica permite identificar <strong>áreas de maior permanência no espaço e no tempo</strong>, bem como capturar a <strong>estrutura interna das trajetórias</strong> ao longo de diferentes períodos — como <strong>dia</strong>, <strong>estação</strong> ou <strong>ciclo comportamental</strong>.</p>
+<p>Um exemplo prático dessa abordagem é mostrado na <strong>Figura 20</strong>, que apresenta <strong>densidades empilhadas no cubo espaço-temporal</strong>.<br />
+O painel (a) mostra o cubo espaço-tempo de um mês de trajetórias diárias de uma ave, enquanto o painel (b) exibe a <strong>densidade Browniana empilhada</strong>, evidenciando regiões de maior incerteza.<br />
+Os painéis (c) e (d) mostram, respectivamente, a <strong>densidade Gaussiana empilhada</strong> e a <strong>isosuperfície dos valores máximos</strong>, que revelam <strong>hotspots espaço-temporais persistentes</strong>.</p>
+<p><img alt="Figura 1" src="_images/fig4_20.png" /></p>
+<p><strong>Figura 20 — Densidade espaço-temporal empilhada</strong><br />
+<em>(Adaptado de [190]).</em></p>
+<p>Esses modelos tridimensionais têm aplicações que vão muito além da ecologia, abrangendo <strong>estudos de comportamento humano</strong>, <strong>análises de criminalidade</strong>, <strong>epidemiologia espacial</strong> e <strong>interação homem–máquina</strong>.<br />
+Ao oferecer uma <strong>visão volumétrica da mobilidade</strong>, permitem <strong>quantificar o nível de interação entre trajetórias</strong>, <strong>detectar mudanças de padrão</strong> e <strong>identificar regiões de alta recorrência temporal</strong>, consolidando-se como <strong>ferramentas essenciais</strong> para a compreensão de fenômenos dinâmicos complexos.</p>
+</section>
+<section id="analise-visual-do-movimento">
+<h4>4.2.3.3 Análise Visual do Movimento<a class="headerlink" href="#analise-visual-do-movimento" title="Link to this heading">#</a></h4>
+<p>A <strong>análise visual</strong> combina <strong>visualização interativa</strong> com <strong>métodos analíticos e computacionais</strong> para explorar grandes volumes de dados complexos — como trajetórias espaço-temporais.<br />
+O princípio central dessa abordagem é o uso de <strong>visões interligadas (linked views)</strong>, isto é, um conjunto de visualizações conectadas entre si, nas quais as ações realizadas em uma (como selecionar, ampliar ou filtrar) afetam simultaneamente todas as outras.</p>
+<p>Essa integração permite observar o fenômeno sob múltiplas perspectivas — <strong>espacial, temporal e contextual</strong> —, de modo que um padrão detectado em um gráfico de atributos, por exemplo, possa ser imediatamente localizado e interpretado no espaço e no tempo.<br />
+Essa característica torna as <em>linked views</em> especialmente valiosas na <strong>análise exploratória de dados espaço-temporais</strong>, favorecendo descobertas que não seriam possíveis por meio de abordagens isoladas.</p>
+<p>Em sistemas de <strong>análise visual de movimento</strong>, diferentes tipos de visualizações são integrados em uma mesma interface: <strong>mapas espaciais</strong>, <strong>cubos espaço-temporais</strong>, <strong>gráficos de atributos</strong>, <strong>densidades de movimento</strong> e <strong>diagramas temporais</strong>.<br />
+Essa combinação fornece uma compreensão global e interativa dos dados, permitindo tanto o <strong>reconhecimento de padrões</strong> quanto a <strong>detecção de anomalias</strong>.</p>
+<p>Um exemplo clássico dessa integração é o <strong>muro de trajetórias (<em>trajectory wall</em>)</strong>, em que as trajetórias são representadas como <strong>fitas tridimensionais empilhadas</strong> sobre o espaço geográfico, com o eixo vertical indicando o número de ocorrências ou a intensidade do tráfego.<br />
+A cor de cada segmento pode representar um <strong>atributo</strong> — como velocidade, altitude ou categoria de movimento — e, quando vinculada a uma <strong>lente temporal (<em>time lens</em>)</strong>, essa estrutura permite destacar subconjuntos de trajetórias com comportamentos semelhantes em intervalos específicos.<br />
+Com isso, padrões como <strong>engarrafamentos</strong>, <strong>aglomerações</strong> ou <strong>fluxos anômalos</strong> tornam-se facilmente perceptíveis e exploráveis.</p>
+<p>Outro exemplo relevante é a <strong>análise visual de trajetórias do olhar (<em>eye tracking</em>)</strong>, amplamente utilizada em <strong>estudos de interação humano–computador</strong>.<br />
+Nesses casos, os sistemas combinam <strong>visualizações espaço-temporais</strong>, <strong>mapas de densidade</strong> e <strong>técnicas de agregação</strong> para explorar o comportamento de observação de múltiplos indivíduos em uma mesma tarefa.<br />
+Operações interativas, como <strong>seleção</strong>, <strong>simplificação</strong> e <strong>agrupamento</strong>, permitem identificar <strong>padrões coletivos</strong>, <strong>diferenças entre participantes</strong> e <strong>regiões de maior atenção</strong>.</p>
+<p>Um exemplo claro dessa integração entre <strong>espaço</strong>, <strong>tempo</strong> e <strong>comportamento</strong> é apresentado na <strong>Figura 21</strong>, que mostra dados de rastreamento ocular em uma ferramenta de análise visual com múltiplas visões interligadas.<br />
+Essa interface combina diferentes formas de representação para explorar, de maneira coordenada, as dimensões <strong>espaciais</strong>, <strong>temporais</strong> e <strong>cognitivas</strong> do movimento.</p>
+<p><img alt="Figura 1" src="_images/fig4_21.png" /></p>
+<p><strong>Figura 21 — Dados de rastreamento ocular em ferramenta de análise visual com múltiplas visões interligadas.</strong><br />
+<em>(Adaptado de [183,197]).</em></p>
+<p>A ferramenta integra três componentes principais:<br />
+(a) um <strong>cubo espaço-tempo</strong>, no qual são exibidas as trajetórias do olhar de diferentes participantes (linhas coloridas) e as regiões de atenção (realçadas em cores sobre as paredes cinzas);<br />
+(b) um <strong>dendrograma hierárquico</strong>, que agrupa trajetórias de acordo com a similaridade dos padrões de atenção às áreas de interesse; e<br />
+(c) um <strong>painel detalhado</strong>, que apresenta a variação da atenção em uma área específica ao longo do tempo.</p>
+<p>A Figura 21 evidencia como a <strong>análise visual interativa</strong> permite investigar simultaneamente <strong>padrões espaciais, temporais e comportamentais</strong>, revelando relações complexas entre movimento e foco de atenção.<br />
+O uso de <strong>múltiplas visões coordenadas</strong> amplia a capacidade exploratória do analista, favorecendo a descoberta de <strong>correlações sutis</strong> que seriam invisíveis em abordagens isoladas, tornando o processo de análise mais <strong>dinâmico</strong>, <strong>interpretativo</strong> e <strong>integrado</strong>.</p>
+<p>Além da interação visual, muitos sistemas incorporam <strong>métodos semiautomáticos de análise</strong>, como <strong>medidas de similaridade</strong> e <strong>técnicas de agrupamento (<em>clustering</em>)</strong>.<br />
+Essas ferramentas ajudam a organizar grandes volumes de trajetórias em grupos com padrões semelhantes, tornando a exploração mais <strong>eficiente</strong> e <strong>escalável</strong>.</p>
+<p>O usuário pode realizar uma <strong>exploração hierárquica (top-down)</strong> — selecionando subconjuntos de trajetórias, refinando agrupamentos e comparando diferentes critérios de similaridade, que podem ser <strong>geométricos</strong> (posição, direção, curvatura), <strong>temporais</strong> (duração, sincronização) ou <strong>contextuais</strong> (categoria do objeto, ambiente, velocidade média).</p>
+<p>Em aplicações específicas, a similaridade entre trajetórias pode ser calculada não apenas por <strong>métricas espaciais clássicas</strong>, mas também por <strong>métricas de sequência</strong>, como a <strong>distância de Levenshtein</strong>, que mede quantas operações (adições, exclusões ou substituições) são necessárias para transformar uma sequência em outra.<br />
+Essa abordagem é especialmente útil em <strong>experimentos com vídeos</strong>, permitindo comparar <strong>sequências de áreas de interesse observadas pelos olhos</strong> e agrupar <strong>padrões visuais semelhantes entre participantes</strong>.</p>
+<p>Em síntese, a <strong>análise visual do movimento</strong> oferece uma estrutura flexível que une <strong>percepção humana</strong>, <strong>interatividade</strong> e <strong>poder computacional</strong>.<br />
+Ela permite investigar dados de movimento em múltiplas escalas e dimensões, <strong>identificar padrões espaço-temporais complexos</strong>, <strong>explorar interações dinâmicas entre trajetórias</strong> e <strong>gerar novas hipóteses analíticas</strong> a partir da integração entre <strong>visualização</strong>, <strong>estatística</strong> e <strong>inteligência artificial</strong>.</p>
+</section>
+</section>
+</section>
+<section id="desafios-limitacoes-e-tendencias-futuras">
+<h2>4.4 Desafios, Limitações e Tendências Futuras<a class="headerlink" href="#desafios-limitacoes-e-tendencias-futuras" title="Link to this heading">#</a></h2>
+<p>Apesar dos avanços expressivos nas últimas décadas, a <strong>análise e visualização de trajetórias</strong> ainda enfrenta <strong>desafios significativos</strong> — conceituais, técnicos e metodológicos.<br />
+Com o crescimento exponencial da quantidade, variedade e complexidade dos dados de movimento, surgem novas demandas relacionadas à <strong>integração, padronização, interpretação, ética e escalabilidade</strong>.<br />
+A seguir, destacam-se as principais limitações atuais e as tendências que devem orientar o desenvolvimento futuro da área.</p>
+<p><strong>a) Complexidade e Volume de Dados</strong>
+O avanço de tecnologias de rastreamento — como <strong>GPS</strong>, <strong>sensores</strong>, <strong>satélites</strong> e <strong>dispositivos móveis</strong> — provocou uma verdadeira explosão na disponibilidade de dados espaço-temporais.<br />
+Esses dados, contudo, são <strong>heterogêneos</strong>, variando em precisão, frequência de amostragem e formato.<br />
+Entre os principais desafios estão:</p>
+<ul class="simple">
+<li><p>Processar e armazenar grandes volumes de trajetórias;</p></li>
+<li><p>Sincronizar registros espaciais e temporais provenientes de múltiplas fontes;</p></li>
+<li><p>Reduzir ruídos e inconsistências sem perder informações essenciais.</p></li>
+</ul>
+<p>Essas dificuldades tornam indispensável o uso de <strong>estruturas de dados otimizadas</strong>, <strong>processamento distribuído</strong> e <strong>computação de alto desempenho</strong>, permitindo lidar com fluxos massivos e contínuos de informação — especialmente em aplicações em <strong>tempo real</strong>.</p>
+<p><strong>b) Padronização e Interoperabilidade</strong>
+A ausência de <strong>padrões unificados</strong> ainda é um dos principais entraves da área.<br />
+Cada domínio — transporte, ecologia, meteorologia, geoinformática, entre outros — adota <strong>modelos e terminologias próprias</strong>, dificultando a integração e comparação entre estudos.<br />
+Os desafios centrais incluem:</p>
+<ul class="simple">
+<li><p>Definir modelos universais de representação de trajetórias;</p></li>
+<li><p>Criar ontologias e vocabulários comuns para descrever fenômenos de movimento;</p></li>
+<li><p>Garantir interoperabilidade entre bancos de dados e ferramentas geoespaciais.</p></li>
+</ul>
+<p>A consolidação de <strong>padrões interdisciplinares</strong> é essencial para fortalecer a análise de movimento como um <strong>campo científico integrado</strong>, favorecendo o intercâmbio de dados e métodos entre diferentes áreas do conhecimento.</p>
+<p><strong>c) Interpretação e Significado</strong>
+Transformar <strong>dados de movimento em informação significativa</strong> continua sendo uma das maiores barreiras.<br />
+Mesmo com algoritmos avançados e visualizações sofisticadas, muitas análises permanecem restritas ao <strong>nível geométrico</strong>, sem atingir uma compreensão <strong>semântica ou comportamental</strong> do movimento.<br />
+Para superar essa limitação, é necessário:</p>
+<ul class="simple">
+<li><p>Incorporar o <strong>contexto do movimento</strong>, compreendendo seus motivos, restrições e implicações;</p></li>
+<li><p>Integrar <strong>dados qualitativos e observacionais</strong> às abordagens quantitativas;</p></li>
+<li><p>Estimular a <strong>colaboração interdisciplinar</strong> entre especialistas de diferentes campos.</p></li>
+</ul>
+<p>A tendência é aproximar a análise de trajetórias das <strong>ciências sociais e cognitivas</strong>, combinando métodos estatísticos e interpretativos para compreender <strong>por que e como o movimento ocorre</strong> — e não apenas <strong>onde e quando</strong>.</p>
+<p><strong>d) Escala, Generalização e Incerteza</strong>
+Questões de <strong>escala</strong> e <strong>generalização</strong> continuam sendo centrais na análise espaço-temporal.<br />
+À medida que os dados se tornam mais detalhados, cresce também a <strong>incerteza associada</strong> à localização, ao tempo e à interpretação dos registros.<br />
+Os principais desafios incluem:</p>
+<ul class="simple">
+<li><p>Representar trajetórias em múltiplos níveis de detalhe sem distorcer padrões;</p></li>
+<li><p>Quantificar e visualizar <strong>incertezas espaciais e temporais</strong>;</p></li>
+<li><p>Desenvolver <strong>métodos adaptativos de simplificação e suavização</strong>.</p></li>
+</ul>
+<p>O futuro da área depende de encontrar o <strong>equilíbrio entre precisão e clareza</strong>, de modo que a simplificação não elimine nuances importantes da dinâmica observada.<br />
+Visualizações e métricas que <strong>explicitem a incerteza</strong> devem se tornar parte integrante das análises, aumentando a <strong>transparência e a confiabilidade</strong> dos resultados.</p>
+<p><strong>e) Privacidade e Ética</strong>
+O rastreamento contínuo de pessoas, veículos e animais levanta <strong>questões sérias de privacidade e ética</strong>.<br />
+Mesmo dados anonimizados podem ser reidentificados quando combinados com outras fontes, exigindo <strong>políticas rigorosas de governança de dados</strong>.<br />
+As medidas prioritárias incluem:</p>
+<ul class="simple">
+<li><p>Aplicar <strong>técnicas de anonimização e mascaramento espacial</strong>;</p></li>
+<li><p>Garantir <strong>consentimento informado</strong> e <strong>uso responsável</strong> dos dados;</p></li>
+<li><p>Evitar <strong>interpretações discriminatórias ou invasivas</strong>.</p></li>
+</ul>
+<p>A ética deve permear todas as etapas do <strong>ciclo analítico</strong> — da coleta à divulgação — assegurando <strong>transparência, segurança e respeito</strong> aos sujeitos observados.</p>
+<p><strong>f) Integração Interdisciplinar e Tecnológica</strong>
+Por natureza, a <strong>análise de trajetórias</strong> é <strong>interdisciplinar</strong>.<br />
+Seus avanços dependem da integração entre <strong>estatística</strong>, <strong>ciência da computação</strong>, <strong>geografia</strong>, <strong>ecologia</strong>, <strong>engenharia</strong> e <strong>ciências sociais</strong>.<br />
+Além disso, novas tecnologias estão redefinindo o campo, como:</p>
+<ul class="simple">
+<li><p><strong>Big Data geoespacial</strong> e <strong>computação em nuvem</strong>;</p></li>
+<li><p><strong>Aprendizado de máquina</strong> e <strong>inteligência artificial</strong>;</p></li>
+<li><p><strong>Sensores remotos de alta resolução</strong> e <strong>redes IoT</strong>;</p></li>
+<li><p><strong>Visualização imersiva</strong> e <strong>realidade aumentada</strong>.</p></li>
+</ul>
+<p>O futuro da análise de trajetórias está na <strong>integração entre IA, dados massivos e colaboração interdisciplinar</strong>, permitindo <strong>análises em tempo real</strong> e em <strong>múltiplas escalas</strong>.<br />
+Mais do que descrever o movimento, essas abordagens buscarão <strong>compreender os processos que o originam</strong>, integrando <strong>observação</strong>, <strong>modelagem</strong> e <strong>interpretação</strong> para apoiar a <strong>ciência do movimento</strong> em toda a sua complexidade.</p>
+<p><strong>Tendências Futuras</strong>
+A análise e visualização de trajetórias consolida-se como uma das <strong>áreas mais promissoras da ciência de dados geoespaciais</strong>, oferecendo meios para compreender <strong>processos dinâmicos e interconectados</strong> — da <strong>mobilidade urbana</strong> à <strong>migração animal</strong>, dos <strong>fluxos econômicos</strong> aos <strong>fenômenos ambientais</strong> — de forma integrada, visual e interpretável.</p>
+<p>O avanço desse campo depende da capacidade de combinar <strong>rigor técnico</strong>, <strong>sensibilidade ética</strong> e <strong>colaboração interdisciplinar</strong>, transformando trajetórias em <strong>narrativas espaciais significativas</strong> que revelem <strong>como o mundo se move, se transforma e se conecta</strong> no tempo e no espaço.</p>
+<p>As tendências recentes apontam para uma análise de movimento cada vez mais <strong>integrada, inteligente e interpretativa</strong>.<br />
+O foco deixa de ser apenas a <strong>descrição do deslocamento</strong>, passando a contemplar <strong>compreensão, previsão e suporte à tomada de decisão baseada em evidências espaço-temporais</strong>.</p>
+<p>Entre as principais direções de avanço, destacam-se:</p>
+<ul class="simple">
+<li><p><strong>Modelos híbridos</strong>, que combinam estatística clássica, aprendizado de máquina e simulação baseada em agentes, representando tanto padrões coletivos quanto comportamentos individuais;</p></li>
+<li><p><strong>Análises preditivas em tempo real</strong>, aplicadas à mobilidade urbana, gestão de tráfego, monitoramento climático e vigilância em saúde pública;</p></li>
+<li><p><strong>Visualizações interativas e narrativas</strong>, voltadas à comunicação científica e à exploração colaborativa dos dados, ampliando o acesso e a compreensão dos resultados;</p></li>
+<li><p><strong>Integração semântica</strong>, que permite consultas complexas sobre significado, contexto e comportamento, aproximando a análise computacional da interpretação humana;</p></li>
+<li><p><strong>Infraestruturas abertas de dados e software</strong>, voltadas à reprodutibilidade, interoperabilidade e cooperação científica internacional.</p></li>
+</ul>
+<p>Essas tendências representam uma <strong>mudança de paradigma</strong>: da análise puramente <strong>descritiva</strong> para uma abordagem <strong>explicativa, preditiva e contextualizada</strong>, em que <strong>movimento, espaço e tempo</strong> são compreendidos como dimensões <strong>inseparáveis de um sistema dinâmico e vivo</strong>.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="capitulo3.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">3. AUTOCORRELAÇÃO E DEPENDÊNCIA ESPAÇO-TEMPORAL (ANÁLISE ESPAÇO-TEMPORAL GLOBAL E LOCAL)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="capitulo5.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">5. MODELOS ESPAÇO-TEMPORAIS</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aplicacoes-da-analise-de-trajetorias-espaco-temporais">4.1 Aplicações da Análise de Trajetórias Espaço-Temporais</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deslocamento-de-veiculos">4.1.1 Deslocamento de veículos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#migracao-de-aves">4.1.2 Migração de aves</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rastreamento-de-poluicao-atmosferica">4.1.3 Rastreamento de poluição atmosférica</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fundamentos-da-analise-de-trajetorias">4.2 Fundamentos da Análise de Trajetórias</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-geometrica-de-trajetorias">4.2.1 Análise Geométrica de Trajetórias</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#segmentacao-de-trajetorias">4.2.1.1 Segmentação de Trajetórias</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacao-de-uma-trajetoria-representativa">4.2.1.2 Identificação de uma Trajetória Representativa</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-geometrica-dependente-de-escala">4.2.1.3 Análise Geométrica Dependente de Escala</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#padroes-espaco-temporais">4.2.1.4 Padrões Espaço-Temporais</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#similaridade-e-agrupamento-de-trajetorias">4.2.2 Similaridade e Agrupamento de Trajetórias</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#agrupamento-geometrico-e-similaridade">4.2.2.1 Agrupamento Geométrico e Similaridade</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#similaridade-baseada-em-atributos-fisicos-do-movimento">4.2.2.2 Similaridade Baseada em Atributos Físicos do movimento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#similaridade-sensivel-ao-contexto-baseada-em-uma-combinacao-de-atributos">4.2.2.3 Similaridade sensível ao contexto baseada em uma combinação de atributos</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacao-espaco-temporal-e-analise-visual-de-trajetorias">4.2.3 Visualização Espaço-Temporal e Análise Visual de Trajetórias</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#representacoes-espaco-temporais-cubo-espaco-temporal-e-outras-abordagens">4.2.3.1 Representações Espaço-Temporais: Cubo espaço-temporal e outras abordagens</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#agregacoes-visuais-agregacoes-geometricas-e-densidades-por-kernel">4.2.3.2 Agregações Visuais: Agregações Geométricas e Densidades por Kernel</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analise-visual-do-movimento">4.2.3.3 Análise Visual do Movimento</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#desafios-limitacoes-e-tendencias-futuras">4.4 Desafios, Limitações e Tendências Futuras</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Alexandro Gularte Schafer
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
